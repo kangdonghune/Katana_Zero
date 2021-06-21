@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\00.MainFrame">
+      <UniqueIdentifier>{36acd760-db20-4766-8a3b-34e58716b709}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.View">
+      <UniqueIdentifier>{2440b13e-2d68-45a1-9ac4-3ac66d38b457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Document">
+      <UniqueIdentifier>{b6c098d8-6694-4da4-ac9d-10bba932ea15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Graphic_Device">
+      <UniqueIdentifier>{3da940f9-4758-4b2e-ac7a-017b9d357253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Texture">
+      <UniqueIdentifier>{f403311c-8161-4bc1-be51-b99a65f81cab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Map">
+      <UniqueIdentifier>{7707d40a-1f5f-4c66-8937-da1f60bb70e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06.Object">
+      <UniqueIdentifier>{bd4d5d70-4213-4870-a43e-2fbe3cb19fe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\07.Unit">
+      <UniqueIdentifier>{ee5c212a-1648-4eab-9938-76d1c97cb467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Headers">
+      <UniqueIdentifier>{458827be-f7ab-49e1-9467-7889da307a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\099.Default">
+      <UniqueIdentifier>{96bc673b-132f-45cc-9c56-10a002853861}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MainFrm.h">
+      <Filter>소스 파일\00.MainFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="MapToolDoc.h">
+      <Filter>소스 파일\02.Document</Filter>
+    </ClInclude>
+    <ClInclude Include="MapToolView.h">
+      <Filter>소스 파일\01.View</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTool.h">
+      <Filter>소스 파일\099.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>소스 파일\099.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>소스 파일\099.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>소스 파일\099.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+      <Filter>소스 파일\098.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Define_Function.h">
+      <Filter>소스 파일\098.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>소스 파일\098.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.h">
+      <Filter>소스 파일\098.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers.h">
+      <Filter>소스 파일\098.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Function.h">
+      <Filter>소스 파일\098.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern.h">
+      <Filter>소스 파일\098.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic_Device.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>소스 파일\00.MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="MapToolDoc.cpp">
+      <Filter>소스 파일\02.Document</Filter>
+    </ClCompile>
+    <ClCompile Include="MapToolView.cpp">
+      <Filter>소스 파일\01.View</Filter>
+    </ClCompile>
+    <ClCompile Include="MapTool.cpp">
+      <Filter>소스 파일\099.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일\099.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic_Device.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MapTool.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MapTool.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\MapToolDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\MapTool.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>소스 파일\099.Default</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
