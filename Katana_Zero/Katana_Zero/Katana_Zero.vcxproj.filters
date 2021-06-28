@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -34,9 +30,24 @@
     <Filter Include="소스 파일\098.Managers">
       <UniqueIdentifier>{05bebd5a-ec43-470a-aeaa-e7722ec91f38}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <Filter Include="소스 파일\098.Managers\00.ScrollManager">
+      <UniqueIdentifier>{cefa7b42-6665-44d3-952e-47857cdfbcde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\01.ColliderManager">
+      <UniqueIdentifier>{b3acad52-3026-46c5-9598-396ed06f9cde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\02.TimeManager">
+      <UniqueIdentifier>{a30523be-0d43-4576-9e58-5a08e2f24eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\00.GameObjectManager">
+      <UniqueIdentifier>{9b9566b0-ddbe-4784-ac0b-22089b84594c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\01.Player">
+      <UniqueIdentifier>{6c2fbbf3-3911-490c-85e4-08cd168bcbe8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.MapObject\00.MapObjectManager">
+      <UniqueIdentifier>{3b2d90f8-05aa-4a8d-a01e-e8930bf61c8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -51,6 +62,18 @@
     <ClInclude Include="Resource.h">
       <Filter>소스 파일\099.Default</Filter>
     </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>소스 파일\00.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>소스 파일\01.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\01.GameObject\01.Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>소스 파일\01.GameObject\00.GameObjectManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -58,6 +81,18 @@
     </ClCompile>
     <ClCompile Include="Katana_Zero.cpp">
       <Filter>소스 파일\099.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>소스 파일\00.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일\01.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\01.GameObject\01.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>소스 파일\01.GameObject\00.GameObjectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,5 +107,10 @@
     <Image Include="Katana_Zero.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>소스 파일\099.Default</Filter>
+    </Text>
   </ItemGroup>
 </Project>

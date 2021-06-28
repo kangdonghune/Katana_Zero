@@ -19,3 +19,10 @@ typedef struct tagRedefineLine
 	POINT End;
 	TERRAINTYPE::TYPE type;
 }MYLINE;
+
+typedef struct tagPlayerInfo
+{
+	D3DXVECTOR3	D3VecPos;
+	wstring	wstrState;
+	
+}PLAYERINFO;
