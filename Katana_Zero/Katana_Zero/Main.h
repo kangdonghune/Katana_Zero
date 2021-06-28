@@ -3,6 +3,7 @@ class CMain
 {
 private:
 	CMain();
+public:
 	~CMain();
 public:
 	static CMain* Create();

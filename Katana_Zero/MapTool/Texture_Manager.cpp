@@ -10,7 +10,62 @@ CTexture_Manager::CTexture_Manager()
 
 CTexture_Manager::~CTexture_Manager()
 {
+
 	Release_Texture_Manager();
+}
+HRESULT CTexture_Manager::Init_Texture_Manager()
+{
+	//¸Ê
+
+
+	//ÇÃ·¹ÀÌ¾î
+
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_attack/%d", L"Player", L"Attack", 7)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_crouch/%d", L"Player", L"Crouch",1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_doorbreak_full/%d", L"Player", L"DoorBreakFull", 10)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_fall/%d", L"Player", L"Fall", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_hurtfly_begin/%d", L"Player", L"Hurtfly_begin", 2)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_hurtfly_loop/%d", L"Player", L"Hurtfly_loop", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_hurtground/%d", L"Player", L"Hurtground", 6)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_hurtrecover/%d", L"Player", L"Hurtrecover", 9)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_idle/%d", L"Player", L"Idle", 11)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_idle_to_run/%d", L"Player", L"Idle_to_run", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_idle_to_walk/%d", L"Player", L"Idle_to_walk", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_jump/%d", L"Player", L"Jump", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_player_dance/%d", L"Player", L"Dance", 12)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_player_dooropen_gentle/%d", L"Player", L"DoorOpen", 9)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_player_flip/%d", L"Player", L"Flip", 11)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_postcrouch/%d", L"Player", L"Postcrouch", 2)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_precrouch/%d", L"Player", L"Precrouch", 2)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_roll/%d", L"Player", L"Roll", 7)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_run/%d", L"Player", L"Run", 10)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_run_to_idle/%d", L"Player", L"Run_to_idle", 5)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_walk/%d", L"Player", L"Walk", 10)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_wallslide/%d", L"Player", L"Wallslide", 2)))
+		return E_FAIL;
+
+	return S_OK;
 }
 //L"../Texture/Stage/Player/Attack/AKIHA_AKI01_00%d.png",L"Player", L"Attack", 6
 //		L"../Texture/Stage/Player/Dash/AKIHA_AKI13_00%d.png",L"Player", L"Dash", 11

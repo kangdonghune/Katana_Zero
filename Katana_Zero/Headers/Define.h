@@ -5,6 +5,11 @@
 #define WINCY 760
 
 //싱글턴 추가
+
+//클라이언트
+#define GameObjectManager GameObjectManager::Get_Instance()
+
+//맵툴
 #define Device CGraphic_Device::Get_Instance()
 #define Texture_Maneger CTexture_Manager::Get_Instance()
 #define RECTS  CRECT::Get_Instance()

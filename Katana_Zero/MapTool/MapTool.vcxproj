@@ -97,7 +97,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,14 +189,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="C_Map.h" />
-    <ClInclude Include="Define.h" />
-    <ClInclude Include="Define_Function.h" />
-    <ClInclude Include="Enum.h" />
-    <ClInclude Include="Extern.h" />
     <ClInclude Include="Form2.h" />
-    <ClInclude Include="Function.h" />
     <ClInclude Include="Graphic_Device.h" />
-    <ClInclude Include="Headers.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapTool.h" />
     <ClInclude Include="MapToolDoc.h" />
@@ -206,7 +200,6 @@
     <ClInclude Include="RECT.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture_Manager.h" />

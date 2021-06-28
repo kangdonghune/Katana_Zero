@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "Katana_Zero.h"
+#include "Main.h"
 
 #define MAX_LOADSTRING 100
 
@@ -10,6 +11,7 @@
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+HWND  g_hWND;
 
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -40,19 +42,41 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_KATANA_ZERO));
 
-    MSG msg;
+	MSG msg;
+	msg.message = WM_NULL;
+	DWORD dwOldTime = GetTickCount();
 
-    // 기본 메시지 루프입니다.
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
+	CMain* pMain = CMain::Create();
 
-    return (int) msg.wParam;
+	if (nullptr == pMain)
+	{
+		Safe_Delete(pMain);
+	}
+	while (WM_QUIT != msg.message)
+	{
+
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+
+			if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+
+		if (dwOldTime < GetTickCount())
+		{
+			pMain->Update_Main();
+			pMain->LateUpdate_Main();
+			pMain->Render_Main();
+			dwOldTime = GetTickCount();
+		}
+
+
+	}
+	Safe_Delete(pMain);
+	return (int)msg.wParam;
 }
 
 
@@ -105,6 +129,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
+   g_hWND = hWnd;
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 

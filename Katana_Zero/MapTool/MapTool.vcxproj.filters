@@ -30,9 +30,6 @@
     <Filter Include="소스 파일\07.Unit">
       <UniqueIdentifier>{ee5c212a-1648-4eab-9938-76d1c97cb467}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\098.Headers">
-      <UniqueIdentifier>{458827be-f7ab-49e1-9467-7889da307a69}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\099.Default">
       <UniqueIdentifier>{96bc673b-132f-45cc-9c56-10a002853861}</UniqueIdentifier>
     </Filter>
@@ -61,27 +58,6 @@
     </ClInclude>
     <ClInclude Include="MapToolView.h">
       <Filter>소스 파일\01.View</Filter>
-    </ClInclude>
-    <ClInclude Include="Enum.h">
-      <Filter>소스 파일\098.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Define_Function.h">
-      <Filter>소스 파일\098.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Define.h">
-      <Filter>소스 파일\098.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Struct.h">
-      <Filter>소스 파일\098.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers.h">
-      <Filter>소스 파일\098.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Function.h">
-      <Filter>소스 파일\098.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Extern.h">
-      <Filter>소스 파일\098.Headers</Filter>
     </ClInclude>
     <ClInclude Include="Graphic_Device.h">
       <Filter>소스 파일\03.Graphic_Device</Filter>

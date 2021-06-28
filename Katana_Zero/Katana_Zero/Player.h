@@ -5,6 +5,7 @@ class CPlayer :
 {
 private:
 	CPlayer();
+public:
 	~CPlayer();
 public:
 	static CPlayer* Create();
