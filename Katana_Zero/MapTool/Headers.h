@@ -13,6 +13,7 @@ using namespace std;
 
 #include "Enum.h"
 #include "Define.h"
+#include "Define_Function.h"
 #include "Struct.h"
 #include "Extern.h"
 #include "Function.h"

@@ -4,8 +4,9 @@
 
 #pragma once
 
-
-class CMapToolView : public CView
+class C_Map;
+class CMapToolDoc;
+class CMapToolView : public CScrollView
 {
 protected: // serialization에서만 만들어집니다.
 	CMapToolView();
@@ -40,7 +41,31 @@ protected:
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual void OnInitialUpdate();
+
+
+//멤버 변수
+	C_Map* m_pMap;
+	D3DXVECTOR3 m_MousePos;
+	D3DXVECTOR3 m_MouseDownPos;
+	D3DXVECTOR3 m_MouseUpPos;
+
+
+	void Select_ToolFunction(int ToolState);
+	D3DXVECTOR3	GetMousePos();
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	void RenderRects();
 };
+
+
+
+
+
+
+
+
 
 #ifndef _DEBUG  // MapToolView.cpp의 디버그 버전
 inline CMapToolDoc* CMapToolView::GetDocument() const

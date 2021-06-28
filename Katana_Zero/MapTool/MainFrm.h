@@ -1,6 +1,6 @@
 
 // MainFrm.h : CMainFrame 클래스의 인터페이스
-//
+// 푸시테스트_기성
 
 #pragma once
 
@@ -13,6 +13,8 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
+	CSplitterWnd m_MainSplitter; 
+	CSplitterWnd m_SecondSplitter;
 
 // 작업입니다.
 public:
@@ -38,6 +40,7 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	DECLARE_MESSAGE_MAP()
 
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 };
 
 
