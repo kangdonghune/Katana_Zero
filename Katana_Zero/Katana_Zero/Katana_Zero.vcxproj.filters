@@ -13,8 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\00.MainApp">
+    <Filter Include="소스 파일\00.Main">
       <UniqueIdentifier>{74e8146e-bb9d-487a-b10b-41b29a5b8cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject">
+      <UniqueIdentifier>{4b39da53-ec1a-4110-a3f1-86dfd7dea71c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.MapObject">
+      <UniqueIdentifier>{9095a2d7-75f2-481c-bb2d-6d890b4e3dbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Graphic_Device">
+      <UniqueIdentifier>{f81a1e37-af49-4b9c-be74-da877ccf34ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Texture">
+      <UniqueIdentifier>{579490a2-0771-478c-929d-4be23f22f7c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\099.Default">
+      <UniqueIdentifier>{f3f2c64d-d1c4-4e7c-bdd6-c8425c9251c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers">
+      <UniqueIdentifier>{05bebd5a-ec43-470a-aeaa-e7722ec91f38}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,24 +40,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\099.Default</Filter>
     </ClInclude>
     <ClInclude Include="Katana_Zero.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\099.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>소스 파일\099.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>소스 파일\099.Default</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\099.Default</Filter>
     </ClCompile>
     <ClCompile Include="Katana_Zero.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\099.Default</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
