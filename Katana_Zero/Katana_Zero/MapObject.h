@@ -6,7 +6,6 @@ public:
 	virtual ~CMapObject();
 
 public:
-	virtual HRESULT Ready_MapObject() PURE;
 	virtual void	Update_MapObject() PURE;
 	virtual void	LateUpdate_MapObject() PURE;
 	virtual void	Render_MapObject() PURE;

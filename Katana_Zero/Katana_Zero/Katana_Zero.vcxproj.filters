@@ -42,15 +42,6 @@
     <Filter Include="소스 파일\02.MapObject\00.MapObjectManager">
       <UniqueIdentifier>{3b2d90f8-05aa-4a8d-a01e-e8930bf61c8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\02.MapObject\01.Wall">
-      <UniqueIdentifier>{80edb747-b981-4694-be91-c050b2cfa496}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\02.MapObject\02.Land">
-      <UniqueIdentifier>{cd81ee96-39d3-47a1-8a73-34f5a6f64ad6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\02.MapObject\03.Celling">
-      <UniqueIdentifier>{9f65cb74-bd6e-43f3-9aa9-93e08c8c3cf1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\03.Graphic_Device">
       <UniqueIdentifier>{73ec1c3d-07c9-46b9-afb4-e293f92f0fa0}</UniqueIdentifier>
     </Filter>
@@ -104,6 +95,9 @@
     <ClInclude Include="Graphic_Device.h">
       <Filter>소스 파일\03.Graphic_Device</Filter>
     </ClInclude>
+    <ClInclude Include="MapObjectManager.h">
+      <Filter>소스 파일\02.MapObject\00.MapObjectManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -138,6 +132,9 @@
     </ClCompile>
     <ClCompile Include="Graphic_Device.cpp">
       <Filter>소스 파일\03.Graphic_Device</Filter>
+    </ClCompile>
+    <ClCompile Include="MapObjectManager.cpp">
+      <Filter>소스 파일\02.MapObject\00.MapObjectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

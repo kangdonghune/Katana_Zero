@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Main.h"
 #include "Graphic_Device.h"
+#include "MapObjectManager.h"
 #include "Texture_Manager.h"
 
 
@@ -26,14 +27,18 @@ CMain * CMain::Create()
 
 HRESULT CMain::Ready_Main()
 {
+	//디바이스 생성
 	if (FAILED(Device->Ready_Graphic_Device()))
 	{
 		ERR_MSG(L"Ready_Graphic_Device");
 		return E_FAIL;
 	}
-
+	//텍스쳐 삽입
 	if (FAILED(Texture_Maneger->Init_Texture_Manager()))
 		return E_FAIL;
+	
+	//맵 오브젝트 생성
+	MapObjectManager->Init_MapObjectManager();
 	return S_OK;
 }
 
@@ -61,6 +66,8 @@ void CMain::Render_Main()
 	matWorld = matScale * matTrans;
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	MapObjectManager->Render_MapObjectManager();
 
 	Device->Render_End();
 }

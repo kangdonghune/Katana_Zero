@@ -20,9 +20,11 @@ typedef struct tagRedefineLine
 	TERRAINTYPE::TYPE type;
 }MYLINE;
 
-typedef struct tagPlayerInfo
+typedef struct tagUnitInfo
 {
 	D3DXVECTOR3	D3VecPos;
-	wstring	wstrState;
+	wstring	wstrState = L"Idle";
+	wstring wstrKey = L"";
+	UNITTYPE::TYPE type;
 	
-}PLAYERINFO;
+}UNITINFO;

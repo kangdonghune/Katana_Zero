@@ -11,6 +11,9 @@ public:
 	static CPlayer* Create();
 
 public:
+	HRESULT Load_Player(TCHAR* pFilePath);
+
+public:
 	// CGameObject을(를) 통해 상속됨
 	virtual HRESULT Ready_GameObject() override;
 
@@ -23,6 +26,6 @@ public:
 	virtual void Release_GameObject() override;
 
 private:
-	PLAYERINFO m_tPlayerInfo;
+	UNITINFO* m_pPlayerInfo;
 };
 

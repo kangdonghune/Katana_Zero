@@ -16,6 +16,7 @@
 #include "Form2.h"
 #include "RECT.h"
 #include "Texture_Manager.h"
+#include "Unit.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -51,6 +52,7 @@ CMapToolView::~CMapToolView()
 
 	Safe_Delete(m_pMap);
 	RECTS->Destroy_Instance();
+	UNITS->Destroy_Instance();
 	Texture_Maneger->Destroy_Instance();
 	Device->Destroy_Instance();
 
@@ -76,6 +78,7 @@ void CMapToolView::OnDraw(CDC* /*pDC*/)
 	Device->Render_Begin();
 	m_pMap->Render_Map();
 	RenderRects();
+	UNITS->Render_Unit();
 	Device->Render_End();
 
 
@@ -131,6 +134,7 @@ void CMapToolView::OnInitialUpdate()
 	CScrollView::OnInitialUpdate();
 	SetScrollSizes(MM_TEXT, CSize(5000, 5000));
 	g_hWND = m_hWnd;
+
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	RECT rcMain{};
 	pMain->GetWindowRect(&rcMain);
@@ -152,7 +156,7 @@ void CMapToolView::OnInitialUpdate()
 	if (FAILED(m_pMap->Ready_Map()))
 		return;
 	m_pMap->SetView(this);
-
+	Texture_Maneger->Init_Texture_Manager();
 
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 }
@@ -175,6 +179,8 @@ void CMapToolView::Select_ToolFunction(int ToolState)
 	case TOOL_Celling:
 		pForm->CreateCelling();
 		return;
+	case TOOL_Player:
+		pForm->CreatePlayer();
 	default:
 		break;
 	}
@@ -216,10 +222,10 @@ void CMapToolView::RenderRects()
 
 	Device->m_pSprite->End();
 	Device->m_pLine->SetWidth(10.f);
-	for (auto& pRect : RECTS->Get_Rects())
+	for (auto& pLine : RECTS->Get_Wall())
 	{
-		D3DXVECTOR2 vLine[5]{{ float(pRect->rc.left - GetScrollPos(SB_HORZ)) ,float(pRect->rc.top - GetScrollPos(SB_VERT))},{ float(pRect->rc.right - GetScrollPos(SB_HORZ)), float(pRect->rc.top - GetScrollPos(SB_VERT)) },{ float(pRect->rc.right - GetScrollPos(SB_HORZ)),float(pRect->rc.bottom - GetScrollPos(SB_VERT))},{ float(pRect->rc.left - GetScrollPos(SB_HORZ)) ,float(pRect->rc.bottom - GetScrollPos(SB_VERT))},{ float(pRect->rc.left - GetScrollPos(SB_HORZ)), float(pRect->rc.top - GetScrollPos(SB_VERT))}};
-		Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, 255, 0, 0));
+		D3DXVECTOR2	vLine[2]{ { float(pLine->Start.x - GetScrollPos(SB_HORZ)),float(pLine->Start.y - GetScrollPos(SB_VERT)) },{ float(pLine->End.x - GetScrollPos(SB_HORZ)),float(pLine->End.y - GetScrollPos(SB_VERT)) } };
+		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 255, 0, 0));
 
 	}
 

@@ -21,9 +21,6 @@
     <Filter Include="소스 파일\03.Graphic_Device">
       <UniqueIdentifier>{3da940f9-4758-4b2e-ac7a-017b9d357253}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\04.Texture">
-      <UniqueIdentifier>{f403311c-8161-4bc1-be51-b99a65f81cab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\05.Map">
       <UniqueIdentifier>{7707d40a-1f5f-4c66-8937-da1f60bb70e8}</UniqueIdentifier>
     </Filter>
@@ -33,12 +30,6 @@
     <Filter Include="소스 파일\099.Default">
       <UniqueIdentifier>{96bc673b-132f-45cc-9c56-10a002853861}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\04.Texture\00.Texture_Manager">
-      <UniqueIdentifier>{85b26c14-933f-4f2a-bd09-c9e60ece2272}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\04.Texture\01.Multi_Texture">
-      <UniqueIdentifier>{debd62a8-7080-40cd-9693-dbeecef6469a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\06.RECTS">
       <UniqueIdentifier>{bd4d5d70-4213-4870-a43e-2fbe3cb19fe0}</UniqueIdentifier>
     </Filter>
@@ -47,6 +38,15 @@
     </Filter>
     <Filter Include="소스 파일\01.View\01.MiniView">
       <UniqueIdentifier>{d82f078a-4b1b-49e9-9daa-2d86c57b625f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Texture">
+      <UniqueIdentifier>{f403311c-8161-4bc1-be51-b99a65f81cab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Texture\00.Texture_Manager">
+      <UniqueIdentifier>{85b26c14-933f-4f2a-bd09-c9e60ece2272}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Texture\01.Multi_Texture">
+      <UniqueIdentifier>{debd62a8-7080-40cd-9693-dbeecef6469a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +95,9 @@
     <ClInclude Include="targetver.h">
       <Filter>소스 파일\099.Default</Filter>
     </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>소스 파일\07.Unit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -135,6 +138,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일\099.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>소스 파일\07.Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

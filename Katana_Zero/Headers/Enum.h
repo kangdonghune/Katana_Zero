@@ -7,10 +7,10 @@ namespace GAMEOBJECT
 
 namespace TERRAINTYPE
 {
-	enum TYPE{LAND, WALL, CELLING, END};
+	enum TYPE{LAND, WALL, CELLING, PASSABLE, END};
 }
 
-namespace LINETYPE
+namespace UNITTYPE
 {
-	enum TYPE{LAND, CELLING, END};
+	enum TYPE { PLAYER, END };
 }
