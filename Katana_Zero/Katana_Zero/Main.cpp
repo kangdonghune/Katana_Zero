@@ -3,7 +3,10 @@
 #include "Graphic_Device.h"
 #include "MapObjectManager.h"
 #include "Texture_Manager.h"
-
+#include "SaveLoadManager.h"
+#include "GameObjectManager.h"
+#include "FrameManager.h"
+#include "TimeManager.h"
 
 CMain::CMain()
 {
@@ -21,12 +24,16 @@ CMain * CMain::Create()
 	if (FAILED(pMain->Ready_Main()))
 	{
 		Safe_Delete(pMain);
+		return pMain;
 	}
 	return pMain;
 }
 
 HRESULT CMain::Ready_Main()
 {
+	//타임 매니저 생성
+	TimeManager->Ready_TimeManager();
+
 	//디바이스 생성
 	if (FAILED(Device->Ready_Graphic_Device()))
 	{
@@ -39,11 +46,18 @@ HRESULT CMain::Ready_Main()
 	
 	//맵 오브젝트 생성
 	MapObjectManager->Init_MapObjectManager();
+	
+	//유닛 정보 불러오기.
+	if (FAILED(SaveLoadManager->LoadUnit(L"../Data/Stage1/Unit/Unit.dat")))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 void CMain::Update_Main()
 {
+	TimeManager->Update_TimeManager();
+	GameObjectManager->Update_GameObjectManager();
 }
 
 void CMain::LateUpdate_Main()
@@ -68,7 +82,8 @@ void CMain::Render_Main()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 	MapObjectManager->Render_MapObjectManager();
-
+	GameObjectManager->Render_GameObjectManager();
+	FrameManager->Render_Frame_Manager();
 	Device->Render_End();
 }
 

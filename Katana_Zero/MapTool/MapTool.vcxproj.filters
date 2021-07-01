@@ -33,9 +33,6 @@
     <Filter Include="소스 파일\06.RECTS">
       <UniqueIdentifier>{bd4d5d70-4213-4870-a43e-2fbe3cb19fe0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\01.View\00.CForm">
-      <UniqueIdentifier>{183d5ce8-858b-4314-b337-0ba2ae63ed18}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\01.View\01.MiniView">
       <UniqueIdentifier>{d82f078a-4b1b-49e9-9daa-2d86c57b625f}</UniqueIdentifier>
     </Filter>
@@ -47,6 +44,9 @@
     </Filter>
     <Filter Include="소스 파일\04.Texture\01.Multi_Texture">
       <UniqueIdentifier>{debd62a8-7080-40cd-9693-dbeecef6469a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.View\00.CForm">
+      <UniqueIdentifier>{183d5ce8-858b-4314-b337-0ba2ae63ed18}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

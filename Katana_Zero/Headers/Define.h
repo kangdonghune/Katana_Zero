@@ -9,6 +9,9 @@
 //클라이언트
 #define GameObjectManager	CGameObjectManager::Get_Instance()
 #define MapObjectManager	CMapObjectManager::Get_Instance()
+#define SaveLoadManager		CSaveLoadManager::Get_Instance()
+#define TimeManager			CTimeManager::Get_Instance()
+#define FrameManager		CFrameManager::Get_Instance()
 
 //맵툴
 #define Device			CGraphic_Device::Get_Instance()
@@ -24,6 +27,8 @@
 #define	TOOL_Land		0b00000000000000000000000000000010
 #define	TOOL_Celling	0b00000000000000000000000000000100
 #define TOOL_Player		0b00000000000000000000000000001000
+
+
 
 
 //PURE

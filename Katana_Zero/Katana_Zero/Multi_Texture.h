@@ -6,6 +6,10 @@ class CMulti_Texture final :
 public:
 	explicit CMulti_Texture();
 	virtual ~CMulti_Texture();
+
+public:
+	const size_t Get_TexInfo_Frame(const wstring & wstrStateKey = L"");
+
 public:
 	// CTexture을(를) 통해 상속됨
 	virtual HRESULT Insert_Texture(const wstring & wstrFilePath, const wstring & wstrStateKey, const DWORD & dwCount) override;

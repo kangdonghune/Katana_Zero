@@ -215,7 +215,7 @@ void CForm2::Load_Unit(TCHAR * pFilePath)
 			UNITS->Insert_Unit(pUnit, pUnit->type);
 			break;
 		default:
-			Safe_Delete(pUnit);
+			ERR_MSG(L"유닛 타입 문제 확인 바람");
 			break;
 		}
 	}

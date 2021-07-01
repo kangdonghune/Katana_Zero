@@ -15,9 +15,8 @@ public:
 		const wstring& wstrOjbectKey,
 		const wstring& wstrStateKey,
 		const DWORD& dwCount);
-	const TEXINFO* Get_TexInfo_Manager(const wstring& wstrObjectKey,
-		const wstring& wstrStateKey,
-		const DWORD& dwIndex);
+	const TEXINFO* Get_TexInfo_Manager(const wstring& wstrObjectKey ,const wstring& wstrStateKey, const DWORD& dwIndex);
+	const size_t Get_TexInfo_Frame(const wstring& wstrObjectKey, const wstring& wstrStateKey);
 	void Release_Texture_Manager();
 private:
 	// ObjectKey ;

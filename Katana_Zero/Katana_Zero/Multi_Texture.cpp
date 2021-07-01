@@ -12,6 +12,15 @@ CMulti_Texture::~CMulti_Texture()
 	Release_Texture();
 }
 
+const size_t CMulti_Texture::Get_TexInfo_Frame(const wstring & wstrStateKey)
+{
+	map<wstring, vector<TEXINFO*>>::iterator iter_find = m_mapMultiTex.find(wstrStateKey);
+	if (iter_find == m_mapMultiTex.end())
+		return 0;
+
+	return iter_find->second.size();
+}
+
 //ex) L"../Texture/Stage/Player/Dash/AKIHA_AKI13_00%d.png",L"Player", L"Dash", 11
 HRESULT CMulti_Texture::Insert_Texture(const wstring & wstrFilePath, const wstring & wstrStateKey /*= L""*/, const DWORD & dwCount) // 주소, 상태 키, 이미지 개수
 {

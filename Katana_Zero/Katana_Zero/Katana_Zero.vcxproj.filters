@@ -54,6 +54,12 @@
     <Filter Include="소스 파일\04.Texture\01.Multi_Texture">
       <UniqueIdentifier>{3d657e97-26ed-4303-8fe1-be2b9f7ccbd7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\098.Managers\03.SaveLoadManager">
+      <UniqueIdentifier>{abda36ca-3443-4a7f-8cca-5287d374c888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\04.FrameManager">
+      <UniqueIdentifier>{59f33316-13b3-48cc-8192-f44c606eb8f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -98,6 +104,15 @@
     <ClInclude Include="MapObjectManager.h">
       <Filter>소스 파일\02.MapObject\00.MapObjectManager</Filter>
     </ClInclude>
+    <ClInclude Include="SaveLoadManager.h">
+      <Filter>소스 파일\098.Managers\03.SaveLoadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>소스 파일\098.Managers\02.TimeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameManager.h">
+      <Filter>소스 파일\098.Managers\04.FrameManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -135,6 +150,15 @@
     </ClCompile>
     <ClCompile Include="MapObjectManager.cpp">
       <Filter>소스 파일\02.MapObject\00.MapObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveLoadManager.cpp">
+      <Filter>소스 파일\098.Managers\03.SaveLoadManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>소스 파일\098.Managers\02.TimeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameManager.cpp">
+      <Filter>소스 파일\098.Managers\04.FrameManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

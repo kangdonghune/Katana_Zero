@@ -8,10 +8,11 @@ private:
 public:
 	~CPlayer();
 public:
-	static CPlayer* Create();
+	static CPlayer* Create(UNITINFO* pInfo);
 
 public:
-	HRESULT Load_Player(TCHAR* pFilePath);
+
+	void Update_KeyInput();
 
 public:
 	// CGameObject을(를) 통해 상속됨
@@ -26,6 +27,6 @@ public:
 	virtual void Release_GameObject() override;
 
 private:
-	UNITINFO* m_pPlayerInfo;
+
 };
 

@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "Katana_Zero.h"
 #include "Main.h"
+#include "FrameManager.h"
+
 
 #define MAX_LOADSTRING 100
 
@@ -47,17 +49,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	DWORD dwOldTime = GetTickCount();
 
 	CMain* pMain = CMain::Create();
+	FrameManager->Ready_Frame_Manager(60.f);//초당 60프레임
 
-	if (nullptr == pMain)
+	while (msg.message != WM_QUIT)
 	{
-		Safe_Delete(pMain);
-	}
-	while (WM_QUIT != msg.message)
-	{
-
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-
 			if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 			{
 				TranslateMessage(&msg);
@@ -65,12 +62,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			}
 		}
 
-		if (dwOldTime < GetTickCount())
+		if (FrameManager->Frame_Lock()) // 1프레임 만큼의 시간이 가기 전까진 false 반환.
 		{
 			pMain->Update_Main();
 			pMain->LateUpdate_Main();
 			pMain->Render_Main();
-			dwOldTime = GetTickCount();
 		}
 
 

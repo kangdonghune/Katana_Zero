@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameObjectManager.h"
+#include "GameObject.h"
 
 IMPLEMENT_SINGLETON(CGameObjectManager);
 CGameObjectManager::CGameObjectManager()
@@ -14,6 +15,13 @@ CGameObjectManager::~CGameObjectManager()
 
 void CGameObjectManager::Update_GameObjectManager()
 {
+	for (auto& pVector : m_vecGameObj)
+	{
+		for (auto& pUnit : pVector)
+		{
+			pUnit->Update_GameObject();
+		}
+	}
 }
 
 void CGameObjectManager::LateUpdate_GameObjectManager()
@@ -22,6 +30,13 @@ void CGameObjectManager::LateUpdate_GameObjectManager()
 
 void CGameObjectManager::Render_GameObjectManager()
 {
+	for (auto& pVector : m_vecGameObj)
+	{
+		for(auto& pUnit : pVector)
+		{
+			pUnit->Render_GameObject();
+		}
+	}
 }
 
 void CGameObjectManager::Release_GameObjectManager()

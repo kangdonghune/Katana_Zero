@@ -92,15 +92,15 @@ HRESULT CGraphic_Device::Ready_Graphic_Device()
 		goto ERR;
 
 	//p220. 글꼴 ID3DXFont
-	//D3DXFONT_DESCW tFontInfo;
-	//ZeroMemory(&tFontInfo, sizeof(D3DXFONT_DESCW));
-	//tFontInfo.Height = 20; // 높이
-	//tFontInfo.Width = 10; // 너비
-	//tFontInfo.Weight = FW_HEAVY;//두께 
-	//tFontInfo.CharSet = HANGUL_CHARSET;
-	//lstrcpy(tFontInfo.FaceName, L"배달의민족 주아");
-	//if (FAILED(D3DXCreateFontIndirectW(m_pDevice, &tFontInfo, &m_pFont)))
-	//	goto ERR;
+	D3DXFONT_DESCW tFontInfo;
+	ZeroMemory(&tFontInfo, sizeof(D3DXFONT_DESCW));
+	tFontInfo.Height = 20; // 높이
+	tFontInfo.Width = 10; // 너비
+	tFontInfo.Weight = FW_HEAVY;//두께 
+	tFontInfo.CharSet = HANGUL_CHARSET;
+	lstrcpy(tFontInfo.FaceName, L"돋움체");
+	if (FAILED(D3DXCreateFontIndirectW(m_pDevice, &tFontInfo, &m_pFont)))
+		goto ERR;
 
 
 	if (FAILED(D3DXCreateLine(m_pDevice, &m_pLine)))
@@ -117,8 +117,8 @@ void CGraphic_Device::Release_Graphic_Device()
 {
 	//(레퍼런스 카운트 라고 부모로 참조될 때마다 레퍼런틋 카운트가 증가하는데 레퍼런스 카운트가 0이 아니면 딜리트가 안되게 해둠
 	//이 경우 sdk 산하에 디바이스 > 스프라이트 & 폰트가 만들어 진 것이기에 만든 순서의 반대로 릴리즈 해줘야 딜리트가 된다.
-	//if (m_pFont)
-	//	m_pFont->Release();
+	if (m_pFont)
+		m_pFont->Release();
 
 	if (m_pSprite)
 		m_pSprite->Release();

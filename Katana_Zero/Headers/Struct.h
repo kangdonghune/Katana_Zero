@@ -28,3 +28,9 @@ typedef struct tagUnitInfo
 	UNITTYPE::TYPE type;
 	
 }UNITINFO;
+
+typedef	struct tagFrame
+{
+	float fFrameStart;
+	float fFrameEnd;
+}FRAME;

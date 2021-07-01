@@ -105,6 +105,14 @@ const TEXINFO * CTexture_Manager::Get_TexInfo_Manager(const wstring & wstrOjbect
 	//return m_mapTexture[wstrOjbectKey]->Get_TexInfo(wstrStateKey, dwIndex); 
 }
 
+const size_t CTexture_Manager::Get_TexInfo_Frame(const wstring & wstrObjectKey, const wstring & wstrStateKey)
+{
+	auto& iter_find = m_mapTexture.find(wstrObjectKey);// 해당 이름과 같은 오브젝트  키 있는 지 체크
+	if (m_mapTexture.end() == iter_find) //없다면
+		return 0;
+	return dynamic_cast<CMulti_Texture*>(iter_find->second)->Get_TexInfo_Frame(wstrStateKey);
+}
+
 void CTexture_Manager::Release_Texture_Manager()
 {
 	for (auto& rPair : m_mapTexture)
