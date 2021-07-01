@@ -7,6 +7,7 @@
 #include "GameObjectManager.h"
 #include "FrameManager.h"
 #include "TimeManager.h"
+#include "ColliderManager.h"
 
 CMain::CMain()
 {
@@ -58,6 +59,7 @@ void CMain::Update_Main()
 {
 	TimeManager->Update_TimeManager();
 	GameObjectManager->Update_GameObjectManager();
+	ColliderManager->Collider_Land(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectVec(GAMEOBJECT::PLAYER).at(0));
 }
 
 void CMain::LateUpdate_Main()

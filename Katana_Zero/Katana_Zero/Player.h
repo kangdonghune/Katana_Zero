@@ -13,6 +13,7 @@ public:
 public:
 
 	void Update_KeyInput();
+	void Update_UnitState();
 
 public:
 	// CGameObject을(를) 통해 상속됨

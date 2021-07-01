@@ -11,6 +11,10 @@ public:
 	void FrameMove(float fSpeed);
 	void Render_HitBox();
 	void Update_Frame();
+	bool Check_FrameEnd();
+
+	const UNITINFO* Get_UnitInfo() { return m_pUnitInfo; }
+	const float		Get_UnitRatio() { return m_fRatio; }
 
 public:
 	virtual HRESULT Ready_GameObject() PURE;
@@ -28,6 +32,6 @@ protected:
 	float				m_fRatio;
 	wstring				m_wstrOldState;
 	wstring				m_wstrCurState;
-	int					m_iRotateY;// y축 회전 시 적용 값으로 바라보는 방향을 결정.
+	int					m_iUnitDir;// y축 회전 시 적용 값으로 바라보는 방향을 결정.
 };
 

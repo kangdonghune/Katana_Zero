@@ -113,6 +113,9 @@
     <ClInclude Include="FrameManager.h">
       <Filter>소스 파일\098.Managers\04.FrameManager</Filter>
     </ClInclude>
+    <ClInclude Include="ColliderManager.h">
+      <Filter>소스 파일\098.Managers\01.ColliderManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -159,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="FrameManager.cpp">
       <Filter>소스 파일\098.Managers\04.FrameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderManager.cpp">
+      <Filter>소스 파일\098.Managers\01.ColliderManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

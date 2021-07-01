@@ -12,6 +12,7 @@
 #define SaveLoadManager		CSaveLoadManager::Get_Instance()
 #define TimeManager			CTimeManager::Get_Instance()
 #define FrameManager		CFrameManager::Get_Instance()
+#define ColliderManager		CColliderManager::Get_Instance()
 
 //¸ÊÅø
 #define Device			CGraphic_Device::Get_Instance()

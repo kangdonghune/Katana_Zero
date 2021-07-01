@@ -11,6 +11,7 @@ public:
 
 public:
 	void Insert_GameObjectManager(CGameObject* pObject,GAMEOBJECT::TYPE type) { m_vecGameObj[type].emplace_back(pObject); }
+	const vector<CGameObject*> Get_GameObjectVec(GAMEOBJECT::TYPE type) { return m_vecGameObj[type]; }
 
 public:
 	void Update_GameObjectManager();

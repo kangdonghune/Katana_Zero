@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "Texture_Manager.h"
 #include "TimeManager.h"
+#include "FrameManager.h"
+#include "Graphic_Device.h"
 
 CGameObject::CGameObject()
 	:m_pUnitInfo(nullptr)
@@ -11,7 +13,7 @@ CGameObject::CGameObject()
 	, m_wstrOldState(L"")
 	, m_wstrCurState(L"")
 	, m_fRatio(0.f)
-	, m_iRotateY(1)
+	, m_iUnitDir(1)
 {
 }
 
@@ -48,9 +50,8 @@ void CGameObject::Update_HitBox()
 
 void CGameObject::FrameMove(float fSpeed)
 {
-	Update_Frame(); //이미지 개수 갱신.
-	m_tFrame.fFrameStart += m_tFrame.fFrameEnd * TimeManager->Get_DeltaTime() * fSpeed; //frame start end는 각 클래스에서 정해준다. fspeed가 1.f일 대 1초동안 애니메이션을 전부 그려준다. 
-	if (m_tFrame.fFrameEnd <= m_tFrame.fFrameStart)
+	m_tFrame.fFrameStart += FrameManager->Get_SPF() * fSpeed; //frame start end는 각 클래스에서 정해준다. 
+	if ((size_t)m_tFrame.fFrameEnd <= (size_t)m_tFrame.fFrameStart)
 		m_tFrame.fFrameStart = 0.f;
 }
 
@@ -74,4 +75,21 @@ void CGameObject::Update_Frame()
 		m_wstrOldState = m_wstrCurState;
 	}
 
+}
+
+bool CGameObject::Check_FrameEnd() //다음 상태로 변경하기 전 준비 동작을 마쳤는지 체크
+{
+	static bool FrameCheck = false;
+	
+	if (FrameCheck) // 준비 동작이 끝났으면
+	{
+		FrameCheck = false; // 준비동작 끝났음을 공지했으면 다시 false 상태로.
+		return true;
+	}
+	if ((size_t)m_tFrame.fFrameEnd-1 == (size_t)m_tFrame.fFrameStart) // 현재 프레임과 끝 프레임이 같다면 준비 동작이 끝난 것
+	{
+		FrameCheck = true; 
+		return false; // 현재 프레임까지 그리고 나서 바꿔야 하기에 false를 반환
+	}
+	return false;
 }

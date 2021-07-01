@@ -7,9 +7,11 @@ public:
 	~CFrameManager();
 
 public:
-	void Ready_Frame_Manager(float fFPS);
-	void Render_Frame_Manager();
-	bool Frame_Lock();
+	void	Ready_Frame_Manager(float fFPS);
+	void	Render_Frame_Manager();
+	void	Render_Frame_Manager_FrameNum(size_t fFrameStart);
+	bool	Frame_Lock();
+	const float	Get_SPF() { return m_fSPF; }
 
 private:
 	LARGE_INTEGER	m_tBeginTime;
@@ -19,6 +21,7 @@ private:
 	float			m_fSPF;
 
 	TCHAR			m_szFPS[32];
+	TCHAR			m_szFrame[32];
 	float			m_fFPSTime;
 	int				m_iFPS;
 };
