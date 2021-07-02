@@ -175,6 +175,7 @@ void CForm2::Save_Unit(TCHAR * pFilePath)
 			WriteFile(hFile, pUnit->wstrState.c_str(), dwStateCount, &dwByte, nullptr);
 			WriteFile(hFile, &pUnit->D3VecPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 			WriteFile(hFile, &pUnit->type, sizeof(UNITTYPE::TYPE), &dwByte, nullptr);
+			WriteFile(hFile, &pUnit->iCollide, sizeof(int), &dwByte, nullptr);
 		}
 	}
 	CloseHandle(hFile);
@@ -209,6 +210,7 @@ void CForm2::Load_Unit(TCHAR * pFilePath)
 		Safe_Delete_Array(szStateBuf);
 		ReadFile(hFile, &pUnit->D3VecPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 		ReadFile(hFile, &pUnit->type, sizeof(UNITTYPE::TYPE), &dwByte, nullptr);
+		ReadFile(hFile, &pUnit->iCollide, sizeof(int), &dwByte, nullptr);
 		switch (pUnit->type)
 		{
 		case UNITTYPE::PLAYER:

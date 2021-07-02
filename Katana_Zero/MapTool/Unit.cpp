@@ -35,7 +35,7 @@ void CUnit::Render_Unit()
 			
 			float fCenterX = pTexInfo->tImageInfo.Width >> 1;
 			float fCenterY = pTexInfo->tImageInfo.Height >> 1;
-			D3DXMatrixScaling(&matScale, 1.f, 1.f, 0.f);
+			D3DXMatrixScaling(&matScale, 1.2f, 1.2f, 0.f);
 			D3DXMatrixTranslation(&matTrans, pUnit->D3VecPos.x - m_pView->GetScrollPos(SB_HORZ), pUnit->D3VecPos.y - m_pView->GetScrollPos(SB_VERT), 0.f);
 			matWorld = matScale * matTrans;
 			CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);

@@ -26,7 +26,7 @@ typedef struct tagUnitInfo
 	wstring	wstrState = L"Idle";
 	wstring wstrKey = L"";
 	UNITTYPE::TYPE type;
-	
+	int	iCollide = C_NONE;
 }UNITINFO;
 
 typedef	struct tagFrame

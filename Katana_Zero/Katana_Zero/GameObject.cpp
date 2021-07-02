@@ -14,6 +14,7 @@ CGameObject::CGameObject()
 	, m_wstrCurState(L"")
 	, m_fRatio(0.f)
 	, m_iUnitDir(1)
+	, m_vecPivot(0,0,0)
 {
 }
 
@@ -41,10 +42,10 @@ void CGameObject::Update_HitBox()
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1; 
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1; 	
 	//ratio 기본 배율은 유닛의 경우 2배
-	m_tHitBox.left = m_pUnitInfo->D3VecPos.x - fCenterX*m_fRatio;
-	m_tHitBox.top = m_pUnitInfo->D3VecPos.y - fCenterY*m_fRatio;
-	m_tHitBox.right = m_pUnitInfo->D3VecPos.x + fCenterX*m_fRatio;
-	m_tHitBox.bottom = m_pUnitInfo->D3VecPos.y + fCenterY*m_fRatio;
+	m_tHitBox.left = m_vecPivot.x - fCenterX*m_fRatio;
+	m_tHitBox.top = m_vecPivot.y - 2*fCenterY*m_fRatio;
+	m_tHitBox.right = m_vecPivot.x + fCenterX*m_fRatio;
+	m_tHitBox.bottom = m_vecPivot.y;
 
 }
 

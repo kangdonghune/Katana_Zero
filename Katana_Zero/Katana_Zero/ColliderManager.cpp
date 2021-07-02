@@ -19,15 +19,24 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 	MYLINE* pLand = nullptr;
 	MYLINE** ppLand = &pLand;
 	const UNITINFO* pInfo = pUnit->Get_UnitInfo();
+	const D3DXVECTOR3 Pivot = pUnit->Get_Pivot();
+	int iHeight = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, pInfo->wstrState, 0)->tImageInfo.Height>>1);
+	int iWidth = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, pInfo->wstrState, 0)->tImageInfo.Width>>1);
 	for (auto& tLine : pLandvec)
 	{
-		if (tLine.Start.x <= pInfo->D3VecPos.x && tLine.End.x >= pInfo->D3VecPos.x)
+		if (pLand != nullptr)
+			break;
+		if (tLine.Start.x <= Pivot.x + iWidth  && tLine.End.x >= Pivot.x - iWidth)
 		{
 			if (tLine.Start.y == tLine.End.y) // 평면 직선이면
 			{
-				float fdistance = tLine.Start.y - (pUnit->Get_UnitRatio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, pInfo->wstrState, 0)->tImageInfo.Height >> 1)) - 5;
-				if (fdistance <= pInfo->D3VecPos.y)
+				LONG lDistance = tLine.Start.y - pUnit->Get_Hitbox().bottom;
+				if (lDistance <= 0 && lDistance >= -3)
+				{
+					pUnit->Set_PivotY(tLine.Start.y);
 					*ppLand = &tLine;
+				}
+
 			}
 			else // 아니면
 			{ 
@@ -37,8 +46,9 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 	}
 
 	if (pLand != nullptr)
-	{
-		ERR_MSG(L"땅과 충돌");
-	}
+		pUnit->Set_Info()->iCollide = C_LAND;
+	if (pLand == nullptr)
+		pUnit->Set_Info()->iCollide = C_NONE;
+	
 }
 
