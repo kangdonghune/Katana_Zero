@@ -16,7 +16,7 @@ CTexture_Manager::~CTexture_Manager()
 HRESULT CTexture_Manager::Init_Texture_Manager()
 {
 	//¸Ê
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Map/stage%d.bmp", L"Map", L"Stage", 5)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Map/stage%d.bmp", L"Map", L"Stage", 6)))
 		return E_FAIL;
 
 	//ÇÃ·¹ÀÌ¾î
@@ -51,9 +51,9 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_player_flip/%d.png", L"Player", L"Flip", 11)))
 		return E_FAIL;
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_postcrouch/%d.png", L"Player", L"Postcrouch", 2)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_postcrouch/%d.png", L"Player", L"Postcrouch", 3)))
 		return E_FAIL;
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_precrouch/%d.png", L"Player", L"Precrouch", 2)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_precrouch/%d.png", L"Player", L"Precrouch", 3)))
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_roll/%d.png", L"Player", L"Roll", 7)))
 		return E_FAIL;

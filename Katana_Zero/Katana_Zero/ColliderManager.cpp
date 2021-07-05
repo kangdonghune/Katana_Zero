@@ -31,7 +31,7 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 			if (tLine.Start.y == tLine.End.y) // 평면 직선이면
 			{
 				LONG lDistance = tLine.Start.y - pUnit->Get_Hitbox().bottom;
-				if (lDistance <= 0 && lDistance >= -3)
+				if (lDistance <= 0 && lDistance >= -10)
 				{
 					pUnit->Set_PivotY(tLine.Start.y);
 					*ppLand = &tLine;

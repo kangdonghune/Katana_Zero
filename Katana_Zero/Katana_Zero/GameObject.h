@@ -9,7 +9,7 @@ public:
 	UNITINFO*&	Set_Info() { return m_pUnitInfo; }
 	void Set_Info(UNITINFO* pInfo) { m_pUnitInfo = pInfo; }
 	void Set_PivotY(float fPos) { m_vecPivot.y = fPos; }
-	
+	void Set_State(PLAYERSTATE::State state) { m_State = state; }
 
 	void Update_HitBox();
 	void FrameMove(float fSpeed);
@@ -42,6 +42,7 @@ protected:
 	wstring					m_wstrCurState;
 	int						m_iUnitDir;// y축 회전 시 적용 값으로 바라보는 방향을 결정.
 	D3DXVECTOR3				m_vecPivot;
-
+	float					m_fUnitSpeed;
+	float					m_fDefaultUnitSpeed;
 };
 

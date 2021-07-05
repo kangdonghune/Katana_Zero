@@ -14,7 +14,9 @@ CGameObject::CGameObject()
 	, m_wstrCurState(L"")
 	, m_fRatio(0.f)
 	, m_iUnitDir(1)
-	, m_vecPivot(0,0,0)
+	, m_vecPivot(0, 0, 0)
+	, m_fUnitSpeed(0.f)
+	, m_fDefaultUnitSpeed(0.f)
 {
 }
 

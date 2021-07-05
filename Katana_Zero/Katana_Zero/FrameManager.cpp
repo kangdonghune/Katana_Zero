@@ -7,6 +7,7 @@ IMPLEMENT_SINGLETON(CFrameManager)
 CFrameManager::CFrameManager()
 	:m_szFPS(L"")
 	,m_szFrame(L"")
+	,m_szFrameName(L"")
 	, m_fFPSTime(0.f)
 	, m_iFPS(0)
 	, m_fSPF(0.f)
@@ -54,6 +55,17 @@ void CFrameManager::Render_Frame_Manager_FrameNum(size_t fFrameStart)
 
 	Device->Get_Sprite()->SetTransform(&matTrans);
 	Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szFrame, lstrlen(m_szFrame), nullptr, 0, D3DCOLOR_ARGB(255, 255, 255, 255));
+}
+
+void CFrameManager::Render_Frame_Manager_FrameName(wstring wstrStateKey)
+{
+	swprintf_s(m_szFrameName, L"State : %s", wstrStateKey.c_str());
+
+	D3DXMATRIX matTrans;
+	D3DXMatrixTranslation(&matTrans, 100.f, 150.f, 0.f);
+
+	Device->Get_Sprite()->SetTransform(&matTrans);
+	Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szFrameName, lstrlen(m_szFrameName), nullptr, 0, D3DCOLOR_ARGB(255, 255, 255, 255));
 }
 
 bool CFrameManager::Frame_Lock()
