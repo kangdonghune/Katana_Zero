@@ -74,8 +74,21 @@ void CPlayer::Idle_to_run()
 {
 	m_fSpeed = 20.f;
 	m_fUnitSpeed = 2.5f;
+
+	if (m_pUnitInfo->iCollide == C_NONE && m_iActing == NOACTING) //충돌 상태도 아니고, 동작 여부도 아니라면.
+	{
+		m_State = PLAYERSTATE::FALL;
+		return;
+	}
+
+
+	if (GetAsyncKeyState('W') & 0X8000)
+	{
+		m_State = PLAYERSTATE::JUMP;
+		return;
+	}
+
 	m_vecPivot.x += m_fUnitSpeed * m_iUnitDir;
-	Update_Frame();// 프레임 갱신하고
 	if (Check_FrameEnd()) // 프레임 끝났는 지 체크
 	{
 		m_State = PLAYERSTATE::RUN;
@@ -89,6 +102,18 @@ void CPlayer::Run()
 
 	m_vecPivot.x += m_fUnitSpeed * m_iUnitDir;
 
+	if (m_pUnitInfo->iCollide == C_NONE && m_iActing == NOACTING) //충돌 상태도 아니고, 동작 여부도 아니라면.
+	{
+		m_State = PLAYERSTATE::FALL;
+		return;
+	}
+
+	if (GetAsyncKeyState('W') & 0X8000)
+	{
+		m_State = PLAYERSTATE::JUMP;
+		return;
+	}
+	
 	if (GetAsyncKeyState('A') & 0X8001)
 	{
 		m_iUnitDir = -1;
@@ -102,6 +127,7 @@ void CPlayer::Run()
 		return;
 	}
 
+
 	m_State = PLAYERSTATE::RUN_TO_IDLE;
 	
 }
@@ -111,7 +137,19 @@ void CPlayer::Run_to_idle()
 	m_fSpeed = 30.f;
 	m_fUnitSpeed = 1.0f;
 	m_vecPivot.x += m_fUnitSpeed * m_iUnitDir;
-	Update_Frame();// 프레임 갱신하고
+
+	if (m_pUnitInfo->iCollide == C_NONE && m_iActing == NOACTING) //충돌 상태도 아니고, 동작 여부도 아니라면.
+	{
+		m_State = PLAYERSTATE::FALL;
+		return;
+	}
+
+	if (GetAsyncKeyState('W') & 0X8000)
+	{
+		m_State = PLAYERSTATE::JUMP;
+		return;
+	}
+
 	if (Check_FrameEnd()) // 프레임 끝났는 지 체크
 	{
 		m_State = PLAYERSTATE::IDLE;
@@ -128,23 +166,98 @@ void CPlayer::Attack()
 
 void CPlayer::Precrouch()
 {
+	if (m_pUnitInfo->iCollide == C_NONE && m_iActing == NOACTING) //충돌 상태도 아니고, 동작 여부도 아니라면.
+	{
+		m_State = PLAYERSTATE::FALL;
+		return;
+	}
+	if (GetAsyncKeyState('W') & 0X8000)
+	{
+		m_State = PLAYERSTATE::JUMP;
+		return;
+	}
+
+	if (GetAsyncKeyState('A') & 0X8001)
+	{
+		m_iUnitDir = -1;
+		m_State = PLAYERSTATE::ROLL;
+		return;
+	}
+	if (GetAsyncKeyState('D') & 0X8001)
+	{
+		m_iUnitDir = 1;
+		m_State = PLAYERSTATE::ROLL;
+		return;
+	}
 	if (Check_FrameEnd())
 		m_State = PLAYERSTATE::CROUCH;
 }
 
 void CPlayer::Crouch()
 {
+
+	if (m_pUnitInfo->iCollide == C_NONE && m_iActing == NOACTING) //충돌 상태도 아니고, 동작 여부도 아니라면.
+	{
+		m_State = PLAYERSTATE::FALL;
+		return;
+	}
+
+	if (GetAsyncKeyState('W') & 0X8000)
+	{
+		m_State = PLAYERSTATE::JUMP;
+		return;
+	}
+
+	if (GetAsyncKeyState('A') & 0X8001)
+	{
+		m_iUnitDir = -1;
+		m_State = PLAYERSTATE::ROLL;
+		return;
+	}
+	if (GetAsyncKeyState('D') & 0X8001)
+	{
+		m_iUnitDir = 1;
+		m_State = PLAYERSTATE::ROLL;
+		return;
+	}
+
 	if (GetAsyncKeyState('S') & 0X8001)
 	{
 		m_State = PLAYERSTATE::CROUCH;
 		return;
 	}
 
+
 	m_State = PLAYERSTATE::POSTCROUCH;
 }
 
 void CPlayer::Postcrouch()
 {
+
+	if (m_pUnitInfo->iCollide == C_NONE && m_iActing == NOACTING) //충돌 상태도 아니고, 동작 여부도 아니라면.
+	{
+		m_State = PLAYERSTATE::FALL;
+		return;
+	}
+	if (GetAsyncKeyState('W') & 0X8000)
+	{
+		m_State = PLAYERSTATE::JUMP;
+		return;
+	}
+
+	if (GetAsyncKeyState('A') & 0X8001)
+	{
+		m_iUnitDir = -1;
+		m_State = PLAYERSTATE::ROLL;
+		return;
+	}
+	if (GetAsyncKeyState('D') & 0X8001)
+	{
+		m_iUnitDir = 1;
+		m_State = PLAYERSTATE::ROLL;
+		return;
+	}
+
 	if (Check_FrameEnd())
 		m_State = PLAYERSTATE::IDLE;
 }
@@ -244,6 +357,25 @@ void CPlayer::Flip()
 
 void CPlayer::Roll()
 {
+	m_fSpeed = 30.f;
+	m_fUnitSpeed = 5.f;
+	if (m_pUnitInfo->iCollide == C_NONE && m_iActing == NOACTING) //충돌 상태도 아니고, 동작 여부도 아니라면.
+	{
+		m_State = PLAYERSTATE::FALL;
+		return;
+	}
+
+	if (GetAsyncKeyState('W') & 0X8000)
+	{
+		m_State = PLAYERSTATE::JUMP;
+		return;
+	}
+	if(!Check_FrameEnd())
+	{
+		m_vecPivot.x += m_fUnitSpeed*m_iUnitDir;
+	}
+	if (Check_FrameEnd())
+		m_State = PLAYERSTATE::IDLE;
 }
 
 //void CPlayer::Update_KeyInput()
@@ -307,20 +439,24 @@ void CPlayer::Update_UnitState()
 	{
 	case PLAYERSTATE::IDLE:
 		m_pUnitInfo->wstrState = L"Idle";
+		Update_Frame();// 프레임 갱신하고
 		Idle();
 		break;
 	case PLAYERSTATE::IDLE_TO_WALK:
 		break;
 	case PLAYERSTATE::IDLE_TO_RUN:
 		m_pUnitInfo->wstrState = L"Idle_to_run";
+		Update_Frame();
 		Idle_to_run();
 		break;
 	case PLAYERSTATE::RUN:
 		m_pUnitInfo->wstrState = L"Run";
+		Update_Frame();
 		Run();
 		break;
 	case PLAYERSTATE::RUN_TO_IDLE:
 		m_pUnitInfo->wstrState = L"Run_to_idle";
+		Update_Frame();
 		Run_to_idle();
 		break;
 	case PLAYERSTATE::WALK:
@@ -329,14 +465,17 @@ void CPlayer::Update_UnitState()
 		break;
 	case PLAYERSTATE::PRECROUCH:
 		m_pUnitInfo->wstrState = L"Precrouch";
+		Update_Frame();
 		Precrouch();
 		break;
 	case PLAYERSTATE::CROUCH:
 		m_pUnitInfo->wstrState = L"Crouch";
+		Update_Frame();
 		Crouch();
 		break;
 	case PLAYERSTATE::POSTCROUCH:
 		m_pUnitInfo->wstrState = L"Postcrouch";
+		Update_Frame();
 		Postcrouch();
 		break;
 	case PLAYERSTATE::DOOROPEN:
@@ -345,6 +484,7 @@ void CPlayer::Update_UnitState()
 		break;
 	case PLAYERSTATE::FALL:
 		m_pUnitInfo->wstrState = L"Fall";
+		Update_Frame();
 		Fall();
 		break;
 	case PLAYERSTATE::HURTFLY_BEGIN:
@@ -357,6 +497,7 @@ void CPlayer::Update_UnitState()
 		break;
 	case PLAYERSTATE::JUMP:
 		m_pUnitInfo->wstrState = L"Jump";
+		Update_Frame();
 		Jump();
 		break;
 	case PLAYERSTATE::DANCE:
@@ -364,6 +505,9 @@ void CPlayer::Update_UnitState()
 	case PLAYERSTATE::FLIP:
 		break;
 	case PLAYERSTATE::ROLL:
+		m_pUnitInfo->wstrState = L"Roll";
+		Update_Frame();
+		Roll();
 		break;
 	case PLAYERSTATE::WALLSLIDE:
 		break;
