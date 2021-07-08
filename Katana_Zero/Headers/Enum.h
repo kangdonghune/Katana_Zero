@@ -2,7 +2,7 @@
 
 namespace GAMEOBJECT
 {
-	enum TYPE{PLAYER, END};
+	enum TYPE{PLAYER, EFFECT, GANGSTER, END};
 }
 
 namespace TERRAINTYPE
@@ -12,7 +12,7 @@ namespace TERRAINTYPE
 
 namespace UNITTYPE
 {
-	enum TYPE { PLAYER, END };
+	enum TYPE { PLAYER, GANGSTER, END };
 }
 
 namespace PLAYERSTATE
@@ -44,3 +44,14 @@ namespace PLAYERSTATE
 		END
 	};
 }
+
+namespace GANGSTERSTATE
+{
+	enum State
+	{
+		IDLE,
+		FALL,
+		END
+	};
+}
+

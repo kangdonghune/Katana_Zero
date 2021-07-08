@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+
 class CPlayer :
 	public CGameObject
 {
@@ -8,7 +9,7 @@ private:
 public:
 	~CPlayer();
 public:
-	static CPlayer* Create(UNITINFO* pInfo);
+	static CGameObject* Create(UNITINFO* pInfo);
 
 private:
 	void Idle();
@@ -34,11 +35,13 @@ private:
 	void Roll();
 	void Wallslide();
 
-
 public:
 
 //	void Update_KeyInput();
 	void Update_UnitState();
+	void Render_Pivot();
+	void Render_MousePos();
+
 
 public:
 	// CGameObject을(를) 통해 상속됨
@@ -53,11 +56,22 @@ public:
 	virtual void Release_GameObject() override;
 
 private:
-	float	m_fDefaultSpeed;
-	float	m_fJumpDistance; //최대 점프 길이
-	int		m_iActing; //동작을 하고 있는지 여부.
-	float	m_fJumpAngle;
-	float	m_fOldJumpAngle;
-	float	m_fFallAngle;
+	float		m_fDefaultSpeed;
+	float		m_fJumpDistance; //최대 점프 길이
+	int			m_iActing; //동작을 하고 있는지 여부.
+	float		m_fJumpAngle;
+	float		m_fOldJumpAngle;
+	float		m_fOldJumpAngleX;
+	float		m_fOldJumpAngleY;
+	float		m_fFallAngle;
+	D3DXVECTOR3 m_vecMousePos;
+	D3DXVECTOR3 m_vecDir;
+	float		m_fAttackLimit;
+	float		m_fAttackCool;
+
+	TCHAR		m_szPivot[255];
+	TCHAR		m_szMousePos[255];
+
+	CGameObject*	m_pAttackEffect;
 };
 

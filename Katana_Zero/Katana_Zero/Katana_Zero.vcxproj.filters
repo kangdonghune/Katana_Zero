@@ -60,6 +60,15 @@
     <Filter Include="소스 파일\098.Managers\04.FrameManager">
       <UniqueIdentifier>{59f33316-13b3-48cc-8192-f44c606eb8f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.GameObject\02.Effect">
+      <UniqueIdentifier>{95a831c6-affb-47fe-a216-2bcfbd9cc763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\02.Enemy">
+      <UniqueIdentifier>{838d3f72-5a8f-4ee3-bf81-f6047c2e35cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\02.Enemy\00.Gangster">
+      <UniqueIdentifier>{10fe3c58-eccc-454e-8a28-f37440d1d4a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -116,6 +125,12 @@
     <ClInclude Include="ColliderManager.h">
       <Filter>소스 파일\098.Managers\01.ColliderManager</Filter>
     </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>소스 파일\01.GameObject\02.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Gangster.h">
+      <Filter>소스 파일\01.GameObject\02.Enemy\00.Gangster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -165,6 +180,12 @@
     </ClCompile>
     <ClCompile Include="ColliderManager.cpp">
       <Filter>소스 파일\098.Managers\01.ColliderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>소스 파일\01.GameObject\02.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Gangster.cpp">
+      <Filter>소스 파일\01.GameObject\02.Enemy\00.Gangster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

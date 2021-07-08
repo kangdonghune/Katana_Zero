@@ -43,6 +43,7 @@ BEGIN_MESSAGE_MAP(CForm2, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON2, &CForm2::OnBnClickedLoad)
 	ON_BN_CLICKED(IDC_RADIO5, &CForm2::OnBnClickedPlayer)
 	ON_BN_CLICKED(IDC_BUTTON6, &CForm2::OnBnClickedDeletePlayer)
+	ON_BN_CLICKED(IDC_RADIO6, &CForm2::OnBnClickedGangster)
 END_MESSAGE_MAP()
 
 
@@ -100,6 +101,17 @@ void CForm2::CreatePlayer()
 	pUnit->D3VecPos = pView->m_MouseDownPos;
 	pUnit->wstrKey = L"Player";
 	pUnit->type = UNITTYPE::PLAYER;
+	UNITS->Insert_Unit(pUnit, pUnit->type);
+}
+
+void CForm2::CreateGangster()
+{
+	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
+	UNITINFO* pUnit = new UNITINFO;
+	pUnit->D3VecPos = pView->m_MouseDownPos;
+	pUnit->wstrKey = L"Gangster";
+	pUnit->type = UNITTYPE::GANGSTER;
 	UNITS->Insert_Unit(pUnit, pUnit->type);
 }
 
@@ -211,6 +223,7 @@ void CForm2::Load_Unit(TCHAR * pFilePath)
 		ReadFile(hFile, &pUnit->D3VecPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 		ReadFile(hFile, &pUnit->type, sizeof(UNITTYPE::TYPE), &dwByte, nullptr);
 		ReadFile(hFile, &pUnit->iCollide, sizeof(int), &dwByte, nullptr);
+
 		switch (pUnit->type)
 		{
 		case UNITTYPE::PLAYER:
@@ -382,4 +395,22 @@ void CForm2::OnBnClickedDeletePlayer()
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
 	pView->RedrawWindow();
+}
+
+
+void CForm2::OnBnClickedGangster()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(true);
+
+	if (IsDlgButtonChecked(IDC_RADIO6))
+	{
+		m_iToolState = TOOL_Gangster;
+	}
+	else
+	{
+		m_iToolState = Tool_Idle;
+	}
+
+	UpdateData(false);
 }

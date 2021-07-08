@@ -2,6 +2,7 @@
 #include "SaveLoadManager.h"
 #include "Player.h"
 #include "GameObjectManager.h"
+#include "Gangster.h"
 
 IMPLEMENT_SINGLETON(CSaveLoadManager)
 CSaveLoadManager::CSaveLoadManager()
@@ -42,10 +43,19 @@ HRESULT CSaveLoadManager::LoadUnit(TCHAR* pFilePath)
 		Safe_Delete_Array(szStateBuf);
 		ReadFile(hFile, &pUnit->D3VecPos, sizeof(D3DXVECTOR3), &dwByte, nullptr);
 		ReadFile(hFile, &pUnit->type, sizeof(UNITTYPE::TYPE), &dwByte, nullptr);
+		ReadFile(hFile, &pUnit->iCollide, sizeof(int), &dwByte, nullptr);
 		switch (pUnit->type)
 		{
 		case UNITTYPE::PLAYER:
 			GameObjectManager->Insert_GameObjectManager(CPlayer::Create(pUnit), GAMEOBJECT::PLAYER);
+			break;
+		case UNITTYPE::GANGSTER:
+			if (GameObjectManager->Get_GameObjectVec(GAMEOBJECT::PLAYER).empty())
+			{
+				ERR_MSG(L"적을 만들기 전에 대상으로 삼을 플레이어가 없습니다.");
+				return E_FAIL;
+			}
+			GameObjectManager->Insert_GameObjectManager(CGangster::Create(GameObjectManager->Get_GameObjectVec(GAMEOBJECT::PLAYER).at(0),pUnit), GAMEOBJECT::GANGSTER);
 			break;
 		default:
 			Safe_Delete(pUnit);

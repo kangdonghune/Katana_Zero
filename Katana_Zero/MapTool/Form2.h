@@ -38,6 +38,7 @@ public:
 	void CreateLine();
 	void CreateCelling();
 	void CreatePlayer();
+	void CreateGangster();
 
 	void AutoSave();
 	void Save_Terrain(TCHAR* pFilePath);
@@ -58,6 +59,7 @@ public:
 	afx_msg void OnBnClickedLoad();
 	afx_msg void OnBnClickedPlayer();
 	afx_msg void OnBnClickedDeletePlayer();
+	afx_msg void OnBnClickedGangster();
 };
 
 

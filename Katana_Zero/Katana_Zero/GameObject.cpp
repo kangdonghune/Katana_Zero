@@ -6,7 +6,7 @@
 #include "Graphic_Device.h"
 
 CGameObject::CGameObject()
-	:m_pUnitInfo(nullptr)
+	: m_pUnitInfo(nullptr)
 	, m_tFrame({})
 	, m_fSpeed(0)
 	, m_State(PLAYERSTATE::IDLE)
@@ -17,6 +17,7 @@ CGameObject::CGameObject()
 	, m_vecPivot(0, 0, 0)
 	, m_fUnitSpeed(0.f)
 	, m_fDefaultUnitSpeed(0.f)
+	, m_fRotateAngle(0.f)
 {
 }
 
@@ -44,10 +45,47 @@ void CGameObject::Update_HitBox()
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1; 
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1; 	
 	//ratio 기본 배율은 유닛의 경우 2배
-	m_tHitBox.left = m_vecPivot.x - fCenterX*m_fRatio;
-	m_tHitBox.top = m_vecPivot.y - 2*fCenterY*m_fRatio;
-	m_tHitBox.right = m_vecPivot.x + fCenterX*m_fRatio;
+	m_tHitBox.left =   m_vecPivot.x - fCenterX*m_fRatio;
+	m_tHitBox.top =    m_vecPivot.y - 2*fCenterY*m_fRatio;
+	m_tHitBox.right =  m_vecPivot.x + fCenterX*m_fRatio;
 	m_tHitBox.bottom = m_vecPivot.y;
+
+}
+
+void CGameObject::Update_HitBoxOBB()
+{
+	if (nullptr == m_pUnitInfo)
+	{
+		ERR_MSG(L"유닛 정보가 없습니다.");
+		return;
+	}
+	D3DXMATRIX matScale, matRolateZ, matTrans, matWorld;
+
+	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, (size_t)m_tFrame.fFrameStart);
+	D3DXVECTOR3				m_tHitBoxObbTemp[4];
+	if (nullptr == pTexInfo)
+	{
+		ERR_MSG(L"Player에서 텍스쳐 찾기 실패");
+		return;
+	}
+
+	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
+	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
+	//ratio 기본 배율은 유닛의 경우 2배
+	m_tHitBoxObbTemp[0] = {-m_fRatio*fCenterX, -m_fRatio*fCenterY, 0.f };//왼쪽 위
+	m_tHitBoxObbTemp[1] = { m_fRatio*fCenterX, -m_fRatio*fCenterY, 0.f };//오른쪽 위
+	m_tHitBoxObbTemp[2] = { m_fRatio*fCenterX,  m_fRatio*fCenterY, 0.f };//오른쪽 아래
+	m_tHitBoxObbTemp[3] = {-m_fRatio*fCenterX,  m_fRatio*fCenterY, 0.f };//왼쪽 아래
+	D3DXMatrixScaling(&matScale, m_iUnitDir, 1.f, 0.f);
+	D3DXMatrixRotationZ(&matRolateZ, m_fRotateAngle);
+	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y, 0.f);
+	matWorld = matScale * matRolateZ * matTrans;
+	for (int i = 0; i < 4; i++)
+	{
+		D3DXVec3TransformCoord(&m_tHitBoxObb[i], &m_tHitBoxObbTemp[i], &matWorld);
+		//D3DXVec3TransformNormal(&m_tHitBoxObb[i], &m_tHitBoxObbTemp[i], &matWorld);
+		m_tHitBoxObb[i];
+	}
 
 }
 
@@ -60,10 +98,76 @@ void CGameObject::FrameMove(float fSpeed)
 
 void CGameObject::Render_HitBox()
 {
+	int r = 255;
+	int g = 255;
+	int b = 255;
+	switch (m_pUnitInfo->iCollide)
+	{
+	case C_NONE:
+		r = 255;
+		g = 255;
+		b = 255;
+		break;
+	case C_LAND:
+		r = 0;
+		g = 255;
+		b = 0;
+		break;
+	case C_WALL|C_WALLL:
+		r = 255;
+		g = 0;
+		b = 0;
+		break;
+	case C_WALL | C_WALLR:
+		r = 255;
+		g = 0;
+		b = 0;
+		break;
+	case C_CELLING:
+		r = 0;
+		g = 0;
+		b = 255;
+		break;
+	case C_LAND| C_WALL | C_WALLL:
+		r = 255;
+		g = 255;
+		b = 0;
+		break;
+	case C_LAND | C_WALL | C_WALLR:
+		r = 255;
+		g = 255;
+		b = 0;
+		break;
+	case C_WALL | C_WALLL | C_CELLING:
+		r = 255;
+		g = 0;
+		b = 255;
+		break;
+	case C_WALL | C_WALLR| C_CELLING:
+		r = 255;
+		g = 0;
+		b = 255;
+		break;
+	default:
+		m_pUnitInfo->iCollide = C_NONE;
+		break;
+	}
 	Device->m_pSprite->End();
 	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine[5]{ { (float)m_tHitBox.left, (float)m_tHitBox.top} ,{ (float)m_tHitBox.right, (float)m_tHitBox.top } ,{ (float)m_tHitBox.right, (float)m_tHitBox.bottom } ,{ (float)m_tHitBox.left, (float)m_tHitBox.bottom } ,{ (float)m_tHitBox.left, (float)m_tHitBox.top }};
-	Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, 200, 200, 0));
+	D3DXVECTOR2	vLine[5]{ { (float)m_tHitBox.left, (float)m_tHitBox.top } ,{ (float)m_tHitBox.right, (float)m_tHitBox.top } ,{ (float)m_tHitBox.right, (float)m_tHitBox.bottom } ,{ (float)m_tHitBox.left, (float)m_tHitBox.bottom } ,{ (float)m_tHitBox.left, (float)m_tHitBox.top } };
+	Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, r, g ,b));
+	D3DXVECTOR2	vLine2[2]{ {(float)m_vecPivot.x, (float)m_vecPivot.y},{ (float)m_vecPivot.x, (float)m_vecPivot.y - 80.f} };
+	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 0));
+	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+}
+
+void CGameObject::Render_HitBoxObb()
+{
+	Device->m_pSprite->End();
+	Device->m_pLine->SetWidth(1.f);
+	D3DXVECTOR2	vLine[5]{ {m_tHitBoxObb[0].x,m_tHitBoxObb[0].y},{ m_tHitBoxObb[1].x,m_tHitBoxObb[1].y },{ m_tHitBoxObb[2].x,m_tHitBoxObb[2].y },{ m_tHitBoxObb[3].x,m_tHitBoxObb[3].y },{ m_tHitBoxObb[0].x,m_tHitBoxObb[0].y } };
+	Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, 175, 255, 175));
+	
 	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
 

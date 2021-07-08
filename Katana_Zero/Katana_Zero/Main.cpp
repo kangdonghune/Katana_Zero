@@ -60,6 +60,12 @@ void CMain::Update_Main()
 	TimeManager->Update_TimeManager();
 	GameObjectManager->Update_GameObjectManager();
 	ColliderManager->Collider_Land(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectVec(GAMEOBJECT::PLAYER).at(0));
+	ColliderManager->Collider_Wall(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectVec(GAMEOBJECT::PLAYER).at(0));
+	ColliderManager->Collider_Celling(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectVec(GAMEOBJECT::PLAYER).at(0));
+
+	ColliderManager->Collider_Land(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectVec(GAMEOBJECT::GANGSTER));
+	ColliderManager->Collider_Wall(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectVec(GAMEOBJECT::GANGSTER));
+	ColliderManager->Collider_Celling(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectVec(GAMEOBJECT::GANGSTER));
 }
 
 void CMain::LateUpdate_Main()
@@ -91,4 +97,8 @@ void CMain::Render_Main()
 
 void CMain::Release_Main()
 {
+	MapObjectManager->Destroy_Instance();
+	GameObjectManager->Destroy_Instance();
+	FrameManager->Destroy_Instance();
+	Device->Destroy_Instance();
 }

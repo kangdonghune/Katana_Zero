@@ -153,9 +153,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColliderManager.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="FrameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="Gangster.h" />
     <ClInclude Include="Graphic_Device.h" />
     <ClInclude Include="Katana_Zero.h" />
     <ClInclude Include="Main.h" />
@@ -173,9 +175,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColliderManager.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="FrameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="Gangster.cpp" />
     <ClCompile Include="Graphic_Device.cpp" />
     <ClCompile Include="Katana_Zero.cpp" />
     <ClCompile Include="Main.cpp" />

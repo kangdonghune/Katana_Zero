@@ -8,7 +8,9 @@
 #include <list>
 #include <map>
 #include <algorithm>
+#include <math.h>
 #include <functional>
+#include <stdio.h>
 using namespace std;
 
 #include "Enum.h"

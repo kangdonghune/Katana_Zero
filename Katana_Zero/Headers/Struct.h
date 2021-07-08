@@ -22,7 +22,7 @@ typedef struct tagRedefineLine
 
 typedef struct tagUnitInfo
 {
-	D3DXVECTOR3	D3VecPos;
+	D3DXVECTOR3	D3VecPos{};
 	wstring	wstrState = L"Idle";
 	wstring wstrKey = L"";
 	UNITTYPE::TYPE type;

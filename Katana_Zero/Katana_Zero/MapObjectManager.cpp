@@ -61,7 +61,7 @@ void CMapObjectManager::LateUpdate_MapObjectManager()
 void CMapObjectManager::Render_MapObjectManager()
 {
 	Device->m_pSprite->End();
-	Device->m_pLine->SetWidth(10.f);
+	Device->m_pLine->SetWidth(5.f);
 	for (auto& tLine : m_vecTerrain[TERRAINTYPE::WALL])
 	{
 		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x),float(tLine.Start.y) },{ float(tLine.End.x),float(tLine.End.y) } };

@@ -181,6 +181,8 @@ void CMapToolView::Select_ToolFunction(int ToolState)
 		return;
 	case TOOL_Player:
 		pForm->CreatePlayer();
+	case TOOL_Gangster:
+		pForm->CreateGangster();
 	default:
 		break;
 	}
@@ -221,7 +223,7 @@ void CMapToolView::RenderRects()
 {
 
 	Device->m_pSprite->End();
-	Device->m_pLine->SetWidth(10.f);
+	Device->m_pLine->SetWidth(5.f);
 	for (auto& pLine : RECTS->Get_Wall())
 	{
 		D3DXVECTOR2	vLine[2]{ { float(pLine->Start.x - GetScrollPos(SB_HORZ)),float(pLine->Start.y - GetScrollPos(SB_VERT)) },{ float(pLine->End.x - GetScrollPos(SB_HORZ)),float(pLine->End.y - GetScrollPos(SB_VERT)) } };
