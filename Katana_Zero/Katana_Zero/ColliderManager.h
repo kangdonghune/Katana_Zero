@@ -15,5 +15,7 @@ public:
 	void	Collider_Land(vector<MYLINE> pLandvec, vector<CGameObject*> pUnitVec);
 	void	Collider_Wall(vector<MYLINE> pWallvec, vector<CGameObject*> pUnitVec);
 	void	Collider_Celling(vector<MYLINE> pCellingVec, vector<CGameObject*> pUnitVec);
+	
+	void	Collider_Obb(CGameObject* pObject1, CGameObject* pObject2);
 };
 

@@ -1,7 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "Enemy.h"
+class CGameObject;
 class CGangster :
-	public CGameObject
+	public CEnemy
 {
 private:
 	CGangster();
@@ -9,10 +10,13 @@ public:
 	~CGangster();
 
 public:
-	static	 CGameObject*	 Create(CGameObject* pTarget, UNITINFO* pInfo);
+	static	CGameObject*	 Create(CGameObject* pTarget, UNITINFO* pInfo);
 
 private:
-	void	Set_Target(CGameObject* pTarget) { m_pTarget = pTarget; }
+	void	Update_TargetRotate();
+
+
+
 public:
 	// CGameObject을(를) 통해 상속됨
 	virtual HRESULT Ready_GameObject() override;
@@ -22,6 +26,7 @@ public:
 	virtual void Release_GameObject() override;
 
 private:
-	CGameObject* m_pTarget;
+
+
 };
 

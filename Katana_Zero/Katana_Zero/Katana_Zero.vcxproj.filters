@@ -63,11 +63,17 @@
     <Filter Include="소스 파일\01.GameObject\02.Effect">
       <UniqueIdentifier>{95a831c6-affb-47fe-a216-2bcfbd9cc763}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\01.GameObject\02.Enemy">
+    <Filter Include="소스 파일\01.GameObject\03.Enemy">
       <UniqueIdentifier>{838d3f72-5a8f-4ee3-bf81-f6047c2e35cb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\01.GameObject\02.Enemy\00.Gangster">
+    <Filter Include="소스 파일\01.GameObject\03.Enemy\00.Gangster">
       <UniqueIdentifier>{10fe3c58-eccc-454e-8a28-f37440d1d4a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\04.Projectile">
+      <UniqueIdentifier>{9329ba80-427b-459b-b4f7-8c8998c78c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\04.Projectile\00.Bullet">
+      <UniqueIdentifier>{304e8132-2937-4bc0-8a02-7e5b6056e3cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,7 +135,13 @@
       <Filter>소스 파일\01.GameObject\02.Effect</Filter>
     </ClInclude>
     <ClInclude Include="Gangster.h">
-      <Filter>소스 파일\01.GameObject\02.Enemy\00.Gangster</Filter>
+      <Filter>소스 파일\01.GameObject\03.Enemy\00.Gangster</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>소스 파일\01.GameObject\04.Projectile\00.Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,7 +197,13 @@
       <Filter>소스 파일\01.GameObject\02.Effect</Filter>
     </ClCompile>
     <ClCompile Include="Gangster.cpp">
-      <Filter>소스 파일\01.GameObject\02.Enemy\00.Gangster</Filter>
+      <Filter>소스 파일\01.GameObject\03.Enemy\00.Gangster</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>소스 파일\01.GameObject\04.Projectile\00.Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

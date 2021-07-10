@@ -7,13 +7,14 @@ public:
 
 public:
 	UNITINFO*&	Set_Info() { return m_pUnitInfo; }
-	void		 Set_Info(UNITINFO* pInfo) { m_pUnitInfo = pInfo; }
-	void		 Set_PivotX(float fPos) { m_vecPivot.x = fPos; }
-	void		 Set_PivotY(float fPos) { m_vecPivot.y = fPos; }
-	void		 Set_State(PLAYERSTATE::State state) { m_State = state; }
-	void		 Set_UnitDir(int iDir) { m_iUnitDir = iDir; }
-	void		 Set_OldCollide(int Collide) { m_iOldCollide = Collide; }
-	void		 Set_FrameStart(float fIndex) { m_tFrame.fFrameStart = fIndex; }
+	void		Set_Info(UNITINFO* pInfo) { m_pUnitInfo = pInfo; }
+	void		Set_PivotX(float fPos) { m_vecPivot.x = fPos; }
+	void		Set_PivotY(float fPos) { m_vecPivot.y = fPos; }
+	void		Set_State(PLAYERSTATE::State state) { m_State = state; }
+	void		Set_UnitDir(int iDir) { m_iUnitDir = iDir; }
+	void		Set_OldCollide(int Collide) { m_iOldCollide = Collide; }
+	void		Set_FrameStart(float fIndex) { m_tFrame.fFrameStart = fIndex; }
+
 
 	void Update_HitBox();
 	void Update_HitBoxOBB();
@@ -23,6 +24,9 @@ public:
 	void Update_Frame();
 	bool Check_FrameEnd();
 
+
+
+	
 	const float					Get_RotateAngle() { return m_fRotateAngle; }
 	const int					Get_UnitDir() { return m_iUnitDir; }
 	const PLAYERSTATE::State	Get_State() { return m_State; }
@@ -32,6 +36,8 @@ public:
 	const RECT					Get_Hitbox() { return m_tHitBox; }
 	const UNITINFO*				Get_UnitInfo() { return m_pUnitInfo; }
 	const float					Get_UnitRatio() { return m_fRatio; }
+
+	UNITINFO*&					Get_DeleteInfo() { return m_pUnitInfo; }
 
 public:
 	virtual HRESULT Ready_GameObject() PURE;
@@ -56,5 +62,9 @@ protected:
 	float					m_fDefaultUnitSpeed;
 	float					m_fRotateAngle;
 	int						m_iOldCollide;
+	float					m_fAttackLimit;
+	float					m_fAttackCool;
+
+
 };
 

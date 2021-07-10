@@ -101,6 +101,11 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_fire_1/%d.png", L"Effect", L"Gangsterfire", 6)))
 		return E_FAIL;
+
+	//Åõ»çÃ¼
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Projectile/Bullet/%d.png", L"Projectile", L"Bullet", 1)))
+		return E_FAIL;
+
 	return S_OK;
 }
 //L"../Texture/Stage/Player/Attack/AKIHA_AKI01_00%d.png",L"Player", L"Attack", 6

@@ -34,3 +34,12 @@ typedef	struct tagFrame
 	float fFrameStart;
 	float fFrameEnd;
 }FRAME;
+
+typedef struct tagHitBox
+{
+	D3DXVECTOR3 D3Dot1;
+	D3DXVECTOR3 D3Dot2;
+	D3DXVECTOR3 D3Dot3;
+	D3DXVECTOR3 D3Dot4;
+
+}HITBOX;

@@ -18,3 +18,5 @@ void Safe_Delete_Array(T& rObj)
 		rObj = nullptr;
 	}
 }
+
+

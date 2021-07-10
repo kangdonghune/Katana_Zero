@@ -18,6 +18,8 @@ CGameObject::CGameObject()
 	, m_fUnitSpeed(0.f)
 	, m_fDefaultUnitSpeed(0.f)
 	, m_fRotateAngle(0.f)
+	, m_fAttackLimit(0.7f)
+	, m_fAttackCool(0.5f)
 {
 }
 
@@ -200,3 +202,5 @@ bool CGameObject::Check_FrameEnd() //다음 상태로 변경하기 전 준비 동작을 마쳤는�
 	}
 	return false;
 }
+
+

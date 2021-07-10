@@ -392,3 +392,19 @@ void CColliderManager::Collider_Celling(vector<MYLINE> pCellingVec, vector<CGame
 	
 }
 
+void CColliderManager::Collider_Obb(CGameObject* pObject1, CGameObject* pObject2)
+{
+	float fDistX = pObject1->Get_UnitInfo()->D3VecPos.x - pObject2->Get_UnitInfo()->D3VecPos.x;
+	float fDistY = pObject1->Get_UnitInfo()->D3VecPos.y - pObject2->Get_UnitInfo()->D3VecPos.y;
+	if (fDistX >= 50)
+		return;
+
+	float height1 = pObject1->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject1->Get_UnitInfo()->wstrKey, pObject1->Get_UnitInfo()->wstrState, 0)->tImageInfo.Height >> 1);
+	float width1 = pObject1->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject1->Get_UnitInfo()->wstrKey, pObject1->Get_UnitInfo()->wstrState, 0)->tImageInfo.Width >> 1);
+	float height2 = pObject2->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject2->Get_UnitInfo()->wstrKey, pObject2->Get_UnitInfo()->wstrState, 0)->tImageInfo.Height >> 1);
+	float width2 = pObject2->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject2->Get_UnitInfo()->wstrKey, pObject2->Get_UnitInfo()->wstrState, 0)->tImageInfo.Width >> 1);
+
+	D3DXVECTOR3 vec[4];
+	//vec[1] = { height1*cosf(D3DXToRadian(pObject1->Get_RotateAngle) }
+}
+

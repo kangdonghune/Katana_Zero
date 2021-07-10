@@ -15,8 +15,6 @@ CPlayer::CPlayer()
 	, m_fOldJumpAngleY(0.f)//이전 점프 높이
 	, m_fFallAngle(0.f)
 	, m_szPivot(L"")
-	, m_fAttackLimit(0.7f)
-	, m_fAttackCool(0.5f)
 {
 }
 

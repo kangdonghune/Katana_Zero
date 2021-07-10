@@ -66,8 +66,7 @@ private:
 	float		m_fFallAngle;
 	D3DXVECTOR3 m_vecMousePos;
 	D3DXVECTOR3 m_vecDir;
-	float		m_fAttackLimit;
-	float		m_fAttackCool;
+
 
 	TCHAR		m_szPivot[255];
 	TCHAR		m_szMousePos[255];
