@@ -167,6 +167,7 @@
     <ClInclude Include="MapObjectManager.h" />
     <ClInclude Include="Multi_Texture.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerAttack.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SaveLoadManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="MapObjectManager.cpp" />
     <ClCompile Include="Multi_Texture.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerAttack.cpp" />
     <ClCompile Include="SaveLoadManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -32,25 +32,25 @@ CGameObject * CGangster::Create(CGameObject * pTarget, UNITINFO* pInfo)
 }
 
 void CGangster::Update_TargetRotate()
-{ 
-	D3DXVECTOR3 TargetPos = { m_pTarget->Get_Pivot().x,m_pTarget->Get_Pivot().y - m_pTarget->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(m_pTarget->Get_UnitInfo()->wstrKey,m_pTarget->Get_UnitInfo()->wstrState,0)->tImageInfo.Height>>1) ,0 };
-	D3DXVECTOR3 MyPos = { m_pUnitInfo->D3VecPos.x,  m_pUnitInfo->D3VecPos.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
+{
+	D3DXVECTOR3 TargetPos = { m_pTarget->Get_Pivot().x,m_pTarget->Get_Pivot().y - m_pTarget->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(m_pTarget->Get_UnitInfo()->wstrKey,m_pTarget->Get_UnitInfo()->wstrState,0)->tImageInfo.Height >> 1) ,0 };
+	D3DXVECTOR3 MyPos = { m_vecPivot.x,  m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
 	D3DXVECTOR3 vDir = TargetPos - MyPos;
 	D3DXVECTOR3 vLook{ 1.f, 0.f, 0.f };
 	D3DXVec3Normalize(&vDir, &vDir);
 	m_iUnitDir = 1;
+
+	float fCos = D3DXVec3Dot(&vDir, &vLook);
+	m_fRotateAngle = D3DXToDegree(acosf(fCos));
+	if (MyPos.y <= TargetPos.y)
+		m_fRotateAngle *= -1.f;
+	m_fTargetAngle = m_fRotateAngle;
+	m_fRotateAngle = 360 - m_fRotateAngle;
 	if (TargetPos.x <= MyPos.x)//0~90 -1 angle 270 360 1 90~180 1 180~270 -1
 	{
 		m_iUnitDir = -1;
-		vLook.x *= -1;
+		m_fRotateAngle = 180 + m_fRotateAngle;
 	}
-	float fCos = D3DXVec3Dot(&vDir, &vLook);
-	m_fRotateAngle = acosf(fCos);
-
-	
-	if (0 <= (TargetPos.x - MyPos.x)* (MyPos.y - TargetPos.y))
-		m_fRotateAngle *= -1;
-
 }
 
 HRESULT CGangster::Ready_GameObject()
@@ -80,7 +80,7 @@ void CGangster::Update_GameObject()
 	if (m_fAttackLimit >= m_fAttackCool)
 	{
 		m_fAttackLimit = 0.f;
-		Find_TargetAngle();
+
 		GameObjectManager->Insert_GameObjectManager(CBullet::Create(this), GAMEOBJECT::BULLET);
 	}
 }
@@ -109,7 +109,7 @@ void CGangster::Render_GameObject()
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
 	D3DXMatrixScaling(&matScale, m_iUnitDir * m_fRatio, m_fRatio, 0.f);
-	//D3DXMatrixRotationZ(&matRolateZ, m_fRotateAngle);
+	//D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
 	D3DXMatrixTranslation(&matTrans, m_vecPivot.x, m_vecPivot.y - m_fRatio*fCenterY, 0.f);
 	matWorld = matScale  *matTrans;
 	//matWorld = matScale * matRolateZ *matTrans;
@@ -123,6 +123,7 @@ void CGangster::Render_GameObject()
 		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 0, 0, 255));
 	}
 	Render_HitBox();
+	Render_ObbLine();
 }
 
 void CGangster::Release_GameObject()

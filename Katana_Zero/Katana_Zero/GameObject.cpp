@@ -5,6 +5,7 @@
 #include "FrameManager.h"
 #include "Graphic_Device.h"
 
+
 CGameObject::CGameObject()
 	: m_pUnitInfo(nullptr)
 	, m_tFrame({})
@@ -20,6 +21,8 @@ CGameObject::CGameObject()
 	, m_fRotateAngle(0.f)
 	, m_fAttackLimit(0.7f)
 	, m_fAttackCool(0.5f)
+	, m_fTargetAngle(0.f)
+	,m_iObjState(NONE)
 {
 }
 
@@ -79,7 +82,7 @@ void CGameObject::Update_HitBoxOBB()
 	m_tHitBoxObbTemp[2] = { m_fRatio*fCenterX,  m_fRatio*fCenterY, 0.f };//오른쪽 아래
 	m_tHitBoxObbTemp[3] = {-m_fRatio*fCenterX,  m_fRatio*fCenterY, 0.f };//왼쪽 아래
 	D3DXMatrixScaling(&matScale, m_iUnitDir, 1.f, 0.f);
-	D3DXMatrixRotationZ(&matRolateZ, m_fRotateAngle);
+	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
 	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y, 0.f);
 	matWorld = matScale * matRolateZ * matTrans;
 	for (int i = 0; i < 4; i++)
@@ -173,6 +176,27 @@ void CGameObject::Render_HitBoxObb()
 	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
 
+void CGameObject::Render_ObbLine()
+{
+	Device->m_pSprite->End();
+	Device->m_pLine->SetWidth(1.f);
+	D3DXVECTOR2	vLine2[2]{ { (float)m_vecPivot.x, (float)(m_vecPivot.y -m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height>>1))}
+	,{ (float)(m_vecPivot.x + m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Width >> 1)) , (float)(m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1))} };
+	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 255));;
+	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+}
+
+void CGameObject::Render_ObbLineD3D()
+{
+	Device->m_pSprite->End();
+	Device->m_pLine->SetWidth(1.f);
+	D3DXVECTOR2	vLine[2]{ {m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y},{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle ))*50, m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle ))*50} };
+	Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
+	D3DXVECTOR2	vLine2[2]{ { m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y },{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle + 90)) * 50, m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle + 90)) * 50 } };
+	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
+	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+}
+
 void CGameObject::Update_Frame()
 {
 	//상태가 바뀔 때만 프레임 갱신.
@@ -202,5 +226,7 @@ bool CGameObject::Check_FrameEnd() //다음 상태로 변경하기 전 준비 동작을 마쳤는�
 	}
 	return false;
 }
+
+
 
 

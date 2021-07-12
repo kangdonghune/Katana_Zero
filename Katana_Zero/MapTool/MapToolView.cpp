@@ -181,8 +181,10 @@ void CMapToolView::Select_ToolFunction(int ToolState)
 		return;
 	case TOOL_Player:
 		pForm->CreatePlayer();
+		break;
 	case TOOL_Gangster:
 		pForm->CreateGangster();
+		break;
 	default:
 		break;
 	}

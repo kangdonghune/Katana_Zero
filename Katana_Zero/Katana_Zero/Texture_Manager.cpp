@@ -97,7 +97,7 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 	//ÀÌÆåÆ®
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Hitimpact/%d.png", L"Effect", L"Hitimpact", 6)))
 		return E_FAIL;
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Attack/%d.png", L"Effect", L"Attack", 6)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Attack/%d.png", L"Effect", L"PlayerAttack", 6)))
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_fire_1/%d.png", L"Effect", L"Gangsterfire", 6)))
 		return E_FAIL;

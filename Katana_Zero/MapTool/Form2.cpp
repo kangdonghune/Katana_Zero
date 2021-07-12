@@ -229,6 +229,8 @@ void CForm2::Load_Unit(TCHAR * pFilePath)
 		case UNITTYPE::PLAYER:
 			UNITS->Insert_Unit(pUnit, pUnit->type);
 			break;
+		case UNITTYPE::GANGSTER:
+			UNITS->Insert_Unit(pUnit, pUnit->type);
 		default:
 			ERR_MSG(L"유닛 타입 문제 확인 바람");
 			break;

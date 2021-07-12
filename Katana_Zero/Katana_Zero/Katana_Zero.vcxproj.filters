@@ -75,6 +75,9 @@
     <Filter Include="소스 파일\01.GameObject\04.Projectile\00.Bullet">
       <UniqueIdentifier>{304e8132-2937-4bc0-8a02-7e5b6056e3cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.GameObject\02.Effect\00.PlayerAttack">
+      <UniqueIdentifier>{2178bd36-23ce-4bf6-8d9d-56865c7b0154}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -143,6 +146,9 @@
     <ClInclude Include="Enemy.h">
       <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerAttack.h">
+      <Filter>소스 파일\01.GameObject\02.Effect\00.PlayerAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -204,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttack.cpp">
+      <Filter>소스 파일\01.GameObject\02.Effect\00.PlayerAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

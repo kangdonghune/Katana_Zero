@@ -50,12 +50,12 @@ HRESULT CSaveLoadManager::LoadUnit(TCHAR* pFilePath)
 			GameObjectManager->Insert_GameObjectManager(CPlayer::Create(pUnit), GAMEOBJECT::PLAYER);
 			break;
 		case UNITTYPE::GANGSTER:
-			if (GameObjectManager->Get_GameObjectVec(GAMEOBJECT::PLAYER).empty())
+			if (GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).empty())
 			{
 				ERR_MSG(L"적을 만들기 전에 대상으로 삼을 플레이어가 없습니다.");
 				return E_FAIL;
 			}
-			GameObjectManager->Insert_GameObjectManager(CGangster::Create(GameObjectManager->Get_GameObjectVec(GAMEOBJECT::PLAYER).at(0),pUnit), GAMEOBJECT::GANGSTER);
+			GameObjectManager->Insert_GameObjectManager(CGangster::Create(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front(),pUnit), GAMEOBJECT::GANGSTER);
 			break;
 		default:
 			Safe_Delete(pUnit);

@@ -14,6 +14,8 @@ public:
 	void		Set_UnitDir(int iDir) { m_iUnitDir = iDir; }
 	void		Set_OldCollide(int Collide) { m_iOldCollide = Collide; }
 	void		Set_FrameStart(float fIndex) { m_tFrame.fFrameStart = fIndex; }
+	void		Set_ObjState(int State) { m_iObjState = State; }
+	void		Set_TargetAngle(float Angle) { m_fTargetAngle += Angle; }
 
 
 	void Update_HitBox();
@@ -21,12 +23,14 @@ public:
 	void FrameMove(float fSpeed);
 	void Render_HitBox();
 	void Render_HitBoxObb();
+	void Render_ObbLine();
+	void Render_ObbLineD3D();
 	void Update_Frame();
 	bool Check_FrameEnd();
 
-
-
-	
+	const D3DXVECTOR3*			Get_HitboxObb() { return m_tHitBoxObb; }
+	const int					Get_ObjState() { return m_iObjState; }
+	const float					Get_TargetAngle() { return m_fTargetAngle; }
 	const float					Get_RotateAngle() { return m_fRotateAngle; }
 	const int					Get_UnitDir() { return m_iUnitDir; }
 	const PLAYERSTATE::State	Get_State() { return m_State; }
@@ -64,7 +68,9 @@ protected:
 	int						m_iOldCollide;
 	float					m_fAttackLimit;
 	float					m_fAttackCool;
-
+	CGameObject*			m_pTarget;
+	float					m_fTargetAngle;
+	int						m_iObjState;
 
 };
 

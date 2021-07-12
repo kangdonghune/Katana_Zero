@@ -70,7 +70,5 @@ private:
 
 	TCHAR		m_szPivot[255];
 	TCHAR		m_szMousePos[255];
-
-	CGameObject*	m_pAttackEffect;
 };
 

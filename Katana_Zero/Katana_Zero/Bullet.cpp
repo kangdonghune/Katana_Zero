@@ -32,23 +32,25 @@ HRESULT CBullet::Ready_GameObject()
 	m_pUnitInfo->wstrKey = L"Projectile";
 	m_pUnitInfo->wstrState = L"Bullet";
 	m_fRatio = 1.f;
-	m_pUnitInfo->D3VecPos.x = m_pShooter->Get_Pivot().x + m_pShooter->Get_UnitDir()*m_fRatio*((Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, 0)->tImageInfo.Width >> 1)+ (Texture_Maneger->Get_TexInfo_Manager(m_pShooter->Get_UnitInfo()->wstrKey, m_pShooter->Get_UnitInfo()->wstrState, 0)->tImageInfo.Width >> 1));
+	m_pUnitInfo->D3VecPos.x = m_pShooter->Get_Pivot().x + m_pShooter->Get_UnitDir()*m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, 0)->tImageInfo.Width >> 1)+ m_pShooter->Get_UnitDir()*m_pShooter->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(m_pShooter->Get_UnitInfo()->wstrKey, m_pShooter->Get_UnitInfo()->wstrState, 0)->tImageInfo.Width >> 1);
 	m_pUnitInfo->D3VecPos.y = m_pShooter->Get_Pivot().y - m_pShooter->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(m_pShooter->Get_UnitInfo()->wstrKey, m_pShooter->Get_UnitInfo()->wstrState, 0)->tImageInfo.Height >> 1);
 	m_pUnitInfo->D3VecPos.z = 0.f;
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
 	m_fSpeed = 20.f;
 	
+	m_fTargetAngle = m_pShooter->Get_TargetAngle();
 	m_fRotateAngle = m_pShooter->Get_RotateAngle();
-	m_iUnitDir = m_pShooter->Get_UnitDir();
+ 	m_iUnitDir = m_pShooter->Get_UnitDir();
 
 	return S_OK;
 }
 
 void CBullet::Update_GameObject()
 {
-	m_pUnitInfo->D3VecPos.x += m_iUnitDir*cosf(m_fRotateAngle)* 3.f;
-	m_pUnitInfo->D3VecPos.y += m_iUnitDir*sinf(m_fRotateAngle)* 3.f;
+
+	m_pUnitInfo->D3VecPos.x += cosf(D3DXToRadian(m_fTargetAngle))*3.f;
+	m_pUnitInfo->D3VecPos.y -= sinf(D3DXToRadian(m_fTargetAngle))*3.f;
 	Update_HitBoxOBB();
 	//방향만 이동.
 
@@ -81,7 +83,7 @@ void CBullet::Render_GameObject()
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
 	D3DXMatrixScaling(&matScale, m_fRatio, m_fRatio, 0.f);
-	D3DXMatrixRotationZ(&matRolateZ, m_fRotateAngle);
+	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
 	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y, 0.f);
 	matWorld = matScale * matRolateZ *matTrans;
 	
@@ -89,6 +91,7 @@ void CBullet::Render_GameObject()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 	Render_HitBoxObb();
+	Render_ObbLineD3D();
 }
 
 void CBullet::Release_GameObject()

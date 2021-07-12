@@ -15,11 +15,20 @@ CGameObjectManager::~CGameObjectManager()
 
 void CGameObjectManager::Update_GameObjectManager()
 {
-	for (auto& pVector : m_vecGameObj)
+	for (int i = 0; i < GAMEOBJECT::END; i++)
 	{
-		for (auto& pUnit : pVector)
+		for (auto& iter = m_lstGameObj[i].begin(); iter != m_lstGameObj[i].end(); )
 		{
-			pUnit->Update_GameObject();
+			if ((*iter)->Get_ObjState() == DEAD)
+			{
+				Safe_Delete(*iter);
+				iter = m_lstGameObj[i].erase(iter);
+			}
+			else
+			{
+				(*iter)->Update_GameObject();
+				++iter;
+			}
 		}
 	}
 }
@@ -30,7 +39,7 @@ void CGameObjectManager::LateUpdate_GameObjectManager()
 
 void CGameObjectManager::Render_GameObjectManager()
 {
-	for (auto& pVector : m_vecGameObj)
+	for (auto& pVector : m_lstGameObj)
 	{
 		for(auto& pUnit : pVector)
 		{
@@ -41,7 +50,7 @@ void CGameObjectManager::Render_GameObjectManager()
 
 void CGameObjectManager::Release_GameObjectManager()
 {
-	for (auto& pVector : m_vecGameObj)
+	for (auto& pVector : m_lstGameObj)
 	{
 		for (auto& pGameObj : pVector)
 		{
@@ -49,8 +58,6 @@ void CGameObjectManager::Release_GameObjectManager()
 			Safe_Delete(pGameObj);
 		}
 		pVector.clear();
-		pVector.shrink_to_fit();
 	}
-	m_vecGameObj->clear();
-	m_vecGameObj->shrink_to_fit();
+	m_lstGameObj->clear();
 }

@@ -1,17 +1,17 @@
 #pragma once
 #include "GameObject.h"
-class CEnemy :
+class CPlayerAttack :
 	public CGameObject
 {
+private:
+	CPlayerAttack();
 public:
-	CEnemy();
-	virtual ~CEnemy();
-
+	~CPlayerAttack();
 
 public:
-	void	Set_Target(CGameObject* pTarget) { m_pTarget = pTarget; }
-
-
+	static CGameObject* Create(CGameObject* pTarget);
+private:
+	void Set_Target(CGameObject* pTarget) { m_pTarget = pTarget; }
 
 public:
 	// CGameObject을(를) 통해 상속됨
@@ -20,10 +20,5 @@ public:
 	virtual void LateUpdate_GameObject() override;
 	virtual void Render_GameObject() override;
 	virtual void Release_GameObject() override;
-
-protected:
-
-
-
 };
 

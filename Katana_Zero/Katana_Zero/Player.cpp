@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Texture_Manager.h"
+#include "GameObjectManager.h"
 #include "FrameManager.h"
 #include "TimeManager.h"
-#include "Effect.h"
+#include "PlayerAttack.h"
 
 CPlayer::CPlayer()
 	:m_fDefaultSpeed(15.0f) // 프레임 속도
@@ -33,7 +34,6 @@ CGameObject * CPlayer::Create(UNITINFO* pInfo)
 		Safe_Delete(pPlayer);
 		return pPlayer;
 	}
-	pPlayer->m_pAttackEffect = CEffect::Create(pPlayer,L"Attack");
 	return pPlayer;
 }
 
@@ -52,7 +52,6 @@ void CPlayer::Idle()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0x0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
 		return;
 	}
 
@@ -114,7 +113,6 @@ void CPlayer::Idle_to_run()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
 		return;
 	}
 
@@ -156,7 +154,6 @@ void CPlayer::Run()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
 		return;
 	}
 	if (m_pUnitInfo->iCollide & C_NONE) //충돌 상태도 아니고, 동작 여부도 아니라면.
@@ -206,7 +203,6 @@ void CPlayer::Run_to_idle()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
 		return;
 	}
 
@@ -252,30 +248,32 @@ void CPlayer::Attack()
 		m_vecMousePos = { float(tMousePos.x), float(tMousePos.y), 0 };
 		D3DXVECTOR3 TexturePos = { m_vecPivot.x, m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
 		m_vecDir = m_vecMousePos - TexturePos;
+		D3DXVec3Normalize(&m_vecDir, &m_vecDir); //단위벡터로
 		D3DXVECTOR3 vLook{ 1.f,0,0 };
 		m_iUnitDir = 1;
-		if (m_vecMousePos.x <= m_vecPivot.x)//0~90 -1 angle 270 360 1 90~180 1 180~270 -1
+		m_fRotateAngle = D3DXToDegree(acosf(D3DXVec3Dot(&m_vecDir, &vLook)));
+		if (TexturePos.y <= tMousePos.y)
+			m_fRotateAngle *= -1.f;
+		m_fTargetAngle = m_fRotateAngle;
+		m_fRotateAngle = 360 - m_fRotateAngle;
+		if (m_vecMousePos.x <= m_vecPivot.x)
 		{
 			m_iUnitDir = -1;
-			vLook.x *= -1;
+			m_fRotateAngle = 180 + m_fRotateAngle;
 		}
-
-		D3DXVec3Normalize(&m_vecDir, &m_vecDir); //단위벡터로
-		m_fRotateAngle = acosf(D3DXVec3Dot(&m_vecDir, &vLook));
-		if (0 <= (m_vecMousePos.x - TexturePos.x)* (TexturePos.y - m_vecMousePos.y))
-			m_fRotateAngle *= -1;
+		
 	}
 	
 	if (m_fJumpDistance > sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance)//점프 속도가 점점 줄다가 최대 높이에 도달하는 순간 떨어지도록.
 	{
 		m_fOldJumpAngle = sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
-		m_fOldJumpAngleX = m_iUnitDir * cosf(m_fRotateAngle) *sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
-		m_fOldJumpAngleY = m_iUnitDir * sinf(m_fRotateAngle) * sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
+		m_fOldJumpAngleX = cosf(D3DXToRadian(m_fTargetAngle)) *sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
+		m_fOldJumpAngleY = sinf(D3DXToRadian(m_fTargetAngle)) * sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
 		m_fJumpAngle += 1.5f;
 		m_vecPivot.x -= m_fOldJumpAngleX;
-		m_vecPivot.x += m_iUnitDir * cosf(m_fRotateAngle) *sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
-		m_vecPivot.y -= m_fOldJumpAngleY;
-		m_vecPivot.y += m_iUnitDir * sinf(m_fRotateAngle) * sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
+		m_vecPivot.x += cosf(D3DXToRadian(m_fTargetAngle)) *sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
+		m_vecPivot.y += m_fOldJumpAngleY;
+		m_vecPivot.y -= sinf(D3DXToRadian(m_fTargetAngle)) * sinf(3 * m_fJumpAngle / g_RADIAN) * m_fJumpDistance;
 	
 	}
 
@@ -294,7 +292,7 @@ void CPlayer::Precrouch()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
+
 		return;
 	}
 
@@ -334,7 +332,7 @@ void CPlayer::Crouch()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
+
 		return;
 	}
 
@@ -381,7 +379,7 @@ void CPlayer::Postcrouch()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
+
 		return;
 	}
 
@@ -433,7 +431,7 @@ void CPlayer::Fall()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
+
 		return;
 	}
 
@@ -507,7 +505,7 @@ void CPlayer::Jump()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
+
 		m_fJumpAngle = 0.f;
 		m_fFallAngle = 0.f;
 		return;
@@ -598,7 +596,6 @@ void CPlayer::Roll()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
 		return;
 	}
 	if (m_pUnitInfo->iCollide & C_NONE) //충돌 상태도 아니고, 동작 여부도 아니라면.
@@ -709,6 +706,8 @@ void CPlayer::Update_UnitState()
 		m_pUnitInfo->wstrState = L"Attack";
 		Update_Frame();
 		Attack();
+		if(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK).empty())
+			GameObjectManager->Insert_GameObjectManager(CPlayerAttack::Create(this), GAMEOBJECT::PLAYERATTACK);
 		break;
 	case PLAYERSTATE::PRECROUCH:
 		m_pUnitInfo->wstrState = L"Precrouch";
@@ -846,7 +845,7 @@ void CPlayer::Render_GameObject()
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
 	D3DXMatrixScaling(&matScale, m_iUnitDir * m_fRatio, m_fRatio, 0.f);
-	D3DXMatrixRotationZ(&matRolateZ, m_fRotateAngle);
+	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
 	D3DXMatrixTranslation(&matTrans, m_vecPivot.x, m_vecPivot.y- m_fRatio*fCenterY, 0.f);
 	matWorld = matScale * matRolateZ *matTrans;
 
@@ -864,6 +863,7 @@ void CPlayer::Render_GameObject()
 	Render_HitBox();
 	Render_Pivot();
 	Render_MousePos();
+	Render_ObbLine();
 }
 
 void CPlayer::Release_GameObject()
@@ -897,7 +897,6 @@ void CPlayer::Wallslide()
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
-		m_pAttackEffect->Set_FrameStart(0);
 		m_fJumpAngle = 0.f;
 		m_fFallAngle += 0.f;
 		return;
