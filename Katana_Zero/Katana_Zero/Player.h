@@ -41,7 +41,7 @@ public:
 	void Update_UnitState();
 	void Render_Pivot();
 	void Render_MousePos();
-
+	void Update_D3DPos();
 
 public:
 	// CGameObject을(를) 통해 상속됨

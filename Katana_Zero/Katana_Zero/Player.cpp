@@ -6,6 +6,7 @@
 #include "TimeManager.h"
 #include "PlayerAttack.h"
 
+
 CPlayer::CPlayer()
 	:m_fDefaultSpeed(15.0f) // 프레임 속도
 	, m_fJumpDistance(0.f) // 최대 점프높이
@@ -512,12 +513,12 @@ void CPlayer::Jump()
 	}
 	if (m_pUnitInfo->iCollide & C_WALL && !(m_pUnitInfo->iCollide & C_LAND))
 	{
-		if (m_pUnitInfo->iCollide & C_WALLL && GetAsyncKeyState('A') & 0X8000)
+		if (GetAsyncKeyState('A') & 0X8000)
 		{
 			m_State = PLAYERSTATE::WALLSLIDE;
 			return;
 		}
-		if (m_pUnitInfo->iCollide & C_WALLR && GetAsyncKeyState('D') & 0X8000)
+		if (GetAsyncKeyState('D') & 0X8000)
 		{
 			m_State = PLAYERSTATE::WALLSLIDE;
 			return;
@@ -608,8 +609,7 @@ void CPlayer::Roll()
 	{
 		m_State = PLAYERSTATE::JUMP;
 		return;
-	}
-	
+	}	
 
 	if(!Check_FrameEnd())
 	{
@@ -704,10 +704,11 @@ void CPlayer::Update_UnitState()
 		break;
 	case PLAYERSTATE::ATTACK:
 		m_pUnitInfo->wstrState = L"Attack";
+		if (GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK).empty()&& m_wstrOldState != L"Attack")
+			GameObjectManager->Insert_GameObjectManager(CPlayerAttack::Create(this), GAMEOBJECT::PLAYERATTACK);
 		Update_Frame();
 		Attack();
-		if(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK).empty())
-			GameObjectManager->Insert_GameObjectManager(CPlayerAttack::Create(this), GAMEOBJECT::PLAYERATTACK);
+
 		break;
 	case PLAYERSTATE::PRECROUCH:
 		m_pUnitInfo->wstrState = L"Precrouch";
@@ -792,6 +793,12 @@ void CPlayer::Render_MousePos()
 	Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szMousePos, lstrlen(m_szMousePos), nullptr, 0, D3DCOLOR_ARGB(255, 255, 255, 255));
 }
 
+void CPlayer::Update_D3DPos()
+{
+	m_pUnitInfo->D3VecPos.x = m_vecPivot.x;
+	m_pUnitInfo->D3VecPos.y = m_vecPivot.y + m_fRatio * (Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, 0)->tImageInfo.Height >> 1);
+}
+
 
 
 
@@ -819,6 +826,7 @@ void CPlayer::Update_GameObject()
  	Update_Frame(); // 만약 상태가 이전 상태와 다른 상태로 변했다면 프레임 갱신
 	FrameMove(m_fSpeed); //현재 프레임 증가 또는 초기화
 	Update_HitBox(); // 현재 유닛 기준으로 충돌 범위 업데이트
+	Update_D3DPos();
 }
 
 void CPlayer::LateUpdate_GameObject()
@@ -853,11 +861,15 @@ void CPlayer::Render_GameObject()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	if (GetAsyncKeyState(VK_CONTROL) & 0X8000)
+	if (GetAsyncKeyState(VK_CONTROL) & 0X8001)
 	{
+		FrameManager->Set_FrameSpeed(20.f);
 		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 0, 0, 255));
 	}
+	else
+		FrameManager->Set_FrameSpeed(60.f);
+
 	FrameManager->Render_Frame_Manager_FrameNum((size_t)m_tFrame.fFrameStart);
 	FrameManager->Render_Frame_Manager_FrameName(m_pUnitInfo->wstrState);
 	Render_HitBox();

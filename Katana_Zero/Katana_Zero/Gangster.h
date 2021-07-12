@@ -14,7 +14,7 @@ public:
 
 private:
 	void	Update_TargetRotate();
-
+	void Update_D3DPos();
 
 
 public:

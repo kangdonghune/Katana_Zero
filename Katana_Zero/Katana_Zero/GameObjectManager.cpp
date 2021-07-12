@@ -35,6 +35,23 @@ void CGameObjectManager::Update_GameObjectManager()
 
 void CGameObjectManager::LateUpdate_GameObjectManager()
 {
+
+	for (int i = 0; i < GAMEOBJECT::END; i++)
+	{
+		for (auto& iter = m_lstGameObj[i].begin(); iter != m_lstGameObj[i].end(); )
+		{
+			if ((*iter)->Get_ObjState() == DEAD)
+			{
+				Safe_Delete(*iter);
+				iter = m_lstGameObj[i].erase(iter);
+			}
+			else
+			{
+				(*iter)->LateUpdate_GameObject();
+				++iter;
+			}
+		}
+	}
 }
 
 void CGameObjectManager::Render_GameObjectManager()

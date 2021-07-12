@@ -30,12 +30,12 @@ HRESULT CEffect::Ready_GameObject()
 {
 	m_pUnitInfo->wstrKey = L"Effect";
 	m_pUnitInfo->type = UNITTYPE::EFFECT;
-	m_pUnitInfo->D3VecPos.x = m_pTarget->Get_Pivot().x;
-	m_pUnitInfo->D3VecPos.y = (m_pTarget->Get_Hitbox().bottom - m_pTarget->Get_Hitbox().top) / 2.f;
+	m_pUnitInfo->D3VecPos.x = m_pTarget->Get_UnitInfo()->D3VecPos.x;
+	m_pUnitInfo->D3VecPos.y = m_pTarget->Get_UnitInfo()->D3VecPos.y;
 	m_pUnitInfo->D3VecPos.z = 0.f;
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
-	m_fSpeed = 20.f;
+	m_fSpeed = 40.f;
 	m_fRatio = 1.5f;
 	m_fRotateAngle = 0.f;
 	m_fTargetAngle = m_pTarget->Get_TargetAngle();
@@ -45,17 +45,10 @@ HRESULT CEffect::Ready_GameObject()
 
 void CEffect::Update_GameObject()
 {
-
-	m_pUnitInfo->D3VecPos.x = m_pTarget->Get_Pivot().x;
-	m_pUnitInfo->D3VecPos.y = m_pTarget->Get_Pivot().y - (m_pTarget->Get_Hitbox().bottom - m_pTarget->Get_Hitbox().top) / 2.f;
 	m_fTargetAngle = m_pTarget->Get_TargetAngle(); 
 	m_fRotateAngle = m_pTarget->Get_RotateAngle();
 	m_iUnitDir = m_pTarget->Get_UnitDir();
 	Update_HitBoxOBB();
-	if (m_pTarget->Get_UnitInfo()->wstrState == L"Attack")
-		FrameMove(m_fSpeed);
-	if (m_pTarget->Get_UnitInfo()->wstrState != L"Attack")
-		m_iObjState = DEAD;
 	if (Check_FrameEnd())
 		m_iObjState = DEAD;
 }
@@ -73,9 +66,6 @@ void CEffect::Render_GameObject()
 		return;
 	}
 
-	if (m_pTarget->Get_UnitInfo()->wstrState != L"Attack")
-		return;
-
 	D3DXMATRIX matScale, matRolateZ, matTrans, matWorld;
 
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, (size_t)m_tFrame.fFrameStart);
@@ -88,9 +78,9 @@ void CEffect::Render_GameObject()
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
 	D3DXMatrixScaling(&matScale, m_iUnitDir * m_fRatio, m_fRatio, 0.f);
-	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
+	//D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
 	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y, 0.f);
-	matWorld = matScale * matRolateZ *matTrans;
+	matWorld = matScale * matTrans;
 
 
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);

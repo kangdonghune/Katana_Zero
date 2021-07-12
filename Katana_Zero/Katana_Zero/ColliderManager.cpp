@@ -2,6 +2,8 @@
 #include "ColliderManager.h"
 #include "GameObject.h"
 #include "Texture_Manager.h"
+#include "Effect.h"
+#include "GameObjectManager.h"
 
 IMPLEMENT_SINGLETON(CColliderManager)
 CColliderManager::CColliderManager()
@@ -26,23 +28,25 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 	int iWidth = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, L"Idle", 0)->tImageInfo.Width>>1);
 	for (auto& tLine : pLandvec)
 	{
-		if (pLand != nullptr)
-			break;
 		if (tLine.Start.x <= Pivot.x && tLine.End.x >= Pivot.x)
-		{
-			if (tLine.Start.y == tLine.End.y) // 평면 직선이면
+		{	
+			if (pLand != nullptr)
+				break;
+			if (tLine.Start.y == tLine.End.y)
 			{
 				LONG lDistance = tLine.Start.y - pUnit->Get_Hitbox().bottom;
-				if (lDistance <= 0 && lDistance >= -1*iHeight)
+				if (lDistance <= 0 && lDistance >= -1 * iHeight)
 				{
 					pUnit->Set_PivotY(tLine.Start.y);
 					*ppLand = &tLine;
 				}
-
 			}
-			else // 아니면
-			{ 
+
+			else
+			{
 				float fLineHeight = (tLine.End.y - tLine.Start.y) / (tLine.End.x - tLine.Start.x)*(Pivot.x - tLine.Start.x) + tLine.Start.y;
+				if (tLine.Start.y > tLine.End.y)
+					fLineHeight = (tLine.Start.y - tLine.End.y) / (tLine.Start.x - tLine.End.x)*(Pivot.x - tLine.Start.x) + tLine.End.y;
 				LONG lDistance = fLineHeight - pUnit->Get_Hitbox().bottom;
 				if (lDistance <= 10 && lDistance >= -iHeight)
 				{
@@ -61,7 +65,7 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 							continue;
 						}
 					}
-						
+
 				}
 			}
 		}
@@ -421,8 +425,9 @@ void CColliderManager::Collider_Obb(CGameObject* pObject1, CGameObject* pObject2
 		if (fabs(D3DXVec3Dot(&Dir, &Dist)) > sum)
 			return;
 	}
-	pObject2->Set_ObjState(COLLIDE);
-	pObject2->Set_TargetAngle(180.f);
+	pObject2->Set_ObjState(COLLIDE);//충돌 상태로 변환
+	GameObjectManager->Insert_GameObjectManager(CEffect::Create(pObject2,L"Bulletreflect"), GAMEOBJECT::EFFECT);
+	pObject2->Set_TargetAngle(180.f);//날아가던 방향을 반대로
 }
 
 void CColliderManager::Collider_Obb(list<CGameObject*>& pObjectlist1, list<CGameObject*>& pObjectlist2)

@@ -8,9 +8,10 @@ CFrameManager::CFrameManager()
 	:m_szFPS(L"")
 	,m_szFrame(L"")
 	,m_szFrameName(L"")
-	, m_fFPSTime(0.f)
-	, m_iFPS(0)
-	, m_fSPF(0.f)
+	,m_fFPSTime(0.f)
+	,m_iFPS(0)
+	,m_fFPS(0)
+	,m_fSPF(0.f)
 {
 }
 
@@ -19,9 +20,18 @@ CFrameManager::~CFrameManager()
 {
 }
 
+void CFrameManager::Set_FrameSpeed(float fFPS)
+{
+	m_fSPF = 1.f / fFPS;
+	m_fFPS = fFPS;
+}
+
+
+
 void CFrameManager::Ready_Frame_Manager(float fFPS) //현재는 초당 60프레임.
 {
 	m_fSPF = 1.f / fFPS; //0.166 초마다 1프레임. 
+	m_fFPS = fFPS;
 	m_fDeltaTime = 0.f;
 	QueryPerformanceCounter(&m_tBeginTime);
 	QueryPerformanceCounter(&m_tEndTime);

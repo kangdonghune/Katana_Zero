@@ -49,8 +49,8 @@ HRESULT CBullet::Ready_GameObject()
 void CBullet::Update_GameObject()
 {
 
-	m_pUnitInfo->D3VecPos.x += cosf(D3DXToRadian(m_fTargetAngle))*3.f;
-	m_pUnitInfo->D3VecPos.y -= sinf(D3DXToRadian(m_fTargetAngle))*3.f;
+	m_pUnitInfo->D3VecPos.x += cosf(D3DXToRadian(m_fTargetAngle))*15.f;
+	m_pUnitInfo->D3VecPos.y -= sinf(D3DXToRadian(m_fTargetAngle))*15.f;
 	Update_HitBoxOBB();
 	//방향만 이동.
 

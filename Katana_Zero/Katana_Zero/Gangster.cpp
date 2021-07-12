@@ -53,6 +53,12 @@ void CGangster::Update_TargetRotate()
 	}
 }
 
+void CGangster::Update_D3DPos()
+{
+	m_pUnitInfo->D3VecPos.x = m_vecPivot.x;
+	m_pUnitInfo->D3VecPos.y = m_vecPivot.y + m_fRatio * (Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, 0)->tImageInfo.Height >> 1);
+}
+
 HRESULT CGangster::Ready_GameObject()
 {
 	m_wstrOldState = m_pUnitInfo->wstrState;
@@ -83,6 +89,7 @@ void CGangster::Update_GameObject()
 
 		GameObjectManager->Insert_GameObjectManager(CBullet::Create(this), GAMEOBJECT::BULLET);
 	}
+	Update_D3DPos();
 }
 
 void CGangster::LateUpdate_GameObject()

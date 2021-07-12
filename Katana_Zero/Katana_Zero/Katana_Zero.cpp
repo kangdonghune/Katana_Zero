@@ -15,6 +15,7 @@ WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 HWND  g_hWND;
 
+
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -47,7 +48,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	MSG msg;
 	msg.message = WM_NULL;
 	DWORD dwOldTime = GetTickCount();
-
 	CMain* pMain = CMain::Create();
 	FrameManager->Ready_Frame_Manager(60.f);//초당 60프레임
 
@@ -64,6 +64,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		if (FrameManager->Frame_Lock()) // 1프레임 만큼의 시간이 가기 전까진 false 반환.
 		{
+			
 			pMain->Update_Main();
 			pMain->LateUpdate_Main();
 			pMain->Render_Main();

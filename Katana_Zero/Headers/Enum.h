@@ -7,7 +7,9 @@ namespace GAMEOBJECT
 		PLAYER,
 		PLAYERATTACK,
 		GANGSTER,
-		BULLET, END
+		BULLET, 
+		EFFECT,
+		END
 	};
 }
 

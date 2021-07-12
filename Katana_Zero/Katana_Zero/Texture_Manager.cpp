@@ -97,9 +97,11 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 	//이펙트
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Hitimpact/%d.png", L"Effect", L"Hitimpact", 6)))
 		return E_FAIL;
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Attack/%d.png", L"Effect", L"PlayerAttack", 6)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Attack/%d.png", L"Effect", L"PlayerAttack",5)))
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_fire_1/%d.png", L"Effect", L"Gangsterfire", 6)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Bulletreflect/%d.png", L"Effect", L"Bulletreflect", 5)))
 		return E_FAIL;
 
 	//투사체

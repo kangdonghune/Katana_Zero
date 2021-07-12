@@ -51,8 +51,7 @@ void CPlayerAttack::Update_GameObject()
 	m_fRotateAngle = m_pTarget->Get_RotateAngle();
 	m_iUnitDir = m_pTarget->Get_UnitDir();
 	Update_HitBoxOBB();
-	if (m_pTarget->Get_UnitInfo()->wstrState == L"Attack")
-		FrameMove(m_fSpeed);
+	FrameMove(m_fSpeed);
 	if (m_pTarget->Get_UnitInfo()->wstrState != L"Attack")
 		m_iObjState = DEAD;
 	if (Check_FrameEnd())

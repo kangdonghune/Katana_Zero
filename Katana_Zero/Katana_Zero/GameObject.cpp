@@ -96,7 +96,7 @@ void CGameObject::Update_HitBoxOBB()
 
 void CGameObject::FrameMove(float fSpeed)
 {
-	m_tFrame.fFrameStart += FrameManager->Get_SPF() * fSpeed; //frame start end는 각 클래스에서 정해준다. 
+	m_tFrame.fFrameStart += FrameManager->Get_SPF() *(FrameManager->Get_FPS()/60)* fSpeed; //frame start end는 각 클래스에서 정해준다. 
 	if ((size_t)m_tFrame.fFrameEnd <= (size_t)m_tFrame.fFrameStart)
 		m_tFrame.fFrameStart = 0.f;
 }
