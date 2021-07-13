@@ -143,11 +143,14 @@
     <ClInclude Include="Bullet.h">
       <Filter>소스 파일\01.GameObject\04.Projectile\00.Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerAttack.h">
       <Filter>소스 파일\01.GameObject\02.Effect\00.PlayerAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="GangsterArm.h">
+      <Filter>소스 파일\01.GameObject\03.Enemy\00.Gangster</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +216,9 @@
     </ClCompile>
     <ClCompile Include="PlayerAttack.cpp">
       <Filter>소스 파일\01.GameObject\02.Effect\00.PlayerAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="GangsterArm.cpp">
+      <Filter>소스 파일\01.GameObject\03.Enemy\00.Gangster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

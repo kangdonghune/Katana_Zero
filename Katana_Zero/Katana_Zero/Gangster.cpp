@@ -72,6 +72,7 @@ HRESULT CGangster::Ready_GameObject()
 	m_fUnitSpeed = m_fDefaultUnitSpeed;
 	m_fAttackLimit = 0.f;
 	m_fAttackCool = 1.f;
+	m_pUnitInfo->wstrState = L"Aim";
 	m_fTargetAngle = 0.f;
 	return S_OK;
 }
@@ -107,6 +108,8 @@ void CGangster::Render_GameObject()
 	D3DXMATRIX matScale, matRolateZ, matTrans, matWorld;
 
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, (size_t)m_tFrame.fFrameStart);
+	const TEXINFO* pArmTex	= Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, L"arm", 0);
+	const TEXINFO* pGun = Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, L"Gangstergun", 0);
 	if (nullptr == pTexInfo)
 	{
 		ERR_MSG(L"Gangster에서 텍스쳐 찾기 실패");
@@ -123,12 +126,48 @@ void CGangster::Render_GameObject()
 
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	if (GetAsyncKeyState(VK_CONTROL) & 0X8000)
+	if (GetAsyncKeyState(VK_CONTROL) & 0X8001)
 	{
 		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
-		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 0, 0, 255));
+		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
 	}
+	if (m_pUnitInfo->wstrState == L"Aim")
+	{
+		D3DXMATRIX matGunScale, matGunRolateZ, matGunTrans, matGunWorld;
+		float fGunCenterX = pGun->tImageInfo.Width >> 1;
+		float fGunCenterY = pGun->tImageInfo.Height >> 1;
+		D3DXMatrixScaling(&matGunScale, m_iUnitDir * m_fRatio, m_fRatio, 0.f);
+		D3DXMatrixRotationZ(&matGunRolateZ, D3DXToRadian(m_fRotateAngle));
+		D3DXMatrixTranslation(&matGunTrans, m_vecPivot.x , m_vecPivot.y - m_fRatio*fCenterY, 0.f);
+		matGunWorld = matGunScale * matGunRolateZ *matGunTrans;
+
+		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matGunWorld);
+		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pGun->pTexture, nullptr, &D3DXVECTOR3(0.f, 0.f, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+		if (GetAsyncKeyState(VK_CONTROL) & 0X8001)
+		{
+			CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matGunWorld);
+			CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pGun->pTexture, nullptr, &D3DXVECTOR3(0.f, 0.f, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
+		}
+
+
+		D3DXMATRIX matArmScale, matArmRolateZ, matArmTrans, matArmWorld;
+		float fArmCenterX = pArmTex->tImageInfo.Width >> 1;
+		float fArmCenterY = pArmTex->tImageInfo.Height >> 1;
+		D3DXMatrixScaling(&matArmScale, m_iUnitDir * m_fRatio, m_fRatio, 0.f);
+		D3DXMatrixRotationZ(&matArmRolateZ, D3DXToRadian(m_fRotateAngle));
+		D3DXMatrixTranslation(&matArmTrans, m_vecPivot.x - m_iUnitDir * m_fRatio*fArmCenterX, m_vecPivot.y - m_fRatio*fCenterY, 0.f);
+		matArmWorld = matArmScale * matArmRolateZ *matArmTrans;
+
+		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matArmWorld);
+		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pArmTex->pTexture, nullptr, &D3DXVECTOR3(0.f, 0.f, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+		if (GetAsyncKeyState(VK_CONTROL) & 0X8001)
+		{
+			CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matArmWorld);
+			CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pArmTex->pTexture, nullptr, &D3DXVECTOR3(0.f, 0.f, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
+		}
+	}
+
+	
 	Render_HitBox();
 	Render_ObbLine();
 }

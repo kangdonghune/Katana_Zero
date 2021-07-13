@@ -864,8 +864,8 @@ void CPlayer::Render_GameObject()
 	if (GetAsyncKeyState(VK_CONTROL) & 0X8001)
 	{
 		FrameManager->Set_FrameSpeed(20.f);
-		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
-		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 0, 0, 255));
+	///	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
+	//	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 0, 0, 255));
 	}
 	else
 		FrameManager->Set_FrameSpeed(60.f);

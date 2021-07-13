@@ -90,7 +90,11 @@ void CMain::Render_Main()
 	matWorld = matScale * matTrans;
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
-
+	if (GetAsyncKeyState(VK_CONTROL) & 0X8001)
+	{
+		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
+		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
+	}
 	MapObjectManager->Render_MapObjectManager();
 	GameObjectManager->Render_GameObjectManager();
 	FrameManager->Render_Frame_Manager();

@@ -15,6 +15,7 @@ public:
 	void		Set_OldCollide(int Collide) { m_iOldCollide = Collide; }
 	void		Set_FrameStart(float fIndex) { m_tFrame.fFrameStart = fIndex; }
 	void		Set_ObjState(int State) { m_iObjState = State; }
+	void		Set_Target(CGameObject* pTarget) { m_pTarget = pTarget; }
 	void		Set_TargetAngle(float Angle) { m_fTargetAngle += Angle; }
 
 

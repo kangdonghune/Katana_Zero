@@ -160,6 +160,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="Gangster.h" />
+    <ClInclude Include="GangsterArm.h" />
     <ClInclude Include="Graphic_Device.h" />
     <ClInclude Include="Katana_Zero.h" />
     <ClInclude Include="Main.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="Gangster.cpp" />
+    <ClCompile Include="GangsterArm.cpp" />
     <ClCompile Include="Graphic_Device.cpp" />
     <ClCompile Include="Katana_Zero.cpp" />
     <ClCompile Include="Main.cpp" />
