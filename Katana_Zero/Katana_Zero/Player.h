@@ -42,7 +42,8 @@ public:
 	void Render_Pivot();
 	void Render_MousePos();
 	void Update_D3DPos();
-
+	void ScroolMove();
+	void ScroolInput();
 public:
 	// CGameObject을(를) 통해 상속됨
 	virtual HRESULT Ready_GameObject() override;

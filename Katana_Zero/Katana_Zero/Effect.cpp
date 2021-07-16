@@ -2,7 +2,7 @@
 #include "Effect.h"
 #include "GameObjectManager.h"
 #include "Texture_Manager.h"
-
+#include "ScrollManager.h"
 CEffect::CEffect()
 {
 }
@@ -36,7 +36,7 @@ HRESULT CEffect::Ready_GameObject()
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
 	m_fSpeed = 40.f;
-	m_fRatio = 1.5f;
+	m_fRatio = 1.0f;
 	m_fRotateAngle = 0.f;
 	m_fTargetAngle = m_pTarget->Get_TargetAngle();
 	m_iUnitDir = m_pTarget->Get_UnitDir();
@@ -65,7 +65,8 @@ void CEffect::Render_GameObject()
 		ERR_MSG(L"Effect 정보가 없습니다.");
 		return;
 	}
-
+	if (m_iObjState == DEAD)
+		return;
 	D3DXMATRIX matScale, matRolateZ, matTrans, matWorld;
 
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, (size_t)m_tFrame.fFrameStart);
@@ -79,14 +80,14 @@ void CEffect::Render_GameObject()
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
 	D3DXMatrixScaling(&matScale, m_iUnitDir * m_fRatio, m_fRatio, 0.f);
 	//D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
-	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y, 0.f);
+	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY(), 0.f);
 	matWorld = matScale * matTrans;
 
 
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	Render_HitBoxObb();
+	//Render_HitBoxObb();
 	Render_ObbLineD3D();
 }
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MapObjectManager.h"
-
+#include "ScrollManager.h"
 IMPLEMENT_SINGLETON(CMapObjectManager)
 CMapObjectManager::CMapObjectManager()
 {
@@ -52,6 +52,17 @@ HRESULT CMapObjectManager::Init_MapObjectManager()
 
 void CMapObjectManager::Update_MapObjectManager()
 {
+	//for (auto& tLinevec : m_vecTerrain)
+	//{
+	//	for (auto& tLine : tLinevec)
+	//	{
+	//		tLine.Start.x = tLine.Start.x - CScrollManager::Get_ScroolX();
+	//		tLine.Start.y = tLine.Start.y - CScrollManager::Get_ScroolY();
+	//		tLine.End.x = tLine.End.x - CScrollManager::Get_ScroolX();
+	//		tLine.End.y = tLine.End.y - CScrollManager::Get_ScroolY();
+	
+	//	}
+	//}
 }
 
 void CMapObjectManager::LateUpdate_MapObjectManager()
@@ -64,20 +75,20 @@ void CMapObjectManager::Render_MapObjectManager()
 	Device->m_pLine->SetWidth(5.f);
 	for (auto& tLine : m_vecTerrain[TERRAINTYPE::WALL])
 	{
-		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x),float(tLine.Start.y) },{ float(tLine.End.x),float(tLine.End.y) } };
+		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x - CScrollManager::Get_ScroolX()),float(tLine.Start.y - CScrollManager::Get_ScroolY()) },{ float(tLine.End.x- CScrollManager::Get_ScroolX()),float(tLine.End.y - CScrollManager::Get_ScroolY()) } };
 		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 255, 0, 0));
 
 	}
 
 	for (auto& tLine : m_vecTerrain[TERRAINTYPE::LAND])
 	{
-		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x),float(tLine.Start.y) },{ float(tLine.End.x),float(tLine.End.y) } };
+		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x - CScrollManager::Get_ScroolX()),float(tLine.Start.y - CScrollManager::Get_ScroolY()) },{ float(tLine.End.x - CScrollManager::Get_ScroolX()),float(tLine.End.y - CScrollManager::Get_ScroolY()) } };
 		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 0, 255, 0));
 	}
 
 	for (auto& tLine : m_vecTerrain[TERRAINTYPE::CELLING])
 	{
-		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x),float(tLine.Start.y) },{ float(tLine.End.x),float(tLine.End.y) } };
+		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x - CScrollManager::Get_ScroolX()),float(tLine.Start.y - CScrollManager::Get_ScroolY()) },{ float(tLine.End.x - CScrollManager::Get_ScroolX()),float(tLine.End.y - CScrollManager::Get_ScroolY()) } };
 		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 0, 0, 255));
 	}
 

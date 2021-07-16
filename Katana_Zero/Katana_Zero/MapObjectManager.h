@@ -11,6 +11,7 @@ public:
 public:
 	//void	Insert_Terrain(CMapObject* pMapObject, TERRAINTYPE::TYPE type) { m_vecTerrain[type].emplace_back(pMapObject); }
 	const vector<MYLINE>	Get_TerrainVector(TERRAINTYPE::TYPE type) { return m_vecTerrain[type]; }
+	const vector<MYLINE>	Get_TerrainVector(int index) { return m_vecTerrain[index]; }
 	void	Load_Terrain(TCHAR* pFilePath);
 
 public:

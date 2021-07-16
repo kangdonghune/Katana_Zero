@@ -2,6 +2,7 @@
 #include "PlayerAttack.h"
 #include "GameObjectManager.h"
 #include "Texture_Manager.h"
+#include "ScrollManager.h"
 
 CPlayerAttack::CPlayerAttack()
 {
@@ -86,7 +87,7 @@ void CPlayerAttack::Render_GameObject()
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
 	D3DXMatrixScaling(&matScale, m_iUnitDir * m_fRatio, m_fRatio, 0.f);
 	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
-	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y, 0.f);
+	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY(), 0.f);
 	matWorld = matScale * matRolateZ *matTrans;
 
 

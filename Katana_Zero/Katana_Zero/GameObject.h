@@ -11,6 +11,7 @@ public:
 	void		Set_PivotX(float fPos) { m_vecPivot.x = fPos; }
 	void		Set_PivotY(float fPos) { m_vecPivot.y = fPos; }
 	void		Set_State(PLAYERSTATE::State state) { m_State = state; }
+	void		Set_State(GANGSTERSTATE::State state) { m_GangState = state; }
 	void		Set_UnitDir(int iDir) { m_iUnitDir = iDir; }
 	void		Set_OldCollide(int Collide) { m_iOldCollide = Collide; }
 	void		Set_FrameStart(float fIndex) { m_tFrame.fFrameStart = fIndex; }
@@ -29,6 +30,8 @@ public:
 	void Update_Frame();
 	bool Check_FrameEnd();
 
+	CGameObject*				Get_Target() { return m_pTarget; }
+	const GANGSTERSTATE::State	Get_GangState() { return m_GangState; }
 	const D3DXVECTOR3*			Get_HitboxObb() { return m_tHitBoxObb; }
 	const int					Get_ObjState() { return m_iObjState; }
 	const float					Get_TargetAngle() { return m_fTargetAngle; }
@@ -72,6 +75,10 @@ protected:
 	CGameObject*			m_pTarget;
 	float					m_fTargetAngle;
 	int						m_iObjState;
+	int						r;
+	int						g;
+	int						b;
 
+	GANGSTERSTATE::State	m_GangState;
 };
 

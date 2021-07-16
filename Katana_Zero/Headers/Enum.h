@@ -53,12 +53,22 @@ namespace PLAYERSTATE
 	};
 }
 
+
 namespace GANGSTERSTATE
 {
 	enum State
 	{
 		IDLE,
+		AIM,
+		ENTERSTAIR,
 		FALL,
+		HURTFLY,
+		HURTGROUND,
+		LEAVESTAIR,
+		RUN,
+		TURN,
+		WALK,
+		WHIP,
 		END
 	};
 }

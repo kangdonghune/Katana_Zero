@@ -4,7 +4,7 @@
 #include "TimeManager.h"
 #include "FrameManager.h"
 #include "Graphic_Device.h"
-
+#include "ScrollManager.h"
 
 CGameObject::CGameObject()
 	: m_pUnitInfo(nullptr)
@@ -23,6 +23,10 @@ CGameObject::CGameObject()
 	, m_fAttackCool(0.5f)
 	, m_fTargetAngle(0.f)
 	,m_iObjState(NONE)
+	, m_GangState(GANGSTERSTATE::IDLE)
+	,r(0)
+	,g(0)
+	,b(0)
 {
 }
 
@@ -50,7 +54,7 @@ void CGameObject::Update_HitBox()
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1; 
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1; 	
 	//ratio 기본 배율은 유닛의 경우 2배
-	m_tHitBox.left =   m_vecPivot.x - fCenterX*m_fRatio;
+	m_tHitBox.left = m_vecPivot.x - fCenterX*m_fRatio;
 	m_tHitBox.top =    m_vecPivot.y - 2*fCenterY*m_fRatio;
 	m_tHitBox.right =  m_vecPivot.x + fCenterX*m_fRatio;
 	m_tHitBox.bottom = m_vecPivot.y;
@@ -159,9 +163,9 @@ void CGameObject::Render_HitBox()
 	}
 	Device->m_pSprite->End();
 	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine[5]{ { (float)m_tHitBox.left, (float)m_tHitBox.top } ,{ (float)m_tHitBox.right, (float)m_tHitBox.top } ,{ (float)m_tHitBox.right, (float)m_tHitBox.bottom } ,{ (float)m_tHitBox.left, (float)m_tHitBox.bottom } ,{ (float)m_tHitBox.left, (float)m_tHitBox.top } };
+	D3DXVECTOR2	vLine[5]{ { (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.right - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.right - CScrollManager::Get_ScroolX(), (float)m_tHitBox.bottom - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.bottom - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } };
 	Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, r, g ,b));
-	D3DXVECTOR2	vLine2[2]{ {(float)m_vecPivot.x, (float)m_vecPivot.y},{ (float)m_vecPivot.x, (float)m_vecPivot.y - 80.f} };
+	D3DXVECTOR2	vLine2[2]{ {(float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)m_vecPivot.y - CScrollManager::Get_ScroolY() },{ (float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)m_vecPivot.y - 80.f - CScrollManager::Get_ScroolY() } };
 	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 0));
 	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
@@ -170,7 +174,7 @@ void CGameObject::Render_HitBoxObb()
 {
 	Device->m_pSprite->End();
 	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine[5]{ {m_tHitBoxObb[0].x,m_tHitBoxObb[0].y},{ m_tHitBoxObb[1].x,m_tHitBoxObb[1].y },{ m_tHitBoxObb[2].x,m_tHitBoxObb[2].y },{ m_tHitBoxObb[3].x,m_tHitBoxObb[3].y },{ m_tHitBoxObb[0].x,m_tHitBoxObb[0].y } };
+	D3DXVECTOR2	vLine[5]{ {m_tHitBoxObb[0].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[0].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[1].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[1].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[2].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[2].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[3].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[3].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[0].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[0].y - CScrollManager::Get_ScroolY() } };
 	Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, 175, 255, 175));
 	
 	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
@@ -180,8 +184,8 @@ void CGameObject::Render_ObbLine()
 {
 	Device->m_pSprite->End();
 	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine2[2]{ { (float)m_vecPivot.x, (float)(m_vecPivot.y -m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height>>1))}
-	,{ (float)(m_vecPivot.x + m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Width >> 1)) , (float)(m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1))} };
+	D3DXVECTOR2	vLine2[2]{ { (float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)(m_vecPivot.y -m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height>>1)) - CScrollManager::Get_ScroolY() }
+	,{ (float)(m_vecPivot.x - CScrollManager::Get_ScroolX() + m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Width >> 1)) , (float)(m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1)) - CScrollManager::Get_ScroolY() } };
 	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 255));;
 	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
@@ -190,9 +194,9 @@ void CGameObject::Render_ObbLineD3D()
 {
 	Device->m_pSprite->End();
 	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine[2]{ {m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y},{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle ))*50, m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle ))*50} };
+	D3DXVECTOR2	vLine[2]{ {m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY() },{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle ))*50 - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle ))*50 - CScrollManager::Get_ScroolY() } };
 	Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
-	D3DXVECTOR2	vLine2[2]{ { m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y },{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle + 90)) * 50, m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle + 90)) * 50 } };
+	D3DXVECTOR2	vLine2[2]{ { m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY() },{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle + 90)) * 50 - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle + 90)) * 50 - CScrollManager::Get_ScroolY() } };
 	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
 	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }

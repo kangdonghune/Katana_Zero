@@ -244,9 +244,15 @@ void CForm2::CreateLine()
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
 	D3DXVECTOR3 flatPoint = pView->m_MouseUpPos;
+	D3DXVECTOR3 LastPoint = pView->m_MouseDownPos;
+	if (GetAsyncKeyState('Q') & 0x8000)
+	{
+		LastPoint.x = RECTS->Get_Line(TERRAINTYPE::LAND).back()->End.x;
+		LastPoint.y = RECTS->Get_Line(TERRAINTYPE::LAND).back()->End.y;
+	}
 	if (GetAsyncKeyState(VK_SHIFT) & 0x8000)
-		flatPoint = { pView->m_MouseUpPos.x,pView->m_MouseDownPos.y, 0.f };
-	RECTS->Insert_Line(pView->m_MouseDownPos, flatPoint, TERRAINTYPE::LAND);
+		flatPoint = { pView->m_MouseUpPos.x,LastPoint.y, 0.f };
+	RECTS->Insert_Line(LastPoint, flatPoint, TERRAINTYPE::LAND);
 }
 
 

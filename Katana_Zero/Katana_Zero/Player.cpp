@@ -5,7 +5,7 @@
 #include "FrameManager.h"
 #include "TimeManager.h"
 #include "PlayerAttack.h"
-
+#include "ScrollManager.h"
 
 CPlayer::CPlayer()
 	:m_fDefaultSpeed(15.0f) // 프레임 속도
@@ -139,6 +139,7 @@ void CPlayer::Idle_to_run()
 
 
 	m_vecPivot.x += m_fUnitSpeed * m_iUnitDir;
+	//m_vecPivot.y += m_fUnitSpeed * 3;
 	if (Check_FrameEnd()) // 프레임 끝났는 지 체크
 	{
 		m_State = PLAYERSTATE::RUN;
@@ -151,7 +152,7 @@ void CPlayer::Run()
 	m_fUnitSpeed = 5.f;
 
 	m_vecPivot.x += m_fUnitSpeed * m_iUnitDir;
-
+	//m_vecPivot.y += m_fUnitSpeed * 3;
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
@@ -200,7 +201,7 @@ void CPlayer::Run_to_idle()
 	m_fSpeed = 30.f;
 	m_fUnitSpeed = 1.0f;
 	m_vecPivot.x += m_fUnitSpeed * m_iUnitDir;
-
+	//m_vecPivot.y += m_fUnitSpeed * 3;
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
@@ -246,14 +247,14 @@ void CPlayer::Attack()
 		m_fAttackLimit = 0.f;
 		GetCursorPos(&tMousePos);
 		ScreenToClient(g_hWND, &tMousePos);
-		m_vecMousePos = { float(tMousePos.x), float(tMousePos.y), 0 };
+		m_vecMousePos = { float(tMousePos.x + CScrollManager::Get_ScroolX()), float(tMousePos.y + CScrollManager::Get_ScroolY()), 0 };
 		D3DXVECTOR3 TexturePos = { m_vecPivot.x, m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
 		m_vecDir = m_vecMousePos - TexturePos;
 		D3DXVec3Normalize(&m_vecDir, &m_vecDir); //단위벡터로
 		D3DXVECTOR3 vLook{ 1.f,0,0 };
 		m_iUnitDir = 1;
 		m_fRotateAngle = D3DXToDegree(acosf(D3DXVec3Dot(&m_vecDir, &vLook)));
-		if (TexturePos.y <= tMousePos.y)
+		if (TexturePos.y <= m_vecMousePos.y)
 			m_fRotateAngle *= -1.f;
 		m_fTargetAngle = m_fRotateAngle;
 		m_fRotateAngle = 360 - m_fRotateAngle;
@@ -462,6 +463,7 @@ void CPlayer::Fall()
 	{
 		m_iUnitDir = -1;
 		m_vecPivot.x += m_fUnitSpeed * m_iUnitDir;
+
 	}
 
 	if (GetAsyncKeyState('D') & 0X8000)
@@ -614,64 +616,11 @@ void CPlayer::Roll()
 	if(!Check_FrameEnd())
 	{
 		m_vecPivot.x += m_fUnitSpeed*m_iUnitDir;
+		//m_vecPivot.y += m_fUnitSpeed;
 	}
 	if (Check_FrameEnd())
 		m_State = PLAYERSTATE::IDLE;
 }
-
-//void CPlayer::Update_KeyInput()
-//{
-//	bool b_isInPut = false; //키가 눌렸는지
-//
-//	if (m_pUnitInfo->iCollide == C_NONE && m_iActing == NOACTING) //충돌하고 있는 상태도 아니고 동작하고 있는 상태도 아니라면 낙하하라.
-//	{
-//		m_State = PLAYERSTATE::FALL;
-//		b_isInPut = true;
-//	}
-//
-//	if (GetAsyncKeyState('A') & 0X8000)
-//	{
-//		if (m_State == PLAYERSTATE::IDLE)
-//		{
-//			m_State = PLAYERSTATE::IDLE_TO_RUN;
-//		}
-//
-//		m_iUnitDir = -1;
-//		b_isInPut = true;
-//	}
-//
-//	if (GetAsyncKeyState('S') & 0X8000 && m_iActing == NOACTING && m_pUnitInfo->iCollide == C_LAND)
-//	{
-//		if (m_State != PLAYERSTATE::PRECROUCH && m_State != PLAYERSTATE::CROUCH)
-//			m_State = PLAYERSTATE::PRECROUCH;
-//		b_isInPut = true;
-//	}
-//
-//	if (GetAsyncKeyState('D') & 0X8000)
-//	{
-//		if (m_State == PLAYERSTATE::IDLE)
-//		{
-//			m_State = PLAYERSTATE::IDLE_TO_RUN;
-//		}
-//		m_iUnitDir = 1;
-//		b_isInPut = true;
-//	}
-//	if ((GetAsyncKeyState('W') & 0X8000) && m_pUnitInfo->iCollide == C_LAND && m_State != PLAYERSTATE::JUMP) //점프는 한 번이라도 눌리면 계속 상태를 유지한다.
-//	{
-//		m_State = PLAYERSTATE::JUMP;
-//		b_isInPut = true;
-//	}
-//
-//
-//	if (!b_isInPut && m_iActing == NOACTING && m_pUnitInfo->iCollide == C_LAND) //키 입력이 없고 딱히 하고 있는 동작이 없다면.
-//	{
-//		if (m_State == PLAYERSTATE::CROUCH || m_State == PLAYERSTATE::POSTCROUCH)
-//			m_State = PLAYERSTATE::POSTCROUCH;
-//		else
-//			m_State = PLAYERSTATE::IDLE;
-//	}
-//
-//}
 
 void CPlayer::Update_UnitState()
 {
@@ -769,6 +718,7 @@ void CPlayer::Update_UnitState()
 	default:
 		break;
 	}
+
 }
 
 void CPlayer::Render_Pivot()
@@ -784,7 +734,7 @@ void CPlayer::Render_Pivot()
 
 void CPlayer::Render_MousePos()
 {
-	swprintf_s(m_szMousePos, L"Mouse x: %f y: %f", m_vecMousePos.x, m_vecMousePos.y);
+	swprintf_s(m_szMousePos, L"Mouse x: %f y: %f", m_vecMousePos.x, m_vecMousePos.y );
 
 	D3DXMATRIX matTrans;
 	D3DXMatrixTranslation(&matTrans, 100.f, 190.f, 0.f);
@@ -796,7 +746,27 @@ void CPlayer::Render_MousePos()
 void CPlayer::Update_D3DPos()
 {
 	m_pUnitInfo->D3VecPos.x = m_vecPivot.x;
-	m_pUnitInfo->D3VecPos.y = m_vecPivot.y + m_fRatio * (Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, 0)->tImageInfo.Height >> 1);
+	m_pUnitInfo->D3VecPos.y = m_vecPivot.y - m_fRatio * (Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, 0)->tImageInfo.Height >> 1);
+}
+
+void CPlayer::ScroolMove()
+{
+	//중간 지점에서 상하좌우 200을 벗어나면 그만큼 스크롤 값 부여.
+	//float fUp = WINCY / 2 - 200;
+	float fDown = WINCY / 2 + 200;
+	float fRight = WINCX / 2 + 200;
+	//float fLeft = WINCX / 2 - 200;
+	CScrollManager::Set_ScroolX(m_vecPivot.x - fRight);
+	CScrollManager::Set_ScroolY(m_vecPivot.y - fDown);
+	CScrollManager::ScrollLock();
+
+}
+
+void CPlayer::ScroolInput()
+{
+	m_vecPivot.x = m_vecPivot.x - CScrollManager::Get_ScroolX();
+	m_vecPivot.y = m_vecPivot.y - CScrollManager::Get_ScroolY();
+
 }
 
 
@@ -821,12 +791,13 @@ HRESULT CPlayer::Ready_GameObject()
 void CPlayer::Update_GameObject()
 {		
 	//Update_KeyInput(); //키 입력 체크
-	m_fAttackLimit += TimeManager->Get_DeltaTime();
+	m_fAttackLimit += TimeManager->Get_DeltaTime() *(FrameManager->Get_FPS() / 60);
 	Update_UnitState(); // 키 입력에 따른 상태 변화 // 이 단계에서 프레임 끝까지 봤냐 체크해야 하는데
  	Update_Frame(); // 만약 상태가 이전 상태와 다른 상태로 변했다면 프레임 갱신
 	FrameMove(m_fSpeed); //현재 프레임 증가 또는 초기화
 	Update_HitBox(); // 현재 유닛 기준으로 충돌 범위 업데이트
 	Update_D3DPos();
+	ScroolMove();
 }
 
 void CPlayer::LateUpdate_GameObject()
@@ -854,7 +825,7 @@ void CPlayer::Render_GameObject()
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
 	D3DXMatrixScaling(&matScale, m_iUnitDir * m_fRatio, m_fRatio, 0.f);
 	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
-	D3DXMatrixTranslation(&matTrans, m_vecPivot.x, m_vecPivot.y- m_fRatio*fCenterY, 0.f);
+	D3DXMatrixTranslation(&matTrans, m_vecPivot.x - CScrollManager::Get_ScroolX(), m_vecPivot.y- m_fRatio*fCenterY - CScrollManager::Get_ScroolY(), 0.f);
 	matWorld = matScale * matRolateZ *matTrans;
 
 

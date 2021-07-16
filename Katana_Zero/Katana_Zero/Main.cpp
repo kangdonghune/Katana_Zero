@@ -8,6 +8,7 @@
 #include "FrameManager.h"
 #include "TimeManager.h"
 #include "ColliderManager.h"
+#include "ScrollManager.h"
 
 CMain::CMain()
 {
@@ -59,15 +60,28 @@ void CMain::Update_Main()
 {
 	TimeManager->Update_TimeManager();
 	GameObjectManager->Update_GameObjectManager();
+	MapObjectManager->Update_MapObjectManager();
+	//플레이어와 라인충돌
 	ColliderManager->Collider_Land(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front());
 	ColliderManager->Collider_Wall(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front());
 	ColliderManager->Collider_Celling(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front());
 
+	//갱스터들과 라인충돌
 	ColliderManager->Collider_Land(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
 	ColliderManager->Collider_Wall(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
 	ColliderManager->Collider_Celling(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
-	
+
+	//탄환과 공격이펙트 충돌
 	ColliderManager->Collider_Obb(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
+	//탄환과 유닛충돌
+	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
+	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER));
+
+	//투사체와 라인충돌
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
+
 }
 
 void CMain::LateUpdate_Main()
@@ -84,16 +98,16 @@ void CMain::Render_Main()
 		return;
 	float fCenterX = float(pTexInfo->tImageInfo.Width >> 1);
 	float fCenterY = float(pTexInfo->tImageInfo.Height >> 1);
-
+	RECT rc= { CScrollManager::Get_ScroolX(),CScrollManager::Get_ScroolY(), WINCX + CScrollManager::Get_ScroolX(), WINCY + CScrollManager::Get_ScroolY() };
 	D3DXMatrixScaling(&matScale, 1.f, 1.f, 0.f);
 	D3DXMatrixTranslation(&matTrans, fCenterX, fCenterY, 0.f);
 	matWorld = matScale * matTrans;
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
-	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, &rc, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 	if (GetAsyncKeyState(VK_CONTROL) & 0X8001)
 	{
 		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
-		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
+		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, &rc, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
 	}
 	MapObjectManager->Render_MapObjectManager();
 	GameObjectManager->Render_GameObjectManager();

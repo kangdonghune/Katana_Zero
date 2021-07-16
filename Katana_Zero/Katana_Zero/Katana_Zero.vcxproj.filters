@@ -78,6 +78,9 @@
     <Filter Include="소스 파일\01.GameObject\02.Effect\00.PlayerAttack">
       <UniqueIdentifier>{2178bd36-23ce-4bf6-8d9d-56865c7b0154}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager">
+      <UniqueIdentifier>{b131b961-2a7a-46d4-91b6-f9a20082d669}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -152,6 +155,15 @@
     <ClInclude Include="Enemy.h">
       <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="ScrollManager.h">
+      <Filter>소스 파일\098.Managers\00.ScrollManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -211,14 +223,23 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>소스 파일\01.GameObject\04.Projectile\00.Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerAttack.cpp">
       <Filter>소스 파일\01.GameObject\02.Effect\00.PlayerAttack</Filter>
     </ClCompile>
     <ClCompile Include="GangsterArm.cpp">
       <Filter>소스 파일\01.GameObject\03.Enemy\00.Gangster</Filter>
+    </ClCompile>
+    <ClCompile Include="ScrollManager.cpp">
+      <Filter>소스 파일\098.Managers\00.ScrollManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>소스 파일\01.GameObject\03.Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

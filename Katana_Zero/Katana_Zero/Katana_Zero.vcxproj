@@ -171,6 +171,9 @@
     <ClInclude Include="PlayerAttack.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SaveLoadManager.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ScrollManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
@@ -196,6 +199,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAttack.cpp" />
     <ClCompile Include="SaveLoadManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScrollManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
