@@ -16,8 +16,10 @@ public:
 public:
 
 public:
+	HRESULT Ready_SceneManager();
 	void Update_SceneManager();
-	void Render_SceneManager(HDC hDC);
+	void Render_SceneManager();
+	void LateUpdate_ScnenManager();
 	void Release_SceneManager();
 private:
 	CScene* m_pScene;

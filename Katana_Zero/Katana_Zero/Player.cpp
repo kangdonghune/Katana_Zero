@@ -504,7 +504,7 @@ void CPlayer::Hurtrecover()
 void CPlayer::Jump()
 {
 	m_fSpeed = 20.f;
-	m_fUnitSpeed = 3.f;
+	m_fUnitSpeed = 5.f;
 	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
 	{
 		m_State = PLAYERSTATE::ATTACK;
@@ -778,9 +778,9 @@ HRESULT CPlayer::Ready_GameObject()
 	m_wstrOldState = m_pUnitInfo->wstrState;
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
-	m_fJumpDistance = 100.f;
+	m_fJumpDistance = 130.f;
 	m_fSpeed = m_fDefaultSpeed;
-	m_fRatio = 1.6f;
+	m_fRatio = 1.8f;
 	m_iUnitDir = 1;
 	m_vecPivot = { m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y + m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
 	m_fDefaultUnitSpeed = 5.f;

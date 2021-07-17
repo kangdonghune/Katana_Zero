@@ -32,7 +32,7 @@ void C_Map::Render_Map()
 {
 	D3DXMATRIX matScale, matTrans, matWorld;
 
-	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 0);
+	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 2);
 	if (nullptr == pTexInfo)
 		return;
 	float fCenterX = float(pTexInfo->tImageInfo.Width >> 1);

@@ -81,6 +81,24 @@
     <Filter Include="소스 파일\098.Managers\05.SceneManager">
       <UniqueIdentifier>{b131b961-2a7a-46d4-91b6-f9a20082d669}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager\00.Loding">
+      <UniqueIdentifier>{52e92530-6320-466e-b39e-b4652910f4d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager\01.Main">
+      <UniqueIdentifier>{87533851-0d76-4157-aec3-810dcd77e759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager\02.Stage">
+      <UniqueIdentifier>{2dd4e4fb-4ae0-4a94-8a22-115fe3aea183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager\02.Stage\00.Stage1">
+      <UniqueIdentifier>{3f8ea615-dfdc-4f68-8191-cb2ec761cb65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager\02.Stage\01.Stage2">
+      <UniqueIdentifier>{e4f3baa2-0e1c-498b-96ee-1a0f3048d165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager\02.Stage\02.Stage3">
+      <UniqueIdentifier>{275ecc15-ac5d-4a39-bba1-347f4d3e9359}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -164,6 +182,15 @@
     <ClInclude Include="SceneManager.h">
       <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
     </ClInclude>
+    <ClInclude Include="Stage1.h">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\00.Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage2.h">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\01.Stage2</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage3.h">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\02.Stage3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -240,6 +267,15 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1.cpp">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\00.Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage2.cpp">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\01.Stage2</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage3.cpp">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\02.Stage3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
