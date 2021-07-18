@@ -10,6 +10,8 @@
 #include "Stage1.h"
 #include "Stage2.h"
 #include "Stage3.h"
+#include "Stage4.h"
+#include "Stage5.h"
 
 IMPLEMENT_SINGLETON(CSceneManager)
 
@@ -48,8 +50,10 @@ void CSceneManager::Change_SceneManager(ID eNextScene)
 			m_pScene = CStage3::Create();
 			break;
 		case CSceneManager::SCENE_STAGE4:
+			m_pScene = CStage4::Create();
 			break;
 		case CSceneManager::SCENE_BOSS:
+			m_pScene = CStage5::Create();
 			break;
 		case CSceneManager::SCENE_END:
 			break;

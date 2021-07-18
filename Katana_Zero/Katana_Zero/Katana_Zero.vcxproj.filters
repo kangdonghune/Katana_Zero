@@ -99,6 +99,12 @@
     <Filter Include="소스 파일\098.Managers\05.SceneManager\02.Stage\02.Stage3">
       <UniqueIdentifier>{275ecc15-ac5d-4a39-bba1-347f4d3e9359}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager\02.Stage\03.Stage4">
+      <UniqueIdentifier>{d6327849-f59a-4399-a639-d8f24061113c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\098.Managers\05.SceneManager\02.Stage\04.Stage5">
+      <UniqueIdentifier>{2ca6bdab-ca2c-43c6-84b7-b3a60357910e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -191,6 +197,12 @@
     <ClInclude Include="Stage3.h">
       <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\02.Stage3</Filter>
     </ClInclude>
+    <ClInclude Include="Stage4.h">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\03.Stage4</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage5.h">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\04.Stage5</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -276,6 +288,12 @@
     </ClCompile>
     <ClCompile Include="Stage3.cpp">
       <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\02.Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage4.cpp">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\03.Stage4</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage5.cpp">
+      <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\04.Stage5</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

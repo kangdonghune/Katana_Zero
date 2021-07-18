@@ -19,7 +19,7 @@ C_Map::~C_Map()
 
 HRESULT C_Map::Ready_Map()
 {
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Map/stage%d.bmp", L"Map", L"Stage", 5)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Map/stage%d.bmp", L"Map", L"Stage", 6)))
 		return E_FAIL;
 	return S_OK;
 }
@@ -32,7 +32,7 @@ void C_Map::Render_Map()
 {
 	D3DXMATRIX matScale, matTrans, matWorld;
 
-	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 2);
+	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 5);
 	if (nullptr == pTexInfo)
 		return;
 	float fCenterX = float(pTexInfo->tImageInfo.Width >> 1);

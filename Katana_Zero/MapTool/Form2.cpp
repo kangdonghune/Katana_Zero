@@ -354,8 +354,8 @@ void CForm2::OnBnClickedCelling()
 void CForm2::OnBnClickedSave()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	Save_Terrain(L"../Data/Stage3/Terrain/Terrain.dat");
-	Save_Unit(L"../Data/Stage3/Unit/Unit.dat");
+	Save_Terrain(L"../Data/Stage5/Terrain/Terrain.dat");
+	Save_Unit(L"../Data/Stage5/Unit/Unit.dat");
 	MessageBox(L"저장 완료", L"저장 시스템", MB_OK);
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
@@ -366,8 +366,8 @@ void CForm2::OnBnClickedSave()
 void CForm2::OnBnClickedLoad()
 {
 	//TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	Load_Terrain(L"../Data/Stage3/Terrain/Terrain.dat");
-	Load_Unit(L"../Data/Stage3/Unit/Unit.dat");
+	Load_Terrain(L"../Data/Stage5/Terrain/Terrain.dat");
+	Load_Unit(L"../Data/Stage5/Unit/Unit.dat");
 	MessageBox(L"불러오기 완료", L"저장 시스템", MB_OK);
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
