@@ -36,7 +36,6 @@ private:
 	void Wallslide();
 
 public:
-
 //	void Update_KeyInput();
 	void Update_UnitState();
 	void Render_Pivot();
@@ -44,6 +43,11 @@ public:
 	void Update_D3DPos();
 	void ScroolMove();
 	void ScroolInput();
+	void Throw_Item();
+
+	void Set_Item(CGameObject* pItem);
+	const ITEMINFO* Get_Itme() { return m_pItem; }
+
 public:
 	// CGameObject을(를) 통해 상속됨
 	virtual HRESULT Ready_GameObject() override;
@@ -67,9 +71,8 @@ private:
 	float		m_fFallAngle;
 	D3DXVECTOR3 m_vecMousePos;
 	D3DXVECTOR3 m_vecDir;
-
-
 	TCHAR		m_szPivot[255];
 	TCHAR		m_szMousePos[255];
+	ITEMINFO*	m_pItem;
 };
 

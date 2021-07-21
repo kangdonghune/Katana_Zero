@@ -6,6 +6,9 @@
 #include "TimeManager.h"
 #include "PlayerAttack.h"
 #include "ScrollManager.h"
+#include "ButcherKnife.h"
+#include "Smoke.h"
+#include "Explosive.h"
 
 CPlayer::CPlayer()
 	:m_fDefaultSpeed(15.0f) // 프레임 속도
@@ -17,6 +20,7 @@ CPlayer::CPlayer()
 	, m_fOldJumpAngleY(0.f)//이전 점프 높이
 	, m_fFallAngle(0.f)
 	, m_szPivot(L"")
+	, m_pItem(nullptr)
 {
 }
 
@@ -63,7 +67,7 @@ void CPlayer::Idle()
 		return;
 	}
 
-	if (m_pUnitInfo->iCollide & C_WALL && !(m_pUnitInfo->iCollide & C_LAND))
+	if (m_pUnitInfo->iCollide & C_WALL && !(m_pUnitInfo->iCollide & C_LAND) && !(m_pUnitInfo->iCollide & C_PASSABLE))
 	{
 		m_State = PLAYERSTATE::FALL;
 		if(m_pUnitInfo->iCollide & C_WALLL && GetAsyncKeyState('A') & 0x8000)
@@ -425,7 +429,7 @@ void CPlayer::Doorbreakfull()
 void CPlayer::Fall()
 {
 	m_fSpeed = 20.f;
-	m_fUnitSpeed = 3.f;
+	m_fUnitSpeed = 5.f;
 
 
 	//낙하 속도가 최종적으로는 fFallSpeed가 되도록 점진적으로 증가
@@ -444,7 +448,7 @@ void CPlayer::Fall()
 	m_vecPivot.y += fFallSpeed;
 
 
-	if (m_pUnitInfo->iCollide & C_WALL && !(m_pUnitInfo->iCollide & C_LAND))
+	if (m_pUnitInfo->iCollide & C_WALL && !(m_pUnitInfo->iCollide & C_LAND ) && !(m_pUnitInfo->iCollide & C_PASSABLE))
 	{
 		if (m_pUnitInfo->iCollide & C_WALLL && GetAsyncKeyState('A') & 0X8000)
 		{
@@ -477,28 +481,65 @@ void CPlayer::Fall()
 		m_vecPivot.y += 3*m_fUnitSpeed;
 	}
 
-	if (m_pUnitInfo->iCollide & C_LAND)
+	if (m_pUnitInfo->iCollide & C_LAND || m_pUnitInfo->iCollide & C_PASSABLE)
 	{
 		m_State = PLAYERSTATE::IDLE;
+		m_fJumpAngle = 0.f;
 		m_fFallAngle = 0.f;
+
 	}
 		
 }
 
 void CPlayer::Hurtfly_begin()
 {
+	m_fSpeed = 20.f;
+	if (m_fHitSpeed <= 0)
+		m_fHitSpeed /= 3.f;
+	m_vecPivot.x += m_iHitDir* cosf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed;
+	m_vecPivot.y -= sinf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed*1.5;
+	if (Check_FrameEnd())
+		m_State = PLAYERSTATE::HURTFLY_LOOB;
 }
 
 void CPlayer::Hurtfly_loob()
 {
+	m_fSpeed = 20.f;
+	if (m_fHitSpeed <= 0)
+		m_fHitSpeed /= 3.f;
+	m_vecPivot.x += m_iHitDir* cosf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed;
+	m_vecPivot.y -= sinf(D3DXToRadian(m_fHitAngle))*3.f*m_iHitDir;
+	if (Check_FrameEnd())
+		m_State = PLAYERSTATE::HURTGROUND;
 }
 
 void CPlayer::Hurtground()
 {
+	m_fSpeed = 20.f;
+	if (m_fHitSpeed <= 0)
+		m_fHitSpeed /= 3.f;
+	m_vecPivot.x += m_iHitDir*cosf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed;
+	m_vecPivot.y += m_fHitSpeed ;
+	if (Check_FrameEnd())
+		m_State = PLAYERSTATE::HURTRECOVER;
 }
 
 void CPlayer::Hurtrecover()
 {
+	m_fSpeed = 40.f;
+	m_fUnitSpeed = 5.f;
+	m_vecPivot.y += m_fUnitSpeed;
+	if (Check_FrameEnd())
+	{
+		m_State = PLAYERSTATE::IDLE;
+		m_iObjState = NONE;
+	}
+	if ((GetAsyncKeyState(VK_LBUTTON) & 0X0001) && m_fAttackCool <= m_fAttackLimit)
+	{
+		m_State = PLAYERSTATE::ATTACK;
+		m_iObjState = NONE;
+		return;
+	}
 }
 
 void CPlayer::Jump()
@@ -513,7 +554,7 @@ void CPlayer::Jump()
 		m_fFallAngle = 0.f;
 		return;
 	}
-	if (m_pUnitInfo->iCollide & C_WALL && !(m_pUnitInfo->iCollide & C_LAND))
+	if (m_pUnitInfo->iCollide & C_WALL && !(m_pUnitInfo->iCollide & C_LAND) && !(m_pUnitInfo->iCollide & C_PASSABLE))
 	{
 		if (GetAsyncKeyState('A') & 0X8000)
 		{
@@ -562,7 +603,7 @@ void CPlayer::Flip()
 	m_fSpeed = 40.f;
 	m_fUnitSpeed = 10.f;
 	
-	if (m_pUnitInfo->iCollide & C_WALL && m_iOldCollide & C_NONE)
+	if (m_pUnitInfo->iCollide & C_WALL && m_iOldCollide & C_NONE )
 	{
 		m_State = PLAYERSTATE::WALLSLIDE;
 		m_fFallAngle = 0.f;
@@ -684,12 +725,24 @@ void CPlayer::Update_UnitState()
 		Fall();
 		break;
 	case PLAYERSTATE::HURTFLY_BEGIN:
+		m_pUnitInfo->wstrState = L"Hurtfly_begin";
+		Update_Frame();
+		Hurtfly_begin();
 		break;
 	case PLAYERSTATE::HURTFLY_LOOB:
+		m_pUnitInfo->wstrState = L"Hurtfly_loop";
+		Update_Frame();
+		Hurtfly_loob();
 		break;
 	case PLAYERSTATE::HURTGROUND:
-		break;
+		m_pUnitInfo->wstrState = L"Hurtground";
+		Update_Frame();
+		Hurtground();
+		break; 
 	case PLAYERSTATE::HURTRECOVER:
+		m_pUnitInfo->wstrState = L"Hurtrecover";
+		Update_Frame();
+		Hurtrecover();
 		break;
 	case PLAYERSTATE::JUMP:
 		m_pUnitInfo->wstrState = L"Jump";
@@ -769,6 +822,66 @@ void CPlayer::ScroolInput()
 
 }
 
+void CPlayer::Throw_Item()
+{
+	if (m_pItem == nullptr)
+		return;
+
+	if (GetAsyncKeyState(VK_RBUTTON) & 0X8000)
+	{
+		float oldRotate = m_fRotateAngle;
+		int	  OldDir = m_iUnitDir;
+		POINT tMousePos{};
+		GetCursorPos(&tMousePos);
+		ScreenToClient(g_hWND, &tMousePos);
+		m_vecMousePos = { float(tMousePos.x + CScrollManager::Get_ScroolX()), float(tMousePos.y + CScrollManager::Get_ScroolY()), 0 };
+		D3DXVECTOR3 TexturePos = { m_vecPivot.x, m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
+		m_vecDir = m_vecMousePos - TexturePos;
+		D3DXVec3Normalize(&m_vecDir, &m_vecDir); //단위벡터로
+		D3DXVECTOR3 vLook{ 1.f,0,0 };
+		m_iUnitDir = 1;
+		m_fRotateAngle = D3DXToDegree(acosf(D3DXVec3Dot(&m_vecDir, &vLook)));
+		if (TexturePos.y <= m_vecMousePos.y)
+			m_fRotateAngle *= -1.f;
+		m_fTargetAngle = m_fRotateAngle;
+		if (m_vecMousePos.x <= m_vecPivot.x)
+		{
+			m_iUnitDir = -1.f;
+		}
+	
+
+		switch ((m_pItem->type))
+		{
+		case ITEMTYPE::BUTCHERKNIFE:
+			GameObjectManager->Insert_GameObjectManager(CButcherKnife::Create(this), GAMEOBJECT::BUTCHERKNIFE);
+			Safe_Delete(m_pItem);
+
+			break;
+		case ITEMTYPE::SMOKE:
+			GameObjectManager->Insert_GameObjectManager(CSmoke::Create(this), GAMEOBJECT::BUTCHERKNIFE);
+			Safe_Delete(m_pItem);
+			break;
+		case ITEMTYPE::EXPLOSIVEVIAL:
+			GameObjectManager->Insert_GameObjectManager(CExplosive::Create(this), GAMEOBJECT::BUTCHERKNIFE);
+			Safe_Delete(m_pItem);
+			break;
+		default:
+			break;
+		}
+		m_fRotateAngle = oldRotate;
+		m_iUnitDir = OldDir;
+	}
+
+}
+
+void CPlayer::Set_Item(CGameObject * pItem)
+{
+	m_pItem = new ITEMINFO;
+	m_pItem->wstrKey = pItem->Get_ItemInfo()->wstrKey;
+	m_pItem->wstrState = pItem->Get_ItemInfo()->wstrState;
+	m_pItem->type = pItem->Get_ItemInfo()->type;
+}
+
 
 
 
@@ -798,6 +911,7 @@ void CPlayer::Update_GameObject()
 	Update_HitBox(); // 현재 유닛 기준으로 충돌 범위 업데이트
 	Update_D3DPos();
 	ScroolMove();
+	Throw_Item();
 }
 
 void CPlayer::LateUpdate_GameObject()
@@ -832,11 +946,9 @@ void CPlayer::Render_GameObject()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	if (GetAsyncKeyState(VK_CONTROL) & 0X8001)
+	if (GetAsyncKeyState(VK_CONTROL) & 0x8001)
 	{
 		FrameManager->Set_FrameSpeed(20.f);
-	///	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
-	//	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 0, 0, 255));
 	}
 	else
 		FrameManager->Set_FrameSpeed(60.f);
@@ -852,6 +964,8 @@ void CPlayer::Render_GameObject()
 void CPlayer::Release_GameObject()
 {
 	Safe_Delete(m_pUnitInfo);
+	if (m_pItem != nullptr)
+		Safe_Delete(m_pItem);
 }
 
 void CPlayer::Wallslide()
@@ -899,10 +1013,17 @@ void CPlayer::Wallslide()
 	{
 		m_State = PLAYERSTATE::FALL;
 		m_fJumpAngle += 0.f;
+		m_fFallAngle += 0.f; 
+		return;
+	}
+	if (m_pUnitInfo->iCollide & C_LAND)
+	{
+		m_State = PLAYERSTATE::IDLE;
+		m_fJumpAngle = 0.f;
 		m_fFallAngle += 0.f;
 		return;
 	}
-	if (m_pUnitInfo->iCollide & C_LAND) 
+	if (m_pUnitInfo->iCollide & C_PASSABLE)
 	{
 		m_State = PLAYERSTATE::IDLE;
 		m_fJumpAngle = 0.f;

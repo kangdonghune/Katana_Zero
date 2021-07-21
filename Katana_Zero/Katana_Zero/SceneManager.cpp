@@ -64,6 +64,45 @@ void CSceneManager::Change_SceneManager(ID eNextScene)
 	}
 }
 
+void CSceneManager::Change_SceneManager(int SceneID)
+{
+	m_eNextScene = (CSceneManager::ID)SceneID;
+	if (m_eCurScene != m_eNextScene)
+	{
+		Safe_Delete(m_pScene);
+
+		switch (m_eNextScene)
+		{
+		case CSceneManager::SCENE_LODING:
+			break;
+		case CSceneManager::SCENE_MENU:
+			break;
+		case CSceneManager::SCENE_EDIT:
+			break;
+		case CSceneManager::SCENE_STAGE1:
+			m_pScene = CStage1::Create();
+			break;
+		case CSceneManager::SCENE_STAGE2:
+			m_pScene = CStage2::Create();
+			break;
+		case CSceneManager::SCENE_STAGE3:
+			m_pScene = CStage3::Create();
+			break;
+		case CSceneManager::SCENE_STAGE4:
+			m_pScene = CStage4::Create();
+			break;
+		case CSceneManager::SCENE_BOSS:
+			m_pScene = CStage5::Create();
+			break;
+		case CSceneManager::SCENE_END:
+			break;
+		default:
+			break;
+		}
+		m_eCurScene = m_eNextScene;
+	}
+}
+
 HRESULT CSceneManager::Ready_SceneManager()
 {
 	//타임 매니저 생성
@@ -92,24 +131,59 @@ void CSceneManager::Update_SceneManager()
 	m_pScene->Update_Scene();
 	//플레이어와 라인충돌
 	ColliderManager->Collider_Land(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front());
+	ColliderManager->Collider_PassAble(MapObjectManager->Get_TerrainVector(TERRAINTYPE::PASSABLE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front());
 	ColliderManager->Collider_Wall(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front());
 	ColliderManager->Collider_Celling(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front());
+	ColliderManager->Collider_StageChange(MapObjectManager->Get_TerrainVector(TERRAINTYPE::STAGECHANGE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front());
 
 	//갱스터들과 라인충돌
 	ColliderManager->Collider_Land(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
 	ColliderManager->Collider_Wall(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
 	ColliderManager->Collider_Celling(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
+	ColliderManager->Collider_PassAbleAndEnemy(MapObjectManager->Get_TerrainVector(TERRAINTYPE::PASSABLE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
 
 	//탄환과 공격이펙트 충돌
 	ColliderManager->Collider_Obb(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
-	//탄환과 유닛충돌
-	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
-	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER));
+	
+	//탄환과 유닛 충돌
+	ColliderManager->Collider_BulletAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
+	ColliderManager->Collider_BulletAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER));
+
+	//탄환과 벽충돌
+	ColliderManager->Collider_Bullet(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
+	ColliderManager->Collider_Bullet(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
+	ColliderManager->Collider_Bullet(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
+	
+	//탄환과 투사체 충돌
+	ColliderManager->Collider_BulletAndProjectile(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BUTCHERKNIFE));
+	ColliderManager->Collider_BulletAndProjectile(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::SMOKE));
+	ColliderManager->Collider_BulletAndProjectile(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::EXPLOSIVE));
+
+
+	//공격이펙트와 적 충돌
+	ColliderManager->ColliderAttckAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
+
+	//투사체와과 유닛충돌
+	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BUTCHERKNIFE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER));
+	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BUTCHERKNIFE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
+	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::SMOKE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER));
+	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::SMOKE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
+	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::EXPLOSIVE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER));
+	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::EXPLOSIVE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
+
+
+
 
 	//투사체와 라인충돌
-	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
-	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
-	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BUTCHERKNIFE));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BUTCHERKNIFE));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BUTCHERKNIFE));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::SMOKE));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::SMOKE));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::SMOKE));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::EXPLOSIVE));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::EXPLOSIVE));
+	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::EXPLOSIVE));
 
 }
 

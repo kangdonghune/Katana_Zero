@@ -12,6 +12,10 @@
 #include "FrameManager.h"
 
 CGangster::CGangster()
+	:m_bLockOn(false)
+	, m_iRunDir(1)
+	,m_fWhipRange(0.f)
+
 {
 }
 
@@ -37,14 +41,56 @@ CGameObject * CGangster::Create(CGameObject * pTarget, UNITINFO* pInfo)
 void CGangster::Idle()
 {
 	//주위 일정 거리내 플레이어 접근 시 aim 상태로
-	
-	
-	
-	
+	if (m_pTarget->Get_Pivot().x < m_vecPivot.x)
+		m_iUnitDir = -1;
+	if (m_pTarget->Get_Pivot().x >= m_vecPivot.x)
+		m_iUnitDir = 1;
+	if (m_fTargetDist <= 800.f && Ray_Traising() && !(m_lstRoot.empty()))
+	{
+		m_GangState = GANGSTERSTATE::RUN;
+		m_bLockOn = true;
+		return;
+	}
+
+	if (m_fTargetDist <= 800.f && m_bLockOn)
+	{
+		m_GangState = GANGSTERSTATE::RUN;
+		return;
+	}
+	if (m_fTargetDist <= m_fWhipRange)
+	{
+		WhipLimit += TimeManager->Get_DeltaTime()*(FrameManager->Get_FPS() / 60);
+		if (WhipLimit >= WhipCool)
+		{
+			m_GangState = GANGSTERSTATE::WHIP;
+			WhipLimit = 0.f;
+			return;
+		}
+	}
+	if (m_fTargetDist <= 300.f && Ray_Traising())
+	{
+		m_GangState = GANGSTERSTATE::AIM;
+		return;
+	}
+
+
+	m_vecPivot.y += 2.f;
 }
 
 void CGangster::Aim()
 {
+	Shooting();
+	if (m_fTargetDist <= m_fWhipRange)
+	{
+		WhipLimit += TimeManager->Get_DeltaTime()*(FrameManager->Get_FPS() / 60);
+		if (WhipLimit >= WhipCool)
+		{
+			m_GangState = GANGSTERSTATE::WHIP;
+			WhipLimit = 0.f;
+			return;
+		}
+	}
+	m_vecPivot.y += 2.f;
 }
 
 void CGangster::Enterstair()
@@ -57,10 +103,22 @@ void CGangster::Fall()
 
 void CGangster::Hurtfly()
 {
+	if (m_fHitSpeed <= 0)
+		m_fHitSpeed /= 3.f;
+	m_vecPivot.x += cosf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed*2;
+	m_vecPivot.y -= sinf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed * 2;
+	if(Check_FrameEnd())
+		m_GangState = GANGSTERSTATE::HURTGROUND;
 }
 
 void CGangster::Hurtground()
 {
+	if (m_fHitSpeed <= 0)
+		m_fHitSpeed /= 3.f;
+	m_vecPivot.x += cosf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed * 2;
+	m_vecPivot.y +=3.f;
+	if (Check_FrameEnd())
+		m_fSpeed = 0;
 }
 
 void CGangster::Leavestair()
@@ -69,6 +127,70 @@ void CGangster::Leavestair()
 
 void CGangster::Run()
 {
+	if (m_lstRoot.empty())
+	{
+		m_GangState = GANGSTERSTATE::IDLE;
+		return;
+	}
+	if (m_fTargetDist <= m_fWhipRange)
+	{
+		WhipLimit += TimeManager->Get_DeltaTime()*(FrameManager->Get_FPS() / 60);
+		if (WhipLimit >= WhipCool)
+		{
+			m_GangState = GANGSTERSTATE::WHIP;
+			WhipLimit = 0.f;
+			return;
+		}
+	}
+	if (m_fTargetDist <= 300.f && Ray_Traising())
+	{
+		m_GangState = GANGSTERSTATE::AIM;
+		return;
+	}
+
+	m_fSpeed = 20.f;
+	m_fUnitSpeed = 7.f;
+	float fDir;
+	auto& iter = m_lstRoot.begin();
+	if (m_tCurLand.ID == iter->ID)//현재 있는 라인과 이동 경로 리스트에 있는 라인이 같다면
+	{ 
+		m_NowLine = (*iter);
+		if (iter != m_lstRoot.end()) //리스트의 마지막 목록이 아니라면
+		{	
+			iter = m_lstRoot.erase(iter);
+			if (m_lstRoot.empty())
+			{
+				m_NextLine.type = TERRAINTYPE::T_NONE;
+				return;
+			}
+			m_NextLine = (*iter);  //이터레이터를 증가하고 다음 라인을 다음 목표지로 한다.
+			if (m_tCurLand.Start.x == m_NextLine.End.x)
+			{
+				m_iRunDir = -1;
+				m_iUnitDir = m_iRunDir;
+			}
+				
+			if (m_tCurLand.End.x == m_NextLine.Start.x)
+			{
+				m_iRunDir = 1;
+				m_iUnitDir = m_iRunDir;
+			}
+			if(m_tCurLand.End.x == m_NextLine.End.x)
+			{
+				m_iRunDir = -1;
+				m_iUnitDir = m_iRunDir;
+			}
+			if (m_tCurLand.Start.x == m_NextLine.Start.x)
+			{
+				m_iRunDir = 1;
+				m_iUnitDir = m_iRunDir;
+			}
+		}
+	}
+	m_vecPivot.x += m_iRunDir*m_fUnitSpeed;
+	m_vecPivot.y += 3.f;
+
+
 }
 
 void CGangster::Turn()
@@ -81,22 +203,42 @@ void CGangster::Walk()
 
 void CGangster::Whip()
 {
+
+	m_fSpeed = 10.f;
+	if (m_pTarget->Get_Pivot().x < m_vecPivot.x)
+		m_iUnitDir = -1;
+	if (m_pTarget->Get_Pivot().x >= m_vecPivot.x)
+		m_iUnitDir = 1;
+	RECT rc = {};
+	if (IntersectRect(&rc, &m_tHitBox, &(m_pTarget->Get_Hitbox()))&& !WhipSucces)
+	{
+		WhipSucces = true;
+		m_pTarget->Set_State(PLAYERSTATE::HURTFLY_BEGIN);
+		m_pTarget->Set_HitAngle(45.f);
+		m_pTarget->Set_HitDir(m_iUnitDir);
+		m_pTarget->Set_HitSpeed(7.f);
+	}
+	if (Check_FrameEnd())
+	{
+		m_GangState = GANGSTERSTATE::IDLE;
+		WhipSucces = false;
+	}
+
+	
 }
 
 void CGangster::Shooting()
 {
-	if (Ray_Traising())
-	{
-		m_fAttackLimit += TimeManager->Get_DeltaTime()*(FrameManager->Get_FPS() / 60);
-		if (m_fAttackLimit >= m_fAttackCool)
-		{
-			m_fAttackLimit = 0.f;
-			GameObjectManager->Insert_GameObjectManager(CBullet::Create(this), GAMEOBJECT::BULLET);
-		}
-	}
-	else
+	m_fAttackLimit += TimeManager->Get_DeltaTime()*(FrameManager->Get_FPS() / 60);
+	if (m_fAttackLimit >= m_fAttackCool)
 	{
 		m_fAttackLimit = 0.f;
+		GameObjectManager->Insert_GameObjectManager(CBullet::Create(this), GAMEOBJECT::BULLET);
+		if(Ray_Traising())
+			m_GangState = GANGSTERSTATE::AIM;
+		else {
+			m_GangState = GANGSTERSTATE::RUN;
+		}
 	}
 }
 
@@ -135,10 +277,12 @@ void CGangster::Update_UnitState()
 	case GANGSTERSTATE::IDLE:
 		m_pUnitInfo->wstrState = L"Idle";
 		Update_Frame();
+		Idle();
 		break;
 	case GANGSTERSTATE::AIM:
 		m_pUnitInfo->wstrState = L"Aim";
 		Update_Frame();
+		Aim();
 		break;
 	case GANGSTERSTATE::ENTERSTAIR:
 		m_pUnitInfo->wstrState = L"Enterstair";
@@ -151,10 +295,12 @@ void CGangster::Update_UnitState()
 	case GANGSTERSTATE::HURTFLY:
 		m_pUnitInfo->wstrState = L"Hurtfly";
 		Update_Frame();
+		Hurtfly();
 		break;
 	case GANGSTERSTATE::HURTGROUND:
-		m_pUnitInfo->wstrState = L"HurtGround";
+		m_pUnitInfo->wstrState = L"Hurtground";
 		Update_Frame();
+		Hurtground();
 		break;
 	case GANGSTERSTATE::LEAVESTAIR:
 		m_pUnitInfo->wstrState = L"Leavestair";
@@ -163,6 +309,7 @@ void CGangster::Update_UnitState()
 	case GANGSTERSTATE::RUN:
 		m_pUnitInfo->wstrState = L"Run";
 		Update_Frame();
+		Run();
 		break;
 	case GANGSTERSTATE::TURN:
 		m_pUnitInfo->wstrState = L"Turn";
@@ -175,6 +322,7 @@ void CGangster::Update_UnitState()
 	case GANGSTERSTATE::WHIP:
 		m_pUnitInfo->wstrState = L"Whip";
 		Update_Frame();
+		Whip();
 		break;
 	default:
 		break;
@@ -219,22 +367,32 @@ HRESULT CGangster::Ready_GameObject()
 	m_fDefaultUnitSpeed = 5.f;
 	m_fUnitSpeed = m_fDefaultUnitSpeed;
 	m_fAttackLimit = 0.f;
-	m_fAttackCool = 1.f;
-	m_pUnitInfo->wstrState = L"Aim";
+	m_fAttackCool = 0.5f;
+	WhipLimit = 0.f;
+	WhipCool = 1.f;
+	m_pUnitInfo->wstrState = L"Idle";
+	m_GangState = GANGSTERSTATE::IDLE;
+	m_fWhipRange = m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, L"Whip",0)->tImageInfo.Width);
 	m_fTargetAngle = 0.f;
+	WhipSucces = false;
 	return S_OK;
 }
 
 void CGangster::Update_GameObject()
 {
-	Update_Frame(); // 만약 상태가 이전 상태와 다른 상태로 변했다면 프레임 갱신
-	FrameMove(m_fSpeed); //현재 프레임 증가 또는 초기화
-	Update_TargetRotate();
-	Update_HitBox(); // 현재 유닛 기준으로 충돌 범위 업데이트
 	Update_D3DPos();
-	Shooting();
-	
+	Update_TargetDist();
+	Update_HitBox();
+	Update_UnitState();
+	FrameMove(m_fSpeed); //현재 프레임 증가 또는 초기화
+	if (Find_Root(m_tCurLand, m_pTarget->Get_CurLine(), m_pTarget->Get_OldLine()))//탐색이 됐다면.
+	{
+		m_pTarget->Set_OldLine(m_pTarget->Get_CurLine());
+	}
+	if (m_GangState == GANGSTERSTATE::AIM)
+		Update_TargetRotate();
 
+	
 }
 
 void CGangster::LateUpdate_GameObject()

@@ -35,8 +35,8 @@ HRESULT CEffect::Ready_GameObject()
 	m_pUnitInfo->D3VecPos.z = 0.f;
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
-	m_fSpeed = 40.f;
-	m_fRatio = 1.0f;
+	m_fSpeed = 50.f;
+	m_fRatio = 1.6f;
 	m_fRotateAngle = 0.f;
 	m_fTargetAngle = m_pTarget->Get_TargetAngle();
 	m_iUnitDir = m_pTarget->Get_UnitDir();
@@ -48,6 +48,7 @@ void CEffect::Update_GameObject()
 	m_fTargetAngle = m_pTarget->Get_TargetAngle(); 
 	m_fRotateAngle = m_pTarget->Get_RotateAngle();
 	m_iUnitDir = m_pTarget->Get_UnitDir();
+	FrameMove(m_fSpeed);
 	Update_HitBoxOBB();
 	if (Check_FrameEnd())
 		m_iObjState = DEAD;

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "MapObjectManager.h"
 #include "ScrollManager.h"
+
+
 IMPLEMENT_SINGLETON(CMapObjectManager)
 CMapObjectManager::CMapObjectManager()
 {
@@ -36,12 +38,18 @@ void CMapObjectManager::Load_Terrain(TCHAR * pFilePath)
 		case TERRAINTYPE::CELLING:
 			m_vecTerrain[TERRAINTYPE::CELLING].emplace_back(tLine);
 			break;
+		case TERRAINTYPE::PASSABLE:
+			m_vecTerrain[TERRAINTYPE::PASSABLE].emplace_back(tLine);
+			break;
+		case TERRAINTYPE::STAGECHANGE:
+			m_vecTerrain[TERRAINTYPE::STAGECHANGE].emplace_back(tLine);
+			break;
 		default:
 			break;
 		}
 	}
 	CloseHandle(hFile);
-	MessageBox(nullptr, L"불러오기 완료", L"불러오기 시스템", MB_OK);
+	//MessageBox(nullptr, L"불러오기 완료", L"불러오기 시스템", MB_OK);
 }
 
 HRESULT CMapObjectManager::Init_MapObjectManager()
@@ -91,7 +99,18 @@ void CMapObjectManager::Render_MapObjectManager()
 		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x - CScrollManager::Get_ScroolX()),float(tLine.Start.y - CScrollManager::Get_ScroolY()) },{ float(tLine.End.x - CScrollManager::Get_ScroolX()),float(tLine.End.y - CScrollManager::Get_ScroolY()) } };
 		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 0, 0, 255));
 	}
+	
+	for (auto& tLine : m_vecTerrain[TERRAINTYPE::PASSABLE])
+	{
+		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x - CScrollManager::Get_ScroolX()),float(tLine.Start.y - CScrollManager::Get_ScroolY()) },{ float(tLine.End.x - CScrollManager::Get_ScroolX()),float(tLine.End.y - CScrollManager::Get_ScroolY()) } };
+		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
+	}
 
+	for (auto& tLine : m_vecTerrain[TERRAINTYPE::STAGECHANGE])
+	{
+		D3DXVECTOR2	vLine[2]{ { float(tLine.Start.x - CScrollManager::Get_ScroolX()),float(tLine.Start.y - CScrollManager::Get_ScroolY()) },{ float(tLine.End.x - CScrollManager::Get_ScroolX()),float(tLine.End.y - CScrollManager::Get_ScroolY()) } };
+		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 0, 0, 0));
+	}
 	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
 

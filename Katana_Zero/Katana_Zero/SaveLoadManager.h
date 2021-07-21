@@ -9,5 +9,6 @@ public:
 
 public:
 	HRESULT	LoadUnit(TCHAR* pFilePath);
+	HRESULT LoadItem(TCHAR* pFilePath);
 };
 

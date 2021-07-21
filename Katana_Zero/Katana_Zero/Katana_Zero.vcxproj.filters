@@ -72,9 +72,6 @@
     <Filter Include="소스 파일\01.GameObject\04.Projectile">
       <UniqueIdentifier>{9329ba80-427b-459b-b4f7-8c8998c78c4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\01.GameObject\04.Projectile\00.Bullet">
-      <UniqueIdentifier>{304e8132-2937-4bc0-8a02-7e5b6056e3cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\01.GameObject\02.Effect\00.PlayerAttack">
       <UniqueIdentifier>{2178bd36-23ce-4bf6-8d9d-56865c7b0154}</UniqueIdentifier>
     </Filter>
@@ -104,6 +101,21 @@
     </Filter>
     <Filter Include="소스 파일\098.Managers\05.SceneManager\02.Stage\04.Stage5">
       <UniqueIdentifier>{2ca6bdab-ca2c-43c6-84b7-b3a60357910e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\04.Projectile\01.Knife">
+      <UniqueIdentifier>{13d01a9a-65b9-455e-82a0-aeafccfce887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\04.Projectile\02.Smoke">
+      <UniqueIdentifier>{677c034c-3cca-42b8-a17e-c0cdab19fc5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\04.Projectile\03.Explosive">
+      <UniqueIdentifier>{a79d88d7-03bf-4a2c-a04d-f9c2f7a61e38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\04.Projectile\00.Bullet">
+      <UniqueIdentifier>{304e8132-2937-4bc0-8a02-7e5b6056e3cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\02.Effect\01.HitEffect">
+      <UniqueIdentifier>{7dce82fc-6541-4f71-a351-936f5ac7850f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +182,6 @@
     <ClInclude Include="Bullet.h">
       <Filter>소스 파일\01.GameObject\04.Projectile\00.Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerAttack.h">
-      <Filter>소스 파일\01.GameObject\02.Effect\00.PlayerAttack</Filter>
-    </ClInclude>
     <ClInclude Include="GangsterArm.h">
       <Filter>소스 파일\01.GameObject\03.Enemy\00.Gangster</Filter>
     </ClInclude>
@@ -202,6 +211,21 @@
     </ClInclude>
     <ClInclude Include="Stage5.h">
       <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\04.Stage5</Filter>
+    </ClInclude>
+    <ClInclude Include="ButcherKnife.h">
+      <Filter>소스 파일\01.GameObject\04.Projectile\01.Knife</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosive.h">
+      <Filter>소스 파일\01.GameObject\04.Projectile\03.Explosive</Filter>
+    </ClInclude>
+    <ClInclude Include="Smoke.h">
+      <Filter>소스 파일\01.GameObject\04.Projectile\02.Smoke</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAttack.h">
+      <Filter>소스 파일\01.GameObject\02.Effect\00.PlayerAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="HitEffect.h">
+      <Filter>소스 파일\01.GameObject\02.Effect\01.HitEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -253,9 +277,6 @@
     <ClCompile Include="ColliderManager.cpp">
       <Filter>소스 파일\098.Managers\01.ColliderManager</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>소스 파일\01.GameObject\02.Effect</Filter>
-    </ClCompile>
     <ClCompile Include="Gangster.cpp">
       <Filter>소스 파일\01.GameObject\03.Enemy\00.Gangster</Filter>
     </ClCompile>
@@ -294,6 +315,21 @@
     </ClCompile>
     <ClCompile Include="Stage5.cpp">
       <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\04.Stage5</Filter>
+    </ClCompile>
+    <ClCompile Include="ButcherKnife.cpp">
+      <Filter>소스 파일\01.GameObject\04.Projectile\01.Knife</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosive.cpp">
+      <Filter>소스 파일\01.GameObject\04.Projectile\03.Explosive</Filter>
+    </ClCompile>
+    <ClCompile Include="Smoke.cpp">
+      <Filter>소스 파일\01.GameObject\04.Projectile\02.Smoke</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>소스 파일\01.GameObject\02.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="HitEffect.cpp">
+      <Filter>소스 파일\01.GameObject\02.Effect\01.HitEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

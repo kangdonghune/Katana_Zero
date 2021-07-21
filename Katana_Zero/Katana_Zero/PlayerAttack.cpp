@@ -41,6 +41,7 @@ HRESULT CPlayerAttack::Ready_GameObject()
 	m_fRotateAngle = 0.f;
 	m_fTargetAngle = m_pTarget->Get_TargetAngle();
 	m_iUnitDir = m_pTarget->Get_UnitDir();
+	m_fUnitSpeed = 20.f;
 	return S_OK;
 }
 

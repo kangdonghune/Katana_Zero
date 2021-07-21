@@ -48,6 +48,9 @@
     <Filter Include="소스 파일\01.View\00.CForm">
       <UniqueIdentifier>{183d5ce8-858b-4314-b337-0ba2ae63ed18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\08.Projectile">
+      <UniqueIdentifier>{452ebdf1-ef65-4db1-bed1-ba741c7e48cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -98,6 +101,9 @@
     <ClInclude Include="Unit.h">
       <Filter>소스 파일\07.Unit</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>소스 파일\08.Projectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -141,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>소스 파일\07.Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>소스 파일\08.Projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

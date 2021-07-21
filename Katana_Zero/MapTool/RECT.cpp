@@ -38,6 +38,12 @@ void CRECT::Insert_Line(D3DXVECTOR3 start, D3DXVECTOR3 end, TERRAINTYPE::TYPE ty
 	case TERRAINTYPE::CELLING:
 		m_vecLine[TERRAINTYPE::CELLING].emplace_back(pLine);
 		break;
+	case TERRAINTYPE::PASSABLE :
+		m_vecLine[TERRAINTYPE::PASSABLE].emplace_back(pLine);
+		break;
+	case TERRAINTYPE::STAGECHANGE:
+		m_vecLine[TERRAINTYPE::STAGECHANGE].emplace_back(pLine);
+		break;
 	default:
 		break;
 	}
@@ -65,6 +71,12 @@ void CRECT::Insert_Line(POINT start, POINT end, TERRAINTYPE::TYPE type)
 	case TERRAINTYPE::CELLING:
 		m_vecLine[TERRAINTYPE::CELLING].emplace_back(pLine);
 		break;
+	case TERRAINTYPE::PASSABLE:
+		m_vecLine[TERRAINTYPE::PASSABLE].emplace_back(pLine);
+		break;
+	case TERRAINTYPE::STAGECHANGE:
+		m_vecLine[TERRAINTYPE::STAGECHANGE].emplace_back(pLine);
+		break;
 	default:
 		break;
 	}
@@ -84,4 +96,16 @@ void CRECT::Release_Rect()
 	}
 	
 
+}
+
+void CRECT::Set_LineID()
+{
+	int iIndex = 0;
+	for (auto& Linevec : m_vecLine)
+	{
+		for (auto& pLine : Linevec)
+		{
+			pLine->ID = iIndex++;
+		}
+	}
 }

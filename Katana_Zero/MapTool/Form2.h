@@ -37,14 +37,21 @@ public:
 	void CreateWall();
 	void CreateLine();
 	void CreateCelling();
+	void CreatePassable();
+	void CreateStageChange();
 	void CreatePlayer();
 	void CreateGangster();
+	void CreateButcherKnife();
+	void CreateSmoke();
+	void CreateExplosive();
 
 	void AutoSave();
 	void Save_Terrain(TCHAR* pFilePath);
 	void Load_Terrain(TCHAR* pFilePath);
 	void Save_Unit(TCHAR* pFilePath);
 	void Load_Unit(TCHAR* pFilePath);
+	void Save_Item(TCHAR* pFilePath);
+	void Load_Item(TCHAR* pFilePath);
 
 
 	CButton m_TerrainRadio[TERRAINTYPE::END];
@@ -60,6 +67,17 @@ public:
 	afx_msg void OnBnClickedPlayer();
 	afx_msg void OnBnClickedDeletePlayer();
 	afx_msg void OnBnClickedGangster();
+	afx_msg void OnBnClickedStageChange();
+	afx_msg void OnBnClickedDeleteStageChange();
+	afx_msg void OnBnClickedButcher();
+	afx_msg void OnBnClickedSmoke();
+	afx_msg void OnBnClickedExplosive();
+	afx_msg void OnBnClickedDeleteGang();
+	afx_msg void OnBnClickedDeleteKnife();
+	afx_msg void OnBnClickedDeleteSmoke();
+	afx_msg void OnBnClickedDeleteExplosive();
+	afx_msg void OnBnClickedPasable();
+	afx_msg void OnBnClickedDeletePassable();
 };
 
 

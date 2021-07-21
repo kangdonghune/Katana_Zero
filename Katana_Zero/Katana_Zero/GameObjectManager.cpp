@@ -71,7 +71,6 @@ void CGameObjectManager::Release_GameObjectManager()
 	{
 		for (auto& pGameObj : pVector)
 		{
-			pGameObj->~CGameObject();
 			Safe_Delete(pGameObj);
 		}
 		pVector.clear();

@@ -153,15 +153,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="ButcherKnife.h" />
     <ClInclude Include="ColliderManager.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Explosive.h" />
     <ClInclude Include="FrameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="Gangster.h" />
     <ClInclude Include="GangsterArm.h" />
     <ClInclude Include="Graphic_Device.h" />
+    <ClInclude Include="HitEffect.h" />
     <ClInclude Include="Katana_Zero.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MapObject.h" />
@@ -174,6 +177,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScrollManager.h" />
+    <ClInclude Include="Smoke.h" />
     <ClInclude Include="Stage1.h" />
     <ClInclude Include="Stage2.h" />
     <ClInclude Include="Stage3.h" />
@@ -187,15 +191,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="ButcherKnife.cpp" />
     <ClCompile Include="ColliderManager.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Explosive.cpp" />
     <ClCompile Include="FrameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="Gangster.cpp" />
     <ClCompile Include="GangsterArm.cpp" />
     <ClCompile Include="Graphic_Device.cpp" />
+    <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="Katana_Zero.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapObject.cpp" />
@@ -207,6 +214,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScrollManager.cpp" />
+    <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="Stage1.cpp" />
     <ClCompile Include="Stage2.cpp" />
     <ClCompile Include="Stage3.cpp" />

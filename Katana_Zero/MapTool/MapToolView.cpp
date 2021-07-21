@@ -17,6 +17,7 @@
 #include "RECT.h"
 #include "Texture_Manager.h"
 #include "Unit.h"
+#include "Projectile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -53,6 +54,7 @@ CMapToolView::~CMapToolView()
 	Safe_Delete(m_pMap);
 	RECTS->Destroy_Instance();
 	UNITS->Destroy_Instance();
+	Projectile->Destroy_Instance();
 	Texture_Maneger->Destroy_Instance();
 	Device->Destroy_Instance();
 
@@ -79,6 +81,7 @@ void CMapToolView::OnDraw(CDC* /*pDC*/)
 	m_pMap->Render_Map();
 	RenderRects();
 	UNITS->Render_Unit();
+	Projectile->Render_Projectile();
 	Device->Render_End();
 
 
@@ -179,11 +182,26 @@ void CMapToolView::Select_ToolFunction(int ToolState)
 	case TOOL_Celling:
 		pForm->CreateCelling();
 		return;
+	case TOOL_Passable:
+		pForm->CreatePassable();
+		return;
+	case TOOL_StageChange:
+		pForm->CreateStageChange();
+		return;
 	case TOOL_Player:
 		pForm->CreatePlayer();
 		break;
 	case TOOL_Gangster:
 		pForm->CreateGangster();
+		break;
+	case TOOL_Knife:
+		pForm->CreateButcherKnife();
+		return;
+	case TOOL_Smoke:
+		pForm->CreateSmoke();
+		break;
+	case TOOL_Explosive:
+		pForm->CreateExplosive();
 		break;
 	default:
 		break;
@@ -244,6 +262,21 @@ void CMapToolView::RenderRects()
 		D3DXVECTOR2	vLine[2]{ { float(pLine->Start.x - GetScrollPos(SB_HORZ)),float(pLine->Start.y - GetScrollPos(SB_VERT)) },{ float(pLine->End.x - GetScrollPos(SB_HORZ)),float(pLine->End.y - GetScrollPos(SB_VERT)) } };
 		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 0, 0, 255));
 	}
+
+
+	for (auto& pLine : RECTS->Get_Passable())
+	{
+		D3DXVECTOR2	vLine[2]{ { float(pLine->Start.x - GetScrollPos(SB_HORZ)),float(pLine->Start.y - GetScrollPos(SB_VERT)) },{ float(pLine->End.x - GetScrollPos(SB_HORZ)),float(pLine->End.y - GetScrollPos(SB_VERT)) } };
+		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
+	}
+
+
+	for (auto& pLine : RECTS->Get_StageChange())
+	{
+		D3DXVECTOR2	vLine[2]{ { float(pLine->Start.x - GetScrollPos(SB_HORZ)),float(pLine->Start.y - GetScrollPos(SB_VERT)) },{ float(pLine->End.x - GetScrollPos(SB_HORZ)),float(pLine->End.y - GetScrollPos(SB_VERT)) } };
+		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 0, 0, 0));
+	}
+
 
 	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }

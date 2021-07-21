@@ -5,9 +5,11 @@
 #include "FrameManager.h"
 #include "Graphic_Device.h"
 #include "ScrollManager.h"
+#include "MapObjectManager.h"
 
 CGameObject::CGameObject()
 	: m_pUnitInfo(nullptr)
+	, m_pItemInfo(nullptr)
 	, m_tFrame({})
 	, m_fSpeed(0)
 	, m_State(PLAYERSTATE::IDLE)
@@ -22,24 +24,37 @@ CGameObject::CGameObject()
 	, m_fAttackLimit(0.7f)
 	, m_fAttackCool(0.5f)
 	, m_fTargetAngle(0.f)
-	,m_iObjState(NONE)
+	, m_iObjState(NONE)
 	, m_GangState(GANGSTERSTATE::IDLE)
-	,r(0)
-	,g(0)
-	,b(0)
+	, r(0)
+	, g(0)
+	, b(0)
+	, m_fTargetDist(10000)
+	, m_fHitSpeed(0.f)
+	, m_fHitAngle(0.f)
+	, m_iHitDir(1)
+	, m_tCurLand({})
+	,m_tOldLand({})
+	, m_NextLine({})
+	, m_NowLine({})
 {
+	m_tCurLand.type = TERRAINTYPE::END;
+	m_tOldLand.ID = -1;
+	m_NextLine.type = TERRAINTYPE::END;
+	m_NowLine.type = TERRAINTYPE::END;
 }
 
 
 CGameObject::~CGameObject()
 {
+
 }
 
 void CGameObject::Update_HitBox()
 {
-	if (nullptr == m_pUnitInfo)
+	if (nullptr == m_pUnitInfo)  
 	{
-		ERR_MSG(L"유닛 정보가 없습니다.");
+		ERR_MSG(L"오브젝트 정보가 없습니다.");
 		return;
 	}
 	D3DXMATRIX matScale, matTrans, matWorld;
@@ -68,6 +83,7 @@ void CGameObject::Update_HitBoxOBB()
 		ERR_MSG(L"유닛 정보가 없습니다.");
 		return;
 	}
+
 	D3DXMATRIX matScale, matRolateZ, matTrans, matWorld;
 
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, (size_t)m_tFrame.fFrameStart);
@@ -98,6 +114,44 @@ void CGameObject::Update_HitBoxOBB()
 
 }
 
+void CGameObject::Update_ProjectileHitBoxOBB()
+{
+	if (nullptr == m_pItemInfo)
+	{
+		ERR_MSG(L"투사체 정보가 없습니다.");
+		return;
+	}
+
+	D3DXMATRIX matScale, matRolateZ, matTrans, matWorld;
+
+	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(m_pItemInfo->wstrKey, m_pItemInfo->wstrState, (size_t)m_tFrame.fFrameStart);
+	D3DXVECTOR3				m_tHitBoxObbTemp[4];
+	if (nullptr == pTexInfo)
+	{
+		ERR_MSG(L"Player에서 텍스쳐 찾기 실패");
+		return;
+	}
+
+	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
+	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
+	//ratio 기본 배율은 유닛의 경우 2배
+	m_tHitBoxObbTemp[0] = { -m_fRatio*fCenterX, -m_fRatio*fCenterY, 0.f };//왼쪽 위
+	m_tHitBoxObbTemp[1] = { m_fRatio*fCenterX, -m_fRatio*fCenterY, 0.f };//오른쪽 위
+	m_tHitBoxObbTemp[2] = { m_fRatio*fCenterX,  m_fRatio*fCenterY, 0.f };//오른쪽 아래
+	m_tHitBoxObbTemp[3] = { -m_fRatio*fCenterX,  m_fRatio*fCenterY, 0.f };//왼쪽 아래
+	D3DXMatrixScaling(&matScale, m_iUnitDir, 1.f, 0.f);
+	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
+	D3DXMatrixTranslation(&matTrans, m_pItemInfo->D3VecPos.x, m_pItemInfo->D3VecPos.y, 0.f);
+	matWorld = matScale * matRolateZ * matTrans;
+	for (int i = 0; i < 4; i++)
+	{
+		D3DXVec3TransformCoord(&m_tHitBoxObb[i], &m_tHitBoxObbTemp[i], &matWorld);
+		//D3DXVec3TransformNormal(&m_tHitBoxObb[i], &m_tHitBoxObbTemp[i], &matWorld);
+		m_tHitBoxObb[i];
+	}
+
+}
+
 void CGameObject::FrameMove(float fSpeed)
 {
 	m_tFrame.fFrameStart += FrameManager->Get_SPF() *(FrameManager->Get_FPS()/60)* fSpeed; //frame start end는 각 클래스에서 정해준다. 
@@ -105,11 +159,18 @@ void CGameObject::FrameMove(float fSpeed)
 		m_tFrame.fFrameStart = 0.f;
 }
 
+void CGameObject::FrameMoveIndependence(float fSpeed)
+{
+	m_tFrame.fFrameStart += FrameManager->Get_SPF() * fSpeed; //frame start end는 각 클래스에서 정해준다. 
+	if ((size_t)m_tFrame.fFrameEnd <= (size_t)m_tFrame.fFrameStart)
+		m_tFrame.fFrameStart = 0.f;
+}
+
 void CGameObject::Render_HitBox()
 {
-	int r = 255;
-	int g = 255;
-	int b = 255;
+	int r = 0;
+	int g = 0;
+	int b = 0;
 	switch (m_pUnitInfo->iCollide)
 	{
 	case C_NONE:
@@ -121,6 +182,11 @@ void CGameObject::Render_HitBox()
 		r = 0;
 		g = 255;
 		b = 0;
+		break;
+	case C_WALL | C_CELLING:
+		r = 255;
+		g = 0;
+		b = 100;
 		break;
 	case C_WALL|C_WALLL:
 		r = 255;
@@ -137,6 +203,13 @@ void CGameObject::Render_HitBox()
 		g = 0;
 		b = 255;
 		break;
+
+	case C_PASSABLE:
+		r = 170;
+		g = 50;
+		b = 255;
+		break;
+
 	case C_LAND| C_WALL | C_WALLL:
 		r = 255;
 		g = 255;
@@ -158,7 +231,6 @@ void CGameObject::Render_HitBox()
 		b = 255;
 		break;
 	default:
-		m_pUnitInfo->iCollide = C_NONE;
 		break;
 	}
 	Device->m_pSprite->End();
@@ -216,20 +288,184 @@ void CGameObject::Update_Frame()
 
 bool CGameObject::Check_FrameEnd() //다음 상태로 변경하기 전 준비 동작을 마쳤는지 체크
 {
-	static bool FrameCheck = false;
-	
-	if (FrameCheck) // 준비 동작이 끝났으면
+
+	if ((size_t)m_tFrame.fFrameEnd <= (size_t)m_tFrame.fFrameStart +1) // 현재 프레임과 끝 프레임이 같다면 준비 동작이 끝난 것
 	{
-		FrameCheck = false; // 준비동작 끝났음을 공지했으면 다시 false 상태로.
-		return true;
-	}
-	if ((size_t)m_tFrame.fFrameEnd-1 == (size_t)m_tFrame.fFrameStart) // 현재 프레임과 끝 프레임이 같다면 준비 동작이 끝난 것
-	{
-		FrameCheck = true; 
-		return false; // 현재 프레임까지 그리고 나서 바꿔야 하기에 false를 반환
+		return true; // 현재 프레임까지 그리고 나서 바꿔야 하기에 false를 반환
 	}
 	return false;
 }
+
+void CGameObject::Update_TargetDist()
+{
+	float x = m_pUnitInfo->D3VecPos.x - m_pTarget->Get_UnitInfo()->D3VecPos.x;
+	float y = m_pUnitInfo->D3VecPos.y - m_pTarget->Get_UnitInfo()->D3VecPos.y;
+	m_fTargetDist = sqrtf(x*x + y*y);
+
+}
+
+void CGameObject::Update_CurLand()
+{
+
+}
+
+bool CGameObject::Find_Root(const MYLINE StartLine, const MYLINE TargetLine, const MYLINE OldTargetLine)
+{
+	if (TargetLine.ID == OldTargetLine.ID) //타겟의 현재 닿고 있는 라인이 바뀌지 않았다면 참을 반환하라.
+		return true;
+	m_lstRoot.clear();
+	m_vecID.clear();
+	if (TargetLine.ID == StartLine.ID)
+	{
+		m_lstRoot.emplace_front(StartLine);
+		return true;
+	}
+	if (RotateRootL(StartLine, TargetLine))
+	{
+		m_lstRoot.emplace_front(StartLine);
+		return true;
+	}
+	if (RotateRootR(StartLine, TargetLine))
+	{
+		m_lstRoot.emplace_front(StartLine);
+		return true;
+	}
+	return false;
+}
+
+bool CGameObject::RotateRootL(const MYLINE StartLine, const MYLINE TargetLine)
+{
+	if(m_vecID.empty())
+		m_vecID.push_back(StartLine.ID);
+	if(!Check_ID(StartLine.ID))
+		m_vecID.push_back(StartLine.ID);
+	for (auto& tLine : MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND))
+	{
+		if (Check_ID(tLine.ID))
+			continue;
+		if ((tLine.End.x == StartLine.Start.x) && (tLine.End.y == StartLine.Start.y)) // 왼쪽점과 오른쪽 점이 겹치는 두 선
+		{
+			if (tLine.ID == TargetLine.ID)
+			{
+				m_lstRoot.emplace_front(tLine);//경로 리스트 앞에 추가
+				return true;
+			}
+				
+			else
+			{
+				if (RotateRootL(tLine, TargetLine))
+				{
+					m_lstRoot.emplace_front(tLine);
+					return true;
+				}
+				if(RotateRootR(tLine, TargetLine))
+				{
+					m_lstRoot.emplace_front(tLine);
+					return true;
+				}
+			}
+		}
+	}
+	for (auto& tLine : MapObjectManager->Get_TerrainVector(TERRAINTYPE::PASSABLE))
+	{
+		if (Check_ID(tLine.ID))
+			continue;
+		if ((tLine.End.x == StartLine.Start.x) && (tLine.End.y == StartLine.Start.y)) // 왼쪽점과 오른쪽 점이 겹치는 두 선
+		{
+			if (tLine.ID == TargetLine.ID)
+			{
+				m_lstRoot.emplace_front(tLine);
+				return true;
+			}
+			else
+			{
+				if (RotateRootL(tLine, TargetLine))
+				{
+					m_lstRoot.emplace_front(tLine);
+					return true;
+				}
+				if (RotateRootR(tLine, TargetLine))
+				{
+					m_lstRoot.emplace_front(tLine);
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool CGameObject::RotateRootR(MYLINE StartLine, MYLINE TargetLine)
+{
+	if (m_vecID.empty())
+		m_vecID.push_back(StartLine.ID);
+	if (!Check_ID(StartLine.ID))
+		m_vecID.push_back(StartLine.ID);
+	for (auto& tLine : MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND))
+	{
+		if (Check_ID(tLine.ID))
+			continue;
+		if ((tLine.Start.x == StartLine.End.x) && (tLine.Start.y == StartLine.End.y)) // 왼쪽점과 오른쪽 점이 겹치는 두 선
+		{
+			if (tLine.ID == TargetLine.ID)
+			{
+				m_lstRoot.emplace_front(tLine);
+				return true;
+			}
+			else
+			{
+				if (RotateRootL(tLine, TargetLine))
+				{
+					m_lstRoot.emplace_front(tLine);
+					return true;
+				}
+				if (RotateRootR(tLine, TargetLine))
+				{
+					m_lstRoot.emplace_front(tLine);
+					return true;
+				}
+			}
+		}
+	}
+	for (auto& tLine : MapObjectManager->Get_TerrainVector(TERRAINTYPE::PASSABLE))
+	{
+		if (Check_ID(tLine.ID))
+			continue;
+		if ((tLine.Start.x == StartLine.End.x) && (tLine.Start.y == StartLine.End.y)) // 왼쪽점과 오른쪽 점이 겹치는 두 선
+		{
+			if (tLine.ID == TargetLine.ID)
+			{
+				m_lstRoot.emplace_front(tLine);
+				return true;
+			}
+			else
+			{
+				if (RotateRootL(tLine, TargetLine))
+				{
+					m_lstRoot.emplace_front(tLine);
+					return true;
+				}
+				if (RotateRootR(tLine, TargetLine))
+				{
+					m_lstRoot.emplace_front(tLine);
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool CGameObject::Check_ID(int ID)
+{
+	for (auto iID : m_vecID)
+	{
+		if (ID == iID)
+			return true;
+	}
+	return false;
+}
+
 
 
 

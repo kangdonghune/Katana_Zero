@@ -21,21 +21,21 @@ CScene * CStage5::Create()
 	CStage5* pStage5 = new CStage5();
 	if (FAILED(pStage5->Ready_Scene()))
 	{
-		Safe_Delete(pStage4);
+		Safe_Delete(pStage5);
 		return pStage5;
 	}
-	return pStage4;
+	return pStage5;
 }
 
 HRESULT CStage5::Ready_Scene()
 {
 	//맵 오브젝트 생성
-	MapObjectManager->Load_Terrain(L"../Data/Stage4/Terrain/Terrain.dat");
+	MapObjectManager->Load_Terrain(L"../Data/Stage5/Terrain/Terrain.dat");
 	//유닛 정보 불러오기.
-	if (FAILED(SaveLoadManager->LoadUnit(L"../Data/Stage4/Unit/Unit.dat")))
+	if (FAILED(SaveLoadManager->LoadUnit(L"../Data/Stage5/Unit/Unit.dat")))
 		return E_FAIL;
 
-	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 3);
+	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 5);
 	m_fMapWidth = float(pTexInfo->tImageInfo.Width);
 	m_fMapHeight = float(pTexInfo->tImageInfo.Height);
 	return S_OK;
@@ -50,7 +50,7 @@ void CStage5::Render_Scene()
 	Device->Render_Begin();
 	D3DXMATRIX matScale, matTrans, matWorld;
 
-	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 3);
+	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 5);
 	if (nullptr == pTexInfo)
 		return;
 

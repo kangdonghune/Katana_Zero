@@ -18,6 +18,7 @@ typedef struct tagRedefineLine
 	POINT Start;
 	POINT End;
 	TERRAINTYPE::TYPE type;
+	int ID = 0;
 }MYLINE;
 
 typedef struct tagUnitInfo
@@ -28,6 +29,14 @@ typedef struct tagUnitInfo
 	UNITTYPE::TYPE type;
 	int	iCollide = C_NONE;
 }UNITINFO;
+
+typedef struct tagItemInfo
+{
+	D3DXVECTOR3	D3VecPos{};
+	wstring	wstrState = L"";
+	wstring wstrKey = L"Projectile";
+	ITEMTYPE::TYPE type;
+}ITEMINFO;
 
 typedef	struct tagFrame
 {

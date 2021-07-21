@@ -8,6 +8,7 @@ public:
 public:
 	UNITINFO*&	Set_Info() { return m_pUnitInfo; }
 	void		Set_Info(UNITINFO* pInfo) { m_pUnitInfo = pInfo; }
+	void		Set_Info(ITEMINFO* pInfo) { m_pItemInfo = pInfo; }
 	void		Set_PivotX(float fPos) { m_vecPivot.x = fPos; }
 	void		Set_PivotY(float fPos) { m_vecPivot.y = fPos; }
 	void		Set_State(PLAYERSTATE::State state) { m_State = state; }
@@ -18,18 +19,41 @@ public:
 	void		Set_ObjState(int State) { m_iObjState = State; }
 	void		Set_Target(CGameObject* pTarget) { m_pTarget = pTarget; }
 	void		Set_TargetAngle(float Angle) { m_fTargetAngle += Angle; }
+	void		Set_ItemPosY(float fPoint) { m_pItemInfo->D3VecPos.y = fPoint; }
+	void		Set_RotateAngle(float fAngle) { m_fRotateAngle = fAngle; }
+	void		Set_HitSpeed(float fSpeed) { m_fHitSpeed = fSpeed; }
+	void		Set_HitAngle(float fAngle) { m_fHitAngle = fAngle; }
+	void		Set_HitDir(int Dir) { m_iHitDir = Dir; }
+	void		Set_CurLine(MYLINE tLine) { m_tCurLand = tLine; }
+	void		Set_OldLine(MYLINE tLine) { m_tOldLand = tLine; }
 
 
 	void Update_HitBox();
 	void Update_HitBoxOBB();
+	void Update_ProjectileHitBoxOBB();
 	void FrameMove(float fSpeed);
+	void FrameMoveIndependence(float fSpeed);
 	void Render_HitBox();
 	void Render_HitBoxObb();
 	void Render_ObbLine();
 	void Render_ObbLineD3D();
 	void Update_Frame();
 	bool Check_FrameEnd();
-
+	void Update_TargetDist();
+	void Update_CurLand();
+	bool Find_Root(const MYLINE StartLine, const MYLINE TargetLine, const MYLINE OldTargetLine);
+	bool RotateRootL(const MYLINE StartLine, const MYLINE TargetLine);
+	bool RotateRootR(const MYLINE StartLine, const MYLINE TargetLine);
+	bool Check_ID(int ID);
+	
+	const MYLINE				Get_NowLine() { return m_NowLine; }
+	const MYLINE				Get_NextLine() { return m_NextLine; }
+	const MYLINE				Get_OldLine() { return m_tOldLand; }
+	const MYLINE				Get_CurLine() { return m_tCurLand; }
+	const float					Get_HitAngle() { return m_fHitAngle; }
+	const int					Get_HitDir() { return m_iHitDir; }
+	const float					Get_UnitSpeed() { return m_fUnitSpeed; }
+	const ITEMINFO*				Get_ItemInfo() { return m_pItemInfo; }
 	CGameObject*				Get_Target() { return m_pTarget; }
 	const GANGSTERSTATE::State	Get_GangState() { return m_GangState; }
 	const D3DXVECTOR3*			Get_HitboxObb() { return m_tHitBoxObb; }
@@ -56,6 +80,7 @@ public:
 	
 protected:
 	UNITINFO*				m_pUnitInfo;
+	ITEMINFO*				m_pItemInfo;
 	PLAYERSTATE::State		m_State;
 	RECT					m_tHitBox;
 	D3DXVECTOR3				m_tHitBoxObb[4];
@@ -78,7 +103,17 @@ protected:
 	int						r;
 	int						g;
 	int						b;
-
+	float					m_fRotateSpeed;
+	float					m_fTargetDist;
+	float					m_fHitSpeed;
+	float					m_fHitAngle;
+	int						m_iHitDir;
+	MYLINE					m_tCurLand;
+	MYLINE					m_tOldLand;
+	vector<int>				m_vecID;
+	list<MYLINE>			m_lstRoot;
+	MYLINE					m_NextLine;
+	MYLINE					m_NowLine;
 	GANGSTERSTATE::State	m_GangState;
 };
 

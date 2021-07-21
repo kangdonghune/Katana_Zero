@@ -43,7 +43,11 @@ public:
 	virtual void Release_GameObject() override;
 
 private:
-
-
+	int  m_iRunDir;
+	bool m_bLockOn;
+	float m_fWhipRange;
+	float WhipCool;
+	float WhipLimit;
+	bool WhipSucces;
 };
 

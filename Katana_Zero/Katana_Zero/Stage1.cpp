@@ -34,7 +34,8 @@ HRESULT CStage1::Ready_Scene()
 	//유닛 정보 불러오기.
 	if(FAILED(SaveLoadManager->LoadUnit(L"../Data/Stage1/Unit/Unit.dat")))
 		return E_FAIL;
-
+	if (FAILED(SaveLoadManager->LoadItem(L"../Data/Stage1/Projectile/Projectile.dat")))
+		return E_FAIL;
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 0);
 	m_fMapWidth = float(pTexInfo->tImageInfo.Width);
 	m_fMapHeight = float(pTexInfo->tImageInfo.Height);

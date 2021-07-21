@@ -197,6 +197,7 @@
     <ClInclude Include="MapToolView.h" />
     <ClInclude Include="MiniView.h" />
     <ClInclude Include="Multi_Texture.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="RECT.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="MapToolView.cpp" />
     <ClCompile Include="MiniView.cpp" />
     <ClCompile Include="Multi_Texture.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="RECT.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

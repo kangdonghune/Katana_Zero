@@ -62,8 +62,8 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_walk/%d.png", L"Player", L"Walk", 10)))
 		return E_FAIL;
-	//if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_wallslide/%d.png", L"Player", L"Wallslide", 2)))
-	//	return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Player/spr_wallslide/%d.png", L"Player", L"Wallslide", 1)))
+		return E_FAIL;
 
 	//갱스터
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_arm/%d.png", L"Gangster", L"arm", 2)))
@@ -92,20 +92,17 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_gangsterwhip/%d.png", L"Gangster", L"Whip", 6)))
 		return E_FAIL;
+	
 
 
-
-
-
-
-
-
-
-
-
-
-	//이펙트
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_fire_1/%d.png", L"Effect", L"Gangsterfire", 6)))
+	//투사체
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Projectile/Bullet/%d.png", L"Projectile", L"Bullet", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item/butcherknife/%d.png", L"Projectile", L"Butcherknife", 2)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item//smoke/%d.png", L"Projectile", L"Smoke", 2)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item/explosivevial/%d.png", L"Projectile", L"Explosivevial", 2)))
 		return E_FAIL;
 	return S_OK;
 }

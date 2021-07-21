@@ -41,6 +41,7 @@ HRESULT CBullet::Ready_GameObject()
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
 	m_fSpeed = 20.f;
+	m_fUnitSpeed = 25.f;
 
  	m_iUnitDir = m_pShooter->Get_UnitDir();
 
@@ -50,8 +51,8 @@ HRESULT CBullet::Ready_GameObject()
 void CBullet::Update_GameObject()
 {
 
-	m_pUnitInfo->D3VecPos.x += cosf(D3DXToRadian(m_fTargetAngle))*15.f;
-	m_pUnitInfo->D3VecPos.y -= sinf(D3DXToRadian(m_fTargetAngle))*15.f;
+	m_pUnitInfo->D3VecPos.x += cosf(D3DXToRadian(m_fTargetAngle))*m_fUnitSpeed;
+	m_pUnitInfo->D3VecPos.y -= sinf(D3DXToRadian(m_fTargetAngle))*m_fUnitSpeed;
 	Update_HitBoxOBB();
 	//방향만 이동.
 

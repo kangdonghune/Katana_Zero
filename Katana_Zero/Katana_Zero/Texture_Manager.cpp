@@ -77,7 +77,7 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_gangstergun/%d.png", L"Gangster", L"Gangstergun", 2)))
 		return E_FAIL;
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_gangsterhurtfly/%d.png", L"Gangster", L"Hurtfly", 2)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_gangsterhurtfly/%d.png", L"Gangster", L"Hurtfly", 3)))
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_gangsterhurtground/%d.png", L"Gangster", L"Hurtground", 14)))
 		return E_FAIL;
@@ -101,11 +101,19 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_fire_1/%d.png", L"Effect", L"Gangsterfire", 6)))
 		return E_FAIL;
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Bulletreflect/%d.png", L"Effect", L"Bulletreflect", 5)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Bulletreflect/%d.png", L"Effect", L"Bulletreflect", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Slash/%d.png", L"Effect", L"Slash", 5)))
 		return E_FAIL;
 
 	//Åõ»çÃ¼
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Projectile/Bullet/%d.png", L"Projectile", L"Bullet", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item/butcherknife/%d.png", L"Projectile", L"Butcherknife", 2)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item//smoke/%d.png", L"Projectile", L"Smoke", 2)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item/explosivevial/%d.png", L"Projectile", L"Explosivevial", 2)))
 		return E_FAIL;
 
 	return S_OK;

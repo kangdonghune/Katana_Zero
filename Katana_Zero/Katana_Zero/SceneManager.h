@@ -12,7 +12,9 @@ private:
 
 public:
 	void Change_SceneManager(ID eNextScene);
+	void Change_SceneManager(int SceneID);
 	CScene* GetScene() { return m_pScene; }
+	ID	Get_CurScene() { return m_eCurScene; }
 public:
 
 public:

@@ -37,7 +37,7 @@ HRESULT CMain::Ready_Main()
 {
 	if(FAILED(SceneManager->Ready_SceneManager()))
 		return E_FAIL;
-	SceneManager->Change_SceneManager(CSceneManager::SCENE_BOSS);
+	SceneManager->Change_SceneManager(CSceneManager::SCENE_STAGE1);
 	return S_OK;
 }
 
@@ -58,16 +58,14 @@ void CMain::Render_Main()
 
 void CMain::Release_Main()
 {
-	SceneManager->Release_SceneManager();
+
 	SceneManager->Destroy_Instance();
 	MapObjectManager->Destroy_Instance();
 	GameObjectManager->Destroy_Instance();
 	FrameManager->Destroy_Instance();
 	SaveLoadManager->Destroy_Instance();
 	TimeManager->Destroy_Instance();
-	FrameManager->Destroy_Instance();
 	ColliderManager->Destroy_Instance();
-	SceneManager->Destroy_Instance();
 	Device->Destroy_Instance();
 	
 }
