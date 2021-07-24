@@ -117,6 +117,18 @@
     <Filter Include="소스 파일\01.GameObject\02.Effect\01.HitEffect">
       <UniqueIdentifier>{7dce82fc-6541-4f71-a351-936f5ac7850f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.GameObject\03.Enemy\03.Boss">
+      <UniqueIdentifier>{f410ad3b-4bd8-4b30-a9f0-c101a8346ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\04.Projectile\04.Laser">
+      <UniqueIdentifier>{58a8562d-c42e-4dfc-9ad9-c94f44923bd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\04.Projectile\05.Granade">
+      <UniqueIdentifier>{e5a38617-b164-4f5c-99c2-ed2f0ab46bd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.GameObject\02.Effect\02.Explosion">
+      <UniqueIdentifier>{e4c89579-84ad-4435-857b-38195c405f12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -133,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="Main.h">
       <Filter>소스 파일\00.Main</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>소스 파일\01.GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>소스 파일\01.GameObject\01.Player</Filter>
@@ -194,9 +203,6 @@
     <ClInclude Include="Scene.h">
       <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
-    </ClInclude>
     <ClInclude Include="Stage1.h">
       <Filter>소스 파일\098.Managers\05.SceneManager\02.Stage\00.Stage1</Filter>
     </ClInclude>
@@ -227,6 +233,24 @@
     <ClInclude Include="HitEffect.h">
       <Filter>소스 파일\01.GameObject\02.Effect\01.HitEffect</Filter>
     </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>소스 파일\01.GameObject\03.Enemy\03.Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>소스 파일\01.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Granade.h">
+      <Filter>소스 파일\01.GameObject\04.Projectile\05.Granade</Filter>
+    </ClInclude>
+    <ClInclude Include="Laser.h">
+      <Filter>소스 파일\01.GameObject\04.Projectile\04.Laser</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>소스 파일\098.Managers\05.SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>소스 파일\01.GameObject\02.Effect\02.Explosion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -237,9 +261,6 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일\00.Main</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>소스 파일\01.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>소스 파일\01.GameObject\01.Player</Filter>
@@ -330,6 +351,21 @@
     </ClCompile>
     <ClCompile Include="HitEffect.cpp">
       <Filter>소스 파일\01.GameObject\02.Effect\01.HitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>소스 파일\01.GameObject\03.Enemy\03.Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일\01.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Laser.cpp">
+      <Filter>소스 파일\01.GameObject\04.Projectile\04.Laser</Filter>
+    </ClCompile>
+    <ClCompile Include="Granade.cpp">
+      <Filter>소스 파일\01.GameObject\04.Projectile\05.Granade</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>소스 파일\01.GameObject\02.Effect\02.Explosion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

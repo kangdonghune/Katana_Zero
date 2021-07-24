@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "GameObjectManager.h"
 #include "Gangster.h"
+#include "Boss.h"
 #include "ButcherKnife.h"
 #include "Smoke.h"
 #include "Explosive.h"
@@ -60,6 +61,14 @@ HRESULT CSaveLoadManager::LoadUnit(TCHAR* pFilePath)
 				return E_FAIL;
 			}
 			GameObjectManager->Insert_GameObjectManager(CGangster::Create(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front(),pUnit), GAMEOBJECT::GANGSTER);
+			break;
+		case UNITTYPE::BOSS:
+			if (GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).empty())
+			{
+				ERR_MSG(L"적을 만들기 전에 대상으로 삼을 플레이어가 없습니다.");
+				return E_FAIL;
+			}
+			GameObjectManager->Insert_GameObjectManager(CBoss::Create(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front(), pUnit), GAMEOBJECT::BOSS);
 			break;
 		default:
 			Safe_Delete(pUnit);

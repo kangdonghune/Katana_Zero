@@ -37,7 +37,7 @@ HRESULT CMain::Ready_Main()
 {
 	if(FAILED(SceneManager->Ready_SceneManager()))
 		return E_FAIL;
-	SceneManager->Change_SceneManager(CSceneManager::SCENE_STAGE1);
+	SceneManager->Change_SceneManager(CSceneManager::SCENE_BOSS);
 	return S_OK;
 }
 

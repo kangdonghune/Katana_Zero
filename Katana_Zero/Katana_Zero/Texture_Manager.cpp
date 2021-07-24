@@ -94,6 +94,56 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_gangsterwhip/%d.png", L"Gangster", L"Whip", 6)))
 		return E_FAIL;
 
+
+	//보스
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Aim/%d.png", L"Boss", L"Aim", 19)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Jump/%d.png", L"Boss", L"Jump", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Dash/%d.png", L"Boss", L"Dash", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Dash_End/%d.png", L"Boss", L"Dashend", 10)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Dash_SlowMotion/%d.png", L"Boss", L"DashSlow", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Dead/%d.png", L"Boss", L"Dead", 19)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Hurt/%d.png", L"Boss", L"Hurt", 10)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Idle/%d.png", L"Boss", L"Idle", 12)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/PreDash/%d.png", L"Boss", L"Predash", 8)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/PreJump/%d.png", L"Boss", L"Prejump", 3)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/PutBack/%d.png", L"Boss", L"Putback", 8)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Recover/%d.png", L"Boss", L"Recover", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Roll/%d.png", L"Boss", L"Roll", 6)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Sweep/%d.png", L"Boss", L"Sweep", 18)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/TakeOut/%d.png", L"Boss", L"Takeout", 8)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Teleport_In/%d.png", L"Boss", L"Teleportin", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Teleport_Out/%d.png", L"Boss", L"Teleportout", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Teleport_in_Sweep/%d.png", L"Boss", L"Teleportinsweep", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Teleport_out_Sweep/%d.png", L"Boss", L"Teleportoutsweep", 3)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Teleport_in_Ground/%d.png", L"Boss", L"Teleportinground", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Teleport_out_Ground/%d.png", L"Boss", L"Teleportoutground", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/WallJump/%d.png", L"Boss", L"WallJump", 6)))
+		return E_FAIL;
+
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/WallJump_Land/%d.png", L"Boss", L"Walljumpland", 4)))
+		return E_FAIL;
+
 	//이펙트
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Hitimpact/%d.png", L"Effect", L"Hitimpact", 6)))
 		return E_FAIL;
@@ -105,6 +155,10 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Slash/%d.png", L"Effect", L"Slash", 5)))
 		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Titleslash/%d.png", L"Effect", L"Tilteslash", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Effect/Explosion/%d.png", L"Effect", L"Explosion", 9)))
+		return E_FAIL;
 
 	//투사체
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Projectile/Bullet/%d.png", L"Projectile", L"Bullet", 1)))
@@ -114,6 +168,8 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item//smoke/%d.png", L"Projectile", L"Smoke", 2)))
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item/explosivevial/%d.png", L"Projectile", L"Explosivevial", 2)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Projectile/Granade/%d.png", L"Projectile", L"Granade", 1)))
 		return E_FAIL;
 
 	return S_OK;

@@ -33,6 +33,8 @@ HRESULT CBullet::Ready_GameObject()
 	m_pUnitInfo->wstrKey = L"Projectile";
 	m_pUnitInfo->wstrState = L"Bullet";
 	m_fRatio = 0.8f;
+	m_fWidthRatio = m_fRatio;
+	m_fHeightRatio = 1.f;
 	m_fRotateAngle = m_pShooter->Get_RotateAngle();
 	m_fTargetAngle = m_pShooter->Get_TargetAngle();
 	m_pUnitInfo->D3VecPos.x = m_pShooter->Get_UnitInfo()->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle))*(m_pShooter->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(m_pShooter->Get_UnitInfo()->wstrKey, m_pShooter->Get_UnitInfo()->wstrState, 0)->tImageInfo.Width >> 1)) + cosf(D3DXToRadian(m_fTargetAngle))*(m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, 0)->tImageInfo.Width>>1));
@@ -50,7 +52,7 @@ HRESULT CBullet::Ready_GameObject()
 
 void CBullet::Update_GameObject()
 {
-
+	m_fRatio = m_fWidthRatio;
 	m_pUnitInfo->D3VecPos.x += cosf(D3DXToRadian(m_fTargetAngle))*m_fUnitSpeed;
 	m_pUnitInfo->D3VecPos.y -= sinf(D3DXToRadian(m_fTargetAngle))*m_fUnitSpeed;
 	Update_HitBoxOBB();
@@ -82,7 +84,7 @@ void CBullet::Render_GameObject()
 
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
-	D3DXMatrixScaling(&matScale, m_fRatio, m_fRatio, 0.f);
+	D3DXMatrixScaling(&matScale, m_fWidthRatio, m_fHeightRatio, 0.f);
 	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
 	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY(), 0.f);
 	matWorld = matScale * matRolateZ *matTrans;

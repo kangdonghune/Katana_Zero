@@ -93,8 +93,9 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Gangster/spr_gangsterwhip/%d.png", L"Gangster", L"Whip", 6)))
 		return E_FAIL;
 	
-
-
+	//보스
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Idle/%d.png", L"Boss", L"Idle", 12)))
+		return E_FAIL;
 	//투사체
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Projectile/Bullet/%d.png", L"Projectile", L"Bullet", 1)))
 		return E_FAIL;

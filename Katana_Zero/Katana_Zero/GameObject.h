@@ -26,7 +26,11 @@ public:
 	void		Set_HitDir(int Dir) { m_iHitDir = Dir; }
 	void		Set_CurLine(MYLINE tLine) { m_tCurLand = tLine; }
 	void		Set_OldLine(MYLINE tLine) { m_tOldLand = tLine; }
-
+	void		Set_UnitSpeed(float speed) { m_fUnitSpeed = speed; }
+	void		Set_WidthRatio(float wRatio) { m_fWidthRatio = wRatio; }
+	void		Set_HeightRatio(float hRatio) { m_fHeightRatio = hRatio; }
+	void		Set_Pos(float x, float y) { m_pUnitInfo->D3VecPos.x = x; m_pUnitInfo->D3VecPos.y = y; }
+	void		Set_FrameSpeed(float speed) { m_fSpeed = speed; }
 
 	void Update_HitBox();
 	void Update_HitBoxOBB();
@@ -45,6 +49,7 @@ public:
 	bool RotateRootL(const MYLINE StartLine, const MYLINE TargetLine);
 	bool RotateRootR(const MYLINE StartLine, const MYLINE TargetLine);
 	bool Check_ID(int ID);
+	
 	
 	const MYLINE				Get_NowLine() { return m_NowLine; }
 	const MYLINE				Get_NextLine() { return m_NextLine; }
@@ -115,5 +120,7 @@ protected:
 	MYLINE					m_NextLine;
 	MYLINE					m_NowLine;
 	GANGSTERSTATE::State	m_GangState;
+	float					m_fWidthRatio;
+	float					m_fHeightRatio;
 };
 

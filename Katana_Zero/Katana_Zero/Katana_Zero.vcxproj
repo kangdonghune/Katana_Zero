@@ -152,20 +152,24 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="ButcherKnife.h" />
     <ClInclude Include="ColliderManager.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="Explosive.h" />
     <ClInclude Include="FrameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="Gangster.h" />
     <ClInclude Include="GangsterArm.h" />
+    <ClInclude Include="Granade.h" />
     <ClInclude Include="Graphic_Device.h" />
     <ClInclude Include="HitEffect.h" />
     <ClInclude Include="Katana_Zero.h" />
+    <ClInclude Include="Laser.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MapObjectManager.h" />
@@ -190,20 +194,24 @@
     <ClInclude Include="TimeManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="ButcherKnife.cpp" />
     <ClCompile Include="ColliderManager.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Explosive.cpp" />
     <ClCompile Include="FrameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="Gangster.cpp" />
     <ClCompile Include="GangsterArm.cpp" />
+    <ClCompile Include="Granade.cpp" />
     <ClCompile Include="Graphic_Device.cpp" />
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="Katana_Zero.cpp" />
+    <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MapObjectManager.cpp" />

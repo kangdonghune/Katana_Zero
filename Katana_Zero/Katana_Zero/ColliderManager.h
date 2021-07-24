@@ -11,9 +11,11 @@ public:
 public:
 	//플레이어 라인충돌
 	void	Collider_Land(vector<MYLINE> pLandvec, CGameObject* pUnit);
+	void	Collider_LandAndBoss(vector<MYLINE> pLandvec, CGameObject* pUnit);
 	void	Collider_LandAndEnemy(vector<MYLINE> pLandvec, CGameObject* pUnit);
 	void	Collider_PassAble(vector<MYLINE> pLandvec, CGameObject* pUnit);
-	void	Collider_PassAbleAndEnemy(vector<MYLINE> pLandvec, CGameObject* pUnit);
+	void	Collider_PassAbleAndBoss(vector<MYLINE> pLandvec, CGameObject* pUnit);
+	void	Collider_Wall(vector<MYLINE> pWallvec, CGameObject* pUnit);
 	void	Collider_Wall(vector<MYLINE> pWallvec, CGameObject* pUnit);
 	void	Collider_Celling(vector<MYLINE> pCellingVec, CGameObject* pUnit);
 	void	Collider_StageChange(vector<MYLINE> pChangeVec, CGameObject* pUnit);

@@ -9,6 +9,7 @@
 #include "ButcherKnife.h"
 #include "Smoke.h"
 #include "Explosive.h"
+#include "SceneManager.h"
 
 CPlayer::CPlayer()
 	:m_fDefaultSpeed(15.0f) // 프레임 속도
@@ -804,6 +805,12 @@ void CPlayer::Update_D3DPos()
 
 void CPlayer::ScroolMove()
 {
+	if (SceneManager->Get_CurScene() == CSceneManager::ID::SCENE_BOSS)
+	{
+		CScrollManager::Set_ScroolX(0);
+		CScrollManager::Set_ScroolY(0);
+		return;
+	}
 	//중간 지점에서 상하좌우 200을 벗어나면 그만큼 스크롤 값 부여.
 	//float fUp = WINCY / 2 - 200;
 	float fDown = WINCY / 2 + 200;
@@ -819,7 +826,6 @@ void CPlayer::ScroolInput()
 {
 	m_vecPivot.x = m_vecPivot.x - CScrollManager::Get_ScroolX();
 	m_vecPivot.y = m_vecPivot.y - CScrollManager::Get_ScroolY();
-
 }
 
 void CPlayer::Throw_Item()

@@ -39,7 +39,7 @@ HRESULT CHitEffect::Ready_GameObject()
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
 	m_fSpeed = 20.f;
-	m_fRatio = 3.f;
+	m_fRatio = 40.f;
 	m_fRotateAngle = 0.f;
 	m_fTargetAngle = m_pTarget->Get_TargetAngle();
 	m_iUnitDir = m_pTarget->Get_UnitDir();
@@ -86,8 +86,8 @@ void CHitEffect::Render_GameObject()
 
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
-	D3DXMatrixScaling(&matScale, m_fRatio, m_fRatio, 0.f);
-	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fTargetAngle));
+	D3DXMatrixScaling(&matScale, m_fRatio, 1.f, 0.f);
+	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(0.f));
 	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY(), 0.f);
 	matWorld = matScale *matRolateZ* matTrans;
 

@@ -41,6 +41,7 @@ public:
 	void CreateStageChange();
 	void CreatePlayer();
 	void CreateGangster();
+	void CreateBoss();
 	void CreateButcherKnife();
 	void CreateSmoke();
 	void CreateExplosive();
@@ -78,6 +79,8 @@ public:
 	afx_msg void OnBnClickedDeleteExplosive();
 	afx_msg void OnBnClickedPasable();
 	afx_msg void OnBnClickedDeletePassable();
+	afx_msg void OnBnClickedBoss();
+	afx_msg void OnBnClickedDeleteBoss();
 };
 
 

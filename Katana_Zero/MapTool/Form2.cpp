@@ -56,6 +56,8 @@ BEGIN_MESSAGE_MAP(CForm2, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON11, &CForm2::OnBnClickedDeleteExplosive)
 	ON_BN_CLICKED(IDC_RADIO1, &CForm2::OnBnClickedPasable)
 	ON_BN_CLICKED(IDC_BUTTON12, &CForm2::OnBnClickedDeletePassable)
+	ON_BN_CLICKED(IDC_RADIO11, &CForm2::OnBnClickedBoss)
+	ON_BN_CLICKED(IDC_BUTTON13, &CForm2::OnBnClickedDeleteBoss)
 END_MESSAGE_MAP()
 
 
@@ -171,6 +173,17 @@ void CForm2::CreateGangster()
 	pUnit->D3VecPos = pView->m_MouseDownPos;
 	pUnit->wstrKey = L"Gangster";
 	pUnit->type = UNITTYPE::GANGSTER;
+	UNITS->Insert_Unit(pUnit, pUnit->type);
+}
+
+void CForm2::CreateBoss()
+{
+	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
+	UNITINFO* pUnit = new UNITINFO;
+	pUnit->D3VecPos = pView->m_MouseDownPos;
+	pUnit->wstrKey = L"Boss";
+	pUnit->type = UNITTYPE::BOSS;
 	UNITS->Insert_Unit(pUnit, pUnit->type);
 }
 
@@ -556,9 +569,9 @@ void CForm2::OnBnClickedCelling()
 void CForm2::OnBnClickedSave()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	Save_Terrain(L"../Data/Stage1/Terrain/Terrain.dat");
-	Save_Unit(L"../Data/Stage1/Unit/Unit.dat");
-	Save_Item(L"../Data/Stage1/Projectile/Projectile.dat");
+	Save_Terrain(L"../Data/Stage5/Terrain/Terrain.dat");
+	Save_Unit(L"../Data/Stage5/Unit/Unit.dat");
+	Save_Item(L"../Data/Stage5/Projectile/Projectile.dat");
 	MessageBox(L"저장 완료", L"저장 시스템", MB_OK);
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
@@ -569,9 +582,9 @@ void CForm2::OnBnClickedSave()
 void CForm2::OnBnClickedLoad()
 {
 	//TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	Load_Terrain(L"../Data/Stage1/Terrain/Terrain.dat");
-	Load_Unit(L"../Data/Stage1/Unit/Unit.dat");
-	Load_Item(L"../Data/Stage1/Projectile/Projectile.dat");
+	Load_Terrain(L"../Data/Stage5/Terrain/Terrain.dat");
+	Load_Unit(L"../Data/Stage5/Unit/Unit.dat");
+	Load_Item(L"../Data/Stage5/Projectile/Projectile.dat");
 	MessageBox(L"불러오기 완료", L"저장 시스템", MB_OK);
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
@@ -779,6 +792,35 @@ void CForm2::OnBnClickedDeletePassable()
 		return;
 	Safe_Delete(RECTS->Get_Passable().back());
 	RECTS->Get_Passable().pop_back();
+	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
+	pView->RedrawWindow();
+}
+
+
+void CForm2::OnBnClickedBoss()
+{
+	UpdateData(true);
+
+	if (IsDlgButtonChecked(IDC_RADIO11))
+	{
+		m_iToolState = TOOL_Boss;
+	}
+	else
+	{
+		m_iToolState = Tool_Idle;
+	}
+
+	UpdateData(false);
+}
+
+
+void CForm2::OnBnClickedDeleteBoss()
+{
+	if (UNITS->Get_UnitVec(UNITTYPE::BOSS).empty())
+		return;
+	Safe_Delete(UNITS->Get_UnitVec(UNITTYPE::BOSS).back());
+	UNITS->Get_UnitVec(UNITTYPE::BOSS).pop_back();
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMapToolView* pView = dynamic_cast<CMapToolView*>(pMain->m_MainSplitter.GetPane(0, 1));
 	pView->RedrawWindow();

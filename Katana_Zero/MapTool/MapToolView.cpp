@@ -194,6 +194,9 @@ void CMapToolView::Select_ToolFunction(int ToolState)
 	case TOOL_Gangster:
 		pForm->CreateGangster();
 		break;
+	case TOOL_Boss:
+		pForm->CreateBoss();
+		break;
 	case TOOL_Knife:
 		pForm->CreateButcherKnife();
 		return;

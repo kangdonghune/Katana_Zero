@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "Player.h"
 #include "HitEffect.h"
+#include "Boss.h"
 
 IMPLEMENT_SINGLETON(CColliderManager)
 CColliderManager::CColliderManager()
@@ -97,6 +98,82 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 	
 }
 
+void CColliderManager::Collider_LandAndBoss(vector<MYLINE> pLandvec, CGameObject * pUnit)
+{
+	MYLINE* pLand = nullptr;
+	MYLINE** ppLand = &pLand;
+	const UNITINFO* pInfo = pUnit->Get_UnitInfo();
+	int	iCollide = pInfo->iCollide;
+	const BOSSSTATE::State State = dynamic_cast<CBoss*>(pUnit)->Get_BossState();
+	const D3DXVECTOR3 Pivot = pUnit->Get_Pivot();
+	int iHeight = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, pInfo->wstrState, 0)->tImageInfo.Height >> 1);
+	int iWidth = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, L"Walljump", 0)->tImageInfo.Width >> 1);
+	for (auto& tLine : pLandvec)
+	{
+		if (tLine.Start.x < Pivot.x && tLine.End.x > Pivot.x)
+		{
+			if (pLand != nullptr)
+				break;
+			if (tLine.Start.y == tLine.End.y)
+			{
+				LONG lDistance = tLine.Start.y - pUnit->Get_Hitbox().bottom;
+				if (lDistance <= 0 && lDistance >= -1 * iHeight)
+				{
+
+					pUnit->Set_PivotY(tLine.Start.y);
+					pUnit->Set_CurLine(tLine);
+					*ppLand = &tLine;
+				}
+			}
+
+			else
+			{
+				float fLineHeight = (tLine.End.y - tLine.Start.y) / (tLine.End.x - tLine.Start.x)*(Pivot.x - tLine.Start.x) + tLine.Start.y;
+				LONG lDistance = fLineHeight - pUnit->Get_Hitbox().bottom;
+				if (lDistance <= 10 && lDistance >= -iHeight)
+				{
+					if (State != PLAYERSTATE::JUMP && State != PLAYERSTATE::ATTACK)
+					{
+						pUnit->Set_PivotY(fLineHeight);
+						pUnit->Set_CurLine(tLine);
+						*ppLand = &tLine;
+						continue;
+					}
+					if (State == PLAYERSTATE::ATTACK)
+					{
+						if (Pivot.y >= fLineHeight)
+						{
+							pUnit->Set_PivotY(fLineHeight);
+							pUnit->Set_CurLine(tLine);
+							*ppLand = &tLine;
+							continue;
+						}
+					}
+
+				}
+			}
+		}
+	}
+
+	if (pLand != nullptr)
+	{
+		pUnit->Set_Info()->iCollide |= C_LAND; //충돌 추가
+		if (pUnit->Get_UnitInfo()->iCollide  & C_NONE)
+			pUnit->Set_Info()->iCollide ^= C_NONE; //충돌 제거
+	}
+
+	if (pLand == nullptr)
+	{
+		if (iCollide & C_LAND)
+			pUnit->Set_Info()->iCollide ^= C_LAND; //충돌 제거
+		if (pUnit->Get_UnitInfo()->iCollide & (C_LAND | C_WALLL | C_WALLR | C_CELLING | C_PASSABLE))
+			return;
+
+		if (pUnit->Set_Info()->iCollide != C_NONE)
+			pUnit->Set_Info()->iCollide = C_NONE;
+	}
+}
+
 void CColliderManager::Collider_LandAndEnemy(vector<MYLINE> pLandvec, CGameObject * pUnit)
 {
 	MYLINE* pLand = nullptr;
@@ -117,7 +194,7 @@ void CColliderManager::Collider_LandAndEnemy(vector<MYLINE> pLandvec, CGameObjec
 			if (tLine.Start.y == tLine.End.y)
 			{
 				LONG lDistance = tLine.Start.y - pUnit->Get_Hitbox().bottom;
-				if (lDistance <= 10 && lDistance >= -1 * iHeight)
+				if (lDistance <= iHeight && lDistance >= -1 * iHeight)
 				{
 					pUnit->Set_PivotY(tLine.Start.y);
 					pUnit->Set_CurLine(tLine);
@@ -129,7 +206,7 @@ void CColliderManager::Collider_LandAndEnemy(vector<MYLINE> pLandvec, CGameObjec
 			{
 				float fLineHeight = (tLine.End.y - tLine.Start.y) / (tLine.End.x - tLine.Start.x)*(Pivot.x - tLine.Start.x) + tLine.Start.y;
 				LONG lDistance = fLineHeight - pUnit->Get_Hitbox().bottom;
-				if (lDistance <= 10 && lDistance >= -iHeight)
+				if (lDistance <= iHeight && lDistance >= -iHeight)
 				{
 					pUnit->Set_PivotY(fLineHeight);
 					pUnit->Set_CurLine(tLine);
@@ -211,6 +288,10 @@ void CColliderManager::Collider_PassAble(vector<MYLINE> pLandvec, CGameObject * 
 	}
 
 
+}
+
+void CColliderManager::Collider_PassAbleAndBoss(vector<MYLINE> pLandvec, CGameObject * pUnit)
+{
 }
 
 void CColliderManager::Collider_PassAbleAndEnemy(vector<MYLINE> pLandvec, CGameObject * pUnit)
