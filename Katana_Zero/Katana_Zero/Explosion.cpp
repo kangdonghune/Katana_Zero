@@ -28,23 +28,42 @@ CGameObject * CExplosion::Create(CGameObject * pTarget)
 	return pEffect;
 }
 
+CGameObject * CExplosion::Create(float x, float y)
+{
+	CExplosion* pEffect = new CExplosion();
+	pEffect->m_pUnitInfo = new UNITINFO{};
+	if (FAILED(pEffect->Ready_GameObject()))
+	{
+		Safe_Delete(pEffect);
+		return pEffect;
+	}
+	pEffect->Set_Pos(x, y);
+	return pEffect;
+}
+
 HRESULT CExplosion::Ready_GameObject()
 {
 	m_pUnitInfo->wstrKey = L"Effect";
 	m_pUnitInfo->wstrState = L"Explosion";
 	m_pUnitInfo->type = UNITTYPE::EFFECT;
-	m_pUnitInfo->D3VecPos.x = m_pTarget->Get_UnitInfo()->D3VecPos.x;
-	m_pUnitInfo->D3VecPos.y = m_pTarget->Get_UnitInfo()->D3VecPos.y;
+	if (m_pTarget != nullptr)
+	{
+		m_pUnitInfo->D3VecPos.x = m_pTarget->Get_UnitInfo()->D3VecPos.x;
+		m_pUnitInfo->D3VecPos.y = m_pTarget->Get_UnitInfo()->D3VecPos.y;
+	}
+
 	m_pUnitInfo->D3VecPos.z = 0.f;
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
 	m_fSpeed = 20.f;
 	m_fRatio = 5.f;
 	m_fRotateAngle = 0.f;
-	m_fTargetAngle = m_pTarget->Get_TargetAngle();
-	m_iUnitDir = m_pTarget->Get_UnitDir();
-	m_fTargetAngle = m_pTarget->Get_TargetAngle();
-	m_fRotateAngle = 360 - m_fTargetAngle;
+	if (m_pTarget != nullptr)
+	{
+		m_fTargetAngle = m_pTarget->Get_TargetAngle();
+		m_iUnitDir = m_pTarget->Get_UnitDir();
+		m_fRotateAngle = 360 - m_fTargetAngle;
+	}
 	return S_OK;
 }
 

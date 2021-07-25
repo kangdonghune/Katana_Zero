@@ -18,6 +18,10 @@
 #include <tchar.h>
 
 #include <Headers.h>
-
+//사운드
+#include <io.h>
+#include "fmod.h"
+#pragma comment(lib, "fmodex_vc.lib")
+#include "SoundMgr.h"
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.

@@ -44,6 +44,7 @@ public:
 	void ScroolMove();
 	void ScroolInput();
 	void Throw_Item();
+	ITEMTYPE::TYPE Get_ItemType();
 
 	void Set_Item(CGameObject* pItem);
 	const ITEMINFO* Get_Itme() { return m_pItem; }

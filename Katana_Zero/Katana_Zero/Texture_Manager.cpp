@@ -138,7 +138,7 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/Teleport_out_Ground/%d.png", L"Boss", L"Teleportoutground", 4)))
 		return E_FAIL;
-	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/WallJump/%d.png", L"Boss", L"WallJump", 6)))
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/WallJump/%d.png", L"Boss", L"Walljump", 7)))
 		return E_FAIL;
 
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Enemy/Boss/WallJump_Land/%d.png", L"Boss", L"Walljumpland", 4)))
@@ -170,6 +170,18 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Item/explosivevial/%d.png", L"Projectile", L"Explosivevial", 2)))
 		return E_FAIL;
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Projectile/Granade/%d.png", L"Projectile", L"Granade", 1)))
+		return E_FAIL;
+
+	//UI
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/UI/Battery/%d.png", L"UI", L"Battery", 10)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/UI/Hud/HUD.png", L"UI", L"Hud", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/UI/Inventory/%d.png", L"UI", L"Inventory", 4)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/UI/Timer/Timer.png", L"UI", L"Timer", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/UI/Timer/TimerFrame.png", L"UI", L"TimerFrame", 1)))
 		return E_FAIL;
 
 	return S_OK;

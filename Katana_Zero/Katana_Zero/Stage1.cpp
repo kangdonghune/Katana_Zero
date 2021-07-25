@@ -39,6 +39,7 @@ HRESULT CStage1::Ready_Scene()
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 0);
 	m_fMapWidth = float(pTexInfo->tImageInfo.Width);
 	m_fMapHeight = float(pTexInfo->tImageInfo.Height);
+	CSoundMgr::Get_Instance()->PlayBGM(L"song_youwillneverknow.ogg");
 	return S_OK;
 }
 
@@ -70,7 +71,7 @@ void CStage1::Render_Scene()
 		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, &rc, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
 	}
-	MapObjectManager->Render_MapObjectManager();
+//	MapObjectManager->Render_MapObjectManager();
 	GameObjectManager->Render_GameObjectManager();
 	FrameManager->Render_Frame_Manager();
 	Device->Render_End();

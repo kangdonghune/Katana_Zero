@@ -16,7 +16,7 @@ private:
 		void Dash();
 		void Dash_end();
 		void Dash_slowmotion();
-		void Dead();
+		void BDead();
 		void Hurt();
 		void Idle();
 		void Predash();
@@ -28,7 +28,8 @@ private:
 		void Takeout();
 		void Teleport_in();
 		void Teleport_out();
-		void Teleport_in_sweep();
+		void Teleport_in_sweepR();
+		void Teleport_in_sweepL();
 		void Teleport_out_sweep();
 		void Teleport_in_ground();
 		void Teleport_out_ground();
@@ -47,9 +48,17 @@ private:
 	void	Shoot_Granade();
 	void	AngleToLWall();
 	void	AngleToRWall();
-
+	bool	AngleToLCelling();
+	bool	AngleToRCelling(); 
+	void	AngleToLLand();
+	void	AngleToRLand();
+	void	SpinShot();
+	void	SweepLaser();
+	void	Update_Function();
 public:
-	const BOSSSTATE::State		Get_BossState() { return m_BossState; }
+
+	void	Set_BossState(BOSSSTATE::State state) { m_BossState = state; }
+	const	BOSSSTATE::State		Get_BossState() { return m_BossState; }
 public:
 	// CGameObject을(를) 통해 상속됨
 	virtual HRESULT Ready_GameObject() override;
@@ -65,4 +74,12 @@ private:
 	CGameObject* m_pGranade;
 	float			m_fJumpAngle;
 	float			m_fCenter;
+	float			m_fSpinAngle;
+	BOSSSKILL::Skill	m_BossSkill;
+	int				m_teleportCount;
+	bool			m_bChange;
+	float			m_fLaserAngle;
+	bool			m_bGo;
+	bool			m_bDown;
+	int				m_iLife;
 };

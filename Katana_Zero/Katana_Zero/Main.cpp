@@ -10,6 +10,7 @@
 #include "ColliderManager.h"
 #include "ScrollManager.h"
 #include "SceneManager.h"
+#include "UI.h"
 
 
 CMain::CMain()
@@ -35,9 +36,13 @@ CMain * CMain::Create()
 
 HRESULT CMain::Ready_Main()
 {
+	CSoundMgr::Get_Instance()->Initialize();
 	if(FAILED(SceneManager->Ready_SceneManager()))
 		return E_FAIL;
-	SceneManager->Change_SceneManager(CSceneManager::SCENE_BOSS);
+	SceneManager->Change_SceneManager(CSceneManager::SCENE_STAGE1);
+	GameObjectManager->Insert_GameObjectManager(CUI::Create(), GAMEOBJECT::UI);
+
+
 	return S_OK;
 }
 

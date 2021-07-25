@@ -114,6 +114,44 @@ void CGameObject::Update_HitBoxOBB()
 
 }
 
+void CGameObject::Update_HitBoxLaser()
+{
+	if (nullptr == m_pUnitInfo)
+	{
+		ERR_MSG(L"유닛 정보가 없습니다.");
+		return;
+	}
+
+	D3DXMATRIX matScale, matRolateZ, matTrans,matParent, matWorld;
+
+	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState, (size_t)m_tFrame.fFrameStart);
+	D3DXVECTOR3				m_tHitBoxObbTemp[4];
+	if (nullptr == pTexInfo)
+	{
+		ERR_MSG(L"Player에서 텍스쳐 찾기 실패");
+		return;
+	}
+
+	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
+	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
+	//ratio 기본 배율은 유닛의 경우 2배
+	m_tHitBoxObbTemp[0] = { 0.f, -m_fRatio*fCenterY, 0.f };//왼쪽 위
+	m_tHitBoxObbTemp[1] = { m_fRatio * 2 * fCenterX, -m_fRatio*fCenterY, 0.f };//오른쪽 위
+	m_tHitBoxObbTemp[2] = { m_fRatio * 2 * fCenterX,  m_fRatio*fCenterY, 0.f };//오른쪽 아래
+	m_tHitBoxObbTemp[3] = { 0.f,  m_fRatio*fCenterY, 0.f };//왼쪽 아래
+	D3DXMatrixScaling(&matScale, m_iUnitDir, 1.f, 0.f);
+	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
+	D3DXMatrixTranslation(&matTrans, m_iUnitDir * 30, 0, 0.f);
+	D3DXMatrixTranslation(&matParent, m_pShooter->Get_UnitInfo()->D3VecPos.x, m_pShooter->Get_UnitInfo()->D3VecPos.y, 0.f);
+	matWorld = matScale*matTrans*matRolateZ*matParent;
+	for (int i = 0; i < 4; i++)
+	{
+		D3DXVec3TransformCoord(&m_tHitBoxObb[i], &m_tHitBoxObbTemp[i], &matWorld);
+		//D3DXVec3TransformNormal(&m_tHitBoxObb[i], &m_tHitBoxObbTemp[i], &matWorld);
+		m_tHitBoxObb[i];
+	}
+}
+
 void CGameObject::Update_ProjectileHitBoxOBB()
 {
 	if (nullptr == m_pItemInfo)

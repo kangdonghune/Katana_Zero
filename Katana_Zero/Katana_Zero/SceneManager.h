@@ -1,4 +1,5 @@
 #pragma once
+class CGameObject;
 class CScene;
 class CSceneManager
 {
@@ -28,5 +29,7 @@ private:
 	ID		m_eCurScene;
 	ID		m_eNextScene;
 	CScene* m_pOldScene;
+	//CGameObject* m_pUI;
+
 };
 

@@ -17,7 +17,14 @@
 CBoss::CBoss()
 	:m_pLaser(nullptr)
 	, m_pGranade(nullptr)
-	,m_fJumpAngle(0.f)
+	, m_fJumpAngle(0.f)
+	, m_BossSkill(BOSSSKILL::END)
+	, m_teleportCount(0)
+	, m_bChange(false)
+	, m_fLaserAngle(0.f)
+	, m_bGo(false)
+	, m_bDown(false)
+	, m_iLife(1)
 {
 }
 
@@ -65,6 +72,7 @@ void CBoss::Update_GameObject()
 	Update_D3DPos();
 	Update_HitBox();
 	Update_UnitState();
+	Update_Function();
 	FrameMove(m_fSpeed); //현재 프레임 증가 또는 초기화
 	Update_TargetRotate();
 	Ray_Traising();
@@ -107,9 +115,9 @@ void CBoss::Render_GameObject()
 		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
 	}
-	Render_Raytraise();
-	Render_HitBox();
-	Render_ObbLine();
+	//Render_Raytraise();
+	//Render_HitBox();
+	//Render_ObbLine();
 	Render_shotLine();
 }
 
@@ -170,10 +178,12 @@ void CBoss::Update_UnitState()
 	case BOSSSTATE::BDEAD:
 		m_pUnitInfo->wstrState = L"Dead";
 		Update_Frame();
+		BDead();
 		break;
 	case BOSSSTATE::HURT:
 		m_pUnitInfo->wstrState = L"Hurt";
 		Update_Frame();
+		Hurt();
 		break;
 	case BOSSSTATE::IDLE:
 		m_pUnitInfo->wstrState = L"Idle";
@@ -205,6 +215,7 @@ void CBoss::Update_UnitState()
 	case BOSSSTATE::SWEEP:
 		m_pUnitInfo->wstrState = L"Sweep";
 		Update_Frame();
+		Sweep();
 		break;
 	case BOSSSTATE::TAKEOUT:
 		m_pUnitInfo->wstrState = L"Takeout";
@@ -214,26 +225,37 @@ void CBoss::Update_UnitState()
 	case BOSSSTATE::TELEPORT_IN:
 		m_pUnitInfo->wstrState = L"Teleportin";
 		Update_Frame();
+		Teleport_in();
 		break;
 	case BOSSSTATE::TELEPORT_OUT:
 		m_pUnitInfo->wstrState = L"Teleportout";
 		Update_Frame();
+		Teleport_out();
 		break;
-	case BOSSSTATE::TELEPORT_IN_SWEEP:
+	case BOSSSTATE::TELEPORT_IN_SWEEPL:
 		m_pUnitInfo->wstrState = L"Teleportinsweep";
 		Update_Frame();
+		Teleport_in_sweepL();
+		break;
+	case BOSSSTATE::TELEPORT_IN_SWEEPR:
+		m_pUnitInfo->wstrState = L"Teleportinsweep";
+		Update_Frame();
+		Teleport_in_sweepR();
 		break;
 	case BOSSSTATE::TELEPORT_OUT_SWEEP:
 		m_pUnitInfo->wstrState = L"Teleportoutsweep";
 		Update_Frame();
+		Teleport_out_sweep();
 		break;
 	case BOSSSTATE::TELEPORT_IN_GROUND:
 		m_pUnitInfo->wstrState = L"Teleportinground";
 		Update_Frame();
+		Teleport_in_ground();
 		break;
 	case BOSSSTATE::TELEPORT_OUT_GROUND:
 		m_pUnitInfo->wstrState = L"Teleportoutground";
 		Update_Frame();
+		Teleport_out_ground();
 		break;
 	case BOSSSTATE::Jump:
 		m_pUnitInfo->wstrState = L"Jump";
@@ -248,6 +270,7 @@ void CBoss::Update_UnitState()
 	case BOSSSTATE::WALLJUMP_LAND:
 		m_pUnitInfo->wstrState = L"Walljumpland";
 		Update_Frame();
+		Walljump_land();
 		break;
 	default:
 		break;
@@ -306,15 +329,6 @@ void CBoss::Shoot_Laser()
 		ShotLine[1].x = m_tHitBox.right + 1050;
 		ShotLine[1].y = m_tHitBox.bottom - ((m_tHitBox.bottom - m_tHitBox.top) * 3.5 / 5) - CScrollManager::Get_ScroolY();
 	}
-	if (m_pLaser == nullptr)
-	{
-		m_pLaser = CLaser::Create(this);
-		if (m_iUnitDir == -1)
-			m_pLaser->Set_Pos((ShotLine[1].x + (ShotLine[0].x - ShotLine[1].x) / 2), ShotLine[0].y + CScrollManager::Get_ScroolY());
-		if (m_iUnitDir == 1)
-			m_pLaser->Set_Pos((ShotLine[0].x + (ShotLine[1].x - ShotLine[0].x) / 2), ShotLine[0].y + CScrollManager::Get_ScroolY());
-		GameObjectManager->Insert_GameObjectManager(m_pLaser, GAMEOBJECT::LASER);
-	}
 	static float ShotCool = 0.3f;
 	static float Shotlimit = 0.f;
 	if (Shotlimit <= ShotCool)
@@ -323,6 +337,15 @@ void CBoss::Shoot_Laser()
 	}
 	if (Shotlimit > ShotCool)
 	{
+		if (m_pLaser == nullptr)
+		{
+			m_pLaser = CLaser::Create(this);
+			if (m_iUnitDir == -1)
+				m_pLaser->Set_Pos( ShotLine[0].x, ShotLine[0].y + CScrollManager::Get_ScroolY());
+			if (m_iUnitDir == 1)
+				m_pLaser->Set_Pos(ShotLine[0].x, ShotLine[0].y + CScrollManager::Get_ScroolY());
+			GameObjectManager->Insert_GameObjectManager(m_pLaser, GAMEOBJECT::LASER);
+		}
 		ShotLine[0] = {};
 		ShotLine[1] = {};
 		static float fRatio = 0;
@@ -357,14 +380,24 @@ void CBoss::Shoot_Granade()
 		m_pGranade = CGranade::Create(this);
 		GameObjectManager->Insert_GameObjectManager(m_pGranade, GAMEOBJECT::GRANADE);
 	}
-	static float BoobCool = 1.5f;
+	static float BoobCool = 1.f;
 	static float BoobCount = 0.f;
 	static float BoobMoveCount = 0.f;
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dir(0.4f, 0.8f);
+	std::uniform_real_distribution<float> dir(0.3f, 0.4f);
 	static float BoobMoveLimit = dir(gen);
-	
+	float rightWallX = MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(0).Start.x;
+	float leftWallX = MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(1).Start.x;
+	if (m_BossState == BOSSSTATE::TELEPORT_IN_GROUND)
+	{
+		m_BossState = BOSSSTATE::PUTBACK;
+		m_bChange = false;
+	}
+
+
+	if(m_pGranade->Get_UnitInfo()->D3VecPos.x <= leftWallX || m_pGranade->Get_UnitInfo()->D3VecPos.x >= rightWallX)
+		m_pGranade->Set_UnitSpeed(0.f);
 	if (BoobMoveCount <= BoobMoveLimit)
 	{
 		BoobMoveCount += TimeManager->Get_DeltaTime() *(FrameManager->Get_FPS() / 60);
@@ -381,7 +414,7 @@ void CBoss::Shoot_Granade()
 			BoobCount = 0.f;
 			m_pGranade->Set_ObjState(DEAD);
 			m_pGranade = nullptr;
-			m_BossState = BOSSSTATE::PUTBACK;
+			m_BossSkill = BOSSSKILL::END;
 			return;
 		}
 	}
@@ -391,7 +424,7 @@ void CBoss::Shoot_Granade()
 
 void CBoss::AngleToLWall()
 {
-	D3DXVECTOR3 TargetPos = { (float)MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(1).Start.x,(float)MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(1).Start.y + 60.f, 0.f };
+	D3DXVECTOR3 TargetPos = { (float)MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(1).Start.x,(float)MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(1).Start.y + 150.f, 0.f };
 	D3DXVECTOR3 MyPos = { m_vecPivot.x,  m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
 	D3DXVECTOR3 vDir = TargetPos - MyPos;
 	D3DXVECTOR3 vLook{ 1.f, 0.f, 0.f };
@@ -406,7 +439,7 @@ void CBoss::AngleToLWall()
 
 void CBoss::AngleToRWall()
 {
-	D3DXVECTOR3 TargetPos = { (float)MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(0).Start.x, (float)MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(0).Start.y + 60.f, 0.f };
+	D3DXVECTOR3 TargetPos = { (float)MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(0).Start.x, (float)MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL).at(0).Start.y + 150.f, 0.f };
 	D3DXVECTOR3 MyPos = { m_vecPivot.x,  m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
 	D3DXVECTOR3 vDir = TargetPos - MyPos;
 	D3DXVECTOR3 vLook{ 1.f, 0.f, 0.f };
@@ -417,6 +450,117 @@ void CBoss::AngleToRWall()
 	m_fJumpAngle = D3DXToDegree(acosf(fCos));
 	if (MyPos.y <= TargetPos.y)
 		m_fJumpAngle *= -1.f;
+}
+
+bool CBoss::AngleToLCelling()
+{
+	D3DXVECTOR3 TargetPos = { 400.f, 90.f, 0.f };
+	D3DXVECTOR3 MyPos = { m_vecPivot.x,  m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
+	if (TargetPos.y > MyPos.y)
+		return true;
+	D3DXVECTOR3 vDir = TargetPos - MyPos;
+	D3DXVECTOR3 vLook{ 1.f, 0.f, 0.f };
+	D3DXVec3Normalize(&vDir, &vDir);
+	//m_iUnitDir = 1;
+
+	float fCos = D3DXVec3Dot(&vDir, &vLook);
+	m_fJumpAngle = D3DXToDegree(acosf(fCos));
+	if (MyPos.y <= TargetPos.y)
+		m_fJumpAngle *= -1.f;
+	return false;
+}
+
+
+bool CBoss::AngleToRCelling()
+{
+	D3DXVECTOR3 TargetPos = { 830.f, 90.f , 0.f };
+	D3DXVECTOR3 MyPos = { m_vecPivot.x,  m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
+	if (TargetPos.y > MyPos.y)
+		return true;
+	D3DXVECTOR3 vDir = TargetPos - MyPos;
+	D3DXVECTOR3 vLook{ 1.f, 0.f, 0.f };
+	D3DXVec3Normalize(&vDir, &vDir);
+	//m_iUnitDir = 1;
+
+	float fCos = D3DXVec3Dot(&vDir, &vLook);
+	m_fJumpAngle = D3DXToDegree(acosf(fCos));
+	if (MyPos.y <= TargetPos.y)
+		m_fJumpAngle *= -1.f;
+	return false;
+}
+
+void CBoss::AngleToLLand()
+{
+	D3DXVECTOR3 TargetPos = { 400.f, 580.f , 0.f };
+	D3DXVECTOR3 MyPos = { m_vecPivot.x,  m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
+	
+	D3DXVECTOR3 vDir = TargetPos - MyPos;
+	D3DXVECTOR3 vLook{ 1.f, 0.f, 0.f };
+	D3DXVec3Normalize(&vDir, &vDir);
+	//m_iUnitDir = 1;
+
+	float fCos = D3DXVec3Dot(&vDir, &vLook);
+	m_fJumpAngle = D3DXToDegree(acosf(fCos));
+	if (MyPos.y <= TargetPos.y)
+		m_fJumpAngle *= -1.f;
+
+}
+
+void CBoss::AngleToRLand()
+{
+	D3DXVECTOR3 TargetPos = { 950.f, 580.f , 0.f };
+	D3DXVECTOR3 MyPos = { m_vecPivot.x,  m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1),0 };
+
+	D3DXVECTOR3 vDir = TargetPos - MyPos;
+	D3DXVECTOR3 vLook{ 1.f, 0.f, 0.f };
+	D3DXVec3Normalize(&vDir, &vDir);
+	//m_iUnitDir = 1;
+
+	float fCos = D3DXVec3Dot(&vDir, &vLook);
+	m_fJumpAngle = D3DXToDegree(acosf(fCos));
+	if (MyPos.y <= TargetPos.y)
+		m_fJumpAngle *= -1.f;
+}
+
+void CBoss::SpinShot()
+{
+	static float ShotAngle = 180.f;
+	if (ShotAngle >= 180.f && ShotAngle <= 360.f)
+	{
+		CGameObject* pBullet = CBullet::Create(this);
+		pBullet->Set_TargetAngle2(ShotAngle);
+		pBullet->Set_RotateAngle(ShotAngle);
+		GameObjectManager->Insert_GameObjectManager(pBullet, GAMEOBJECT::BULLET);
+		ShotAngle += 10.f;
+		return;
+	}
+	ShotAngle = 180.f;
+	m_BossSkill = BOSSSKILL::END;
+	return;
+}
+
+void CBoss::SweepLaser()
+{
+
+
+}
+
+void CBoss::Update_Function()
+{
+	switch (m_BossSkill)
+	{
+
+	case BOSSSKILL::ShotGranade:
+		Shoot_Granade();
+		break;
+	case BOSSSKILL::SpinShot:
+		SpinShot();
+		break;
+	case BOSSSKILL::END:
+		break;
+	default:
+		break;
+	}
 }
 
 void CBoss::Aim()
@@ -436,12 +580,47 @@ void CBoss::Dash_slowmotion()
 {
 }
 
-void CBoss::Dead()
+void CBoss::BDead()
 {
+	m_fSpeed = 3.f;
+	if (!Check_FrameEnd())
+	{
+		m_iUnitDir = -1;
+		m_vecPivot.x -= 0.5f;
+	}
+	if (Check_FrameEnd())
+	{
+		m_fSpeed = 0.f;
+	}
 }
 
 void CBoss::Hurt()
 {
+	m_fSpeed = 10.f;
+	
+	if (m_vecPivot.y < 580.f)
+	{
+		m_vecPivot.x += 15.f;
+		m_vecPivot.y += 15.f;
+	}
+	if (Check_FrameEnd())
+	{
+		m_iLife -= 1;
+		if (m_iLife == 0)
+		{
+			m_BossState = BOSSSTATE::BDEAD;
+			return;
+		}
+
+		m_fSpeed = 0.f;
+		m_bDown = false;
+		m_bGo = false;
+		m_iObjState = NONE;
+		m_BossState = BOSSSTATE::TELEPORT_OUT_SWEEP;
+		GameObjectManager->Insert_GameObjectManager(CExplosion::Create(this), GAMEOBJECT::EFFECT);
+		return;
+	}
+		
 }
 
 void CBoss::Idle()
@@ -451,7 +630,15 @@ void CBoss::Idle()
 	if(m_vecPivot.x >= m_pTarget->Get_UnitInfo()->D3VecPos.x)
 		m_iUnitDir = -1;
 
-	m_BossState = BOSSSTATE::PREJUMP;
+
+	if (m_pUnitInfo->iCollide ^ C_LAND)
+	{
+		m_BossState = BOSSSTATE::TAKEOUT;
+		return;
+	}
+	
+	
+	
 
 }
 
@@ -461,16 +648,26 @@ void CBoss::Predash()
 
 void CBoss::Prejump()
 {
-	m_fSpeed = 5.f;
+	static int iJumpCount = 0;
+	m_fSpeed = 10.f;
+	if (iJumpCount >= 2)
+	{
+		m_BossState = BOSSSTATE::TELEPORT_OUT_SWEEP;
+		iJumpCount = 0;
+	}
 	if (Check_FrameEnd())
+	{
 		m_BossState = BOSSSTATE::Jump;
+		iJumpCount += 1;
+	}
+	
 }
 
 void CBoss::Putback()
 {
 	m_fSpeed = 10.f;
 	if (Check_FrameEnd())
-		m_BossState = BOSSSTATE::IDLE;
+		m_BossState = BOSSSTATE::PREJUMP;
 }
 
 void CBoss::Recover()
@@ -483,15 +680,117 @@ void CBoss::Roll()
 
 void CBoss::Sweep()
 {
+	m_fSpeed = 20.f;
+	if (Check_FrameEnd())
+		m_fSpeed = 0;
+
+
+	static float fRatio = 0;
+	static bool	 bEnd = false;
+	static bool  bLaser = false;
+	static bool  once = false;
+
+	if (m_vecPivot.x <= m_fCenter)
+	{
+	
+		m_iUnitDir = 1;
+		if (m_pLaser == nullptr)
+		{
+			m_pLaser = CLaser::Create(this);
+			if (m_iUnitDir == 1)
+				m_pLaser->Set_Pos(m_tHitBox.right, m_tHitBox.bottom - (m_tHitBox.bottom - m_tHitBox.top) / 2 + CScrollManager::Get_ScroolY());
+			if (m_iUnitDir == -1)
+				m_pLaser->Set_Pos(m_tHitBox.left, m_tHitBox.bottom - (m_tHitBox.bottom - m_tHitBox.top) / 2 + CScrollManager::Get_ScroolY());
+			GameObjectManager->Insert_GameObjectManager(m_pLaser, GAMEOBJECT::LASER);
+		}
+		if (!bLaser)
+			m_fLaserAngle += 3.f;
+		if (fRatio <= 20 && !bEnd)
+			fRatio += 2.f;
+		if (fRatio > 20)
+			bEnd = true;
+		m_pLaser->Set_WidthRatio(31.f);
+		m_pLaser->Set_HeightRatio(fRatio);
+		m_pLaser->Set_RotateAngle(0.f);
+		m_pLaser->Set_RotateAngle(m_fLaserAngle);
+		if (m_fLaserAngle > 180.f)
+		{
+			bLaser = true;
+			fRatio -= 2.f;
+			if (fRatio <= 0)
+			{
+				once = false;
+				m_fLaserAngle = 0.f;
+				bEnd = false;
+				bLaser = false;
+				m_pLaser->Set_ObjState(DEAD);
+				m_pLaser = nullptr;
+				ShotLine[0] = {};
+				ShotLine[1] = {};
+				m_BossState = BOSSSTATE::TELEPORT_OUT;
+				return;
+			}
+
+		}
+	}
+	if (m_vecPivot.x > m_fCenter)
+	{
+		
+		m_iUnitDir = -1;
+		if (m_pLaser == nullptr)
+		{
+			m_pLaser = CLaser::Create(this);
+			if (m_iUnitDir == 1)
+				m_pLaser->Set_Pos(m_tHitBox.right, m_tHitBox.bottom - (m_tHitBox.bottom - m_tHitBox.top) / 2 + CScrollManager::Get_ScroolY());
+			if (m_iUnitDir == -1)
+				m_pLaser->Set_Pos(m_tHitBox.left, m_tHitBox.bottom - (m_tHitBox.bottom - m_tHitBox.top) / 2 + CScrollManager::Get_ScroolY());	
+			GameObjectManager->Insert_GameObjectManager(m_pLaser, GAMEOBJECT::LASER);
+		}
+		if (!bLaser)
+			m_fLaserAngle -= 3.f;
+		if (fRatio <= 20 && !bEnd)
+			fRatio += 2.f;
+		if (fRatio > 20)
+			bEnd = true;
+		m_pLaser->Set_WidthRatio(31.f);
+		m_pLaser->Set_HeightRatio(fRatio);
+		m_pLaser->Set_RotateAngle(0.f);
+		m_pLaser->Set_RotateAngle(m_fLaserAngle);
+		if (m_fLaserAngle < -180.f)
+		{
+			bLaser = true;
+			fRatio -= 2.f;
+			if (fRatio <= 0)
+			{
+				once = false;
+				m_fLaserAngle = 0.f;
+				bEnd = false;
+				bLaser = false;
+				m_pLaser->Set_ObjState(DEAD);
+				m_pLaser = nullptr;
+				ShotLine[0] = {};
+				ShotLine[1] = {};
+				m_BossState = BOSSSTATE::TELEPORT_IN_SWEEPL;
+				return;
+			}
+
+		}
+	}
+	
+
+
+
 }
 
 void CBoss::Takeout()
 {
+
+
 	if (Check_FrameEnd())
 	{
 		m_fSpeed = 0.f;
-		//Shoot_Laser();
-		Shoot_Granade();
+		Shoot_Laser();
+		return;
 	}
 	
 
@@ -501,26 +800,131 @@ void CBoss::Takeout()
 
 void CBoss::Teleport_in()
 {
+
+	if (Check_FrameEnd())
+	{
+		m_fSpeed = 0.f;
+		if (m_pLaser == nullptr)
+		{
+			m_pLaser = CLaser::Create(this);
+			if (m_iUnitDir == -1)
+				m_pLaser->Set_Pos(m_tHitBox.left, m_tHitBox.bottom - (m_tHitBox.bottom - m_tHitBox.top) / 2 + CScrollManager::Get_ScroolY());
+			if (m_iUnitDir == 1)
+				m_pLaser->Set_Pos(ShotLine[0].x, ShotLine[0].y + CScrollManager::Get_ScroolY());
+			GameObjectManager->Insert_GameObjectManager(m_pLaser, GAMEOBJECT::LASER);
+		}
+		static float fRatio = 0;
+		static bool	 bEnd = false;
+
+		m_iUnitDir = 1;
+		if (fRatio <= 20 && !bEnd)
+			fRatio += 3.f;
+		if (fRatio > 20)
+		{
+			bEnd = true;
+		}
+		if (bEnd)
+			fRatio -= 3.f;
+		m_pLaser->Set_WidthRatio(31.f);
+		m_pLaser->Set_HeightRatio(fRatio);
+		m_pLaser->Set_RotateAngle(90.f);
+
+		if (fRatio <= 0)
+		{
+			bEnd = false;
+			m_pLaser->Set_ObjState(DEAD);
+			m_pLaser = nullptr;
+			fRatio = 0.f;
+			m_BossState = BOSSSTATE::TELEPORT_OUT;
+			return;
+		}
+
+	}
+	
+	
 }
 
 void CBoss::Teleport_out()
 {
+	
+	m_fSpeed = 20.f;
+	if (Check_FrameEnd())
+	{	
+		if (m_teleportCount >= 7)
+		{
+			m_fSpeed = 10;
+			m_BossState = BOSSSTATE::TELEPORT_IN_GROUND;
+			m_teleportCount = 0;
+			return;
+		}
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> dir(200.f,1100.f);
+		m_vecPivot.x = dir(gen);
+		m_vecPivot.y = 200.f;
+		m_teleportCount += 1;
+		m_BossState = BOSSSTATE::TELEPORT_IN;
+	}
 }
 
-void CBoss::Teleport_in_sweep()
+void CBoss::Teleport_in_sweepR()
 {
+	m_fSpeed = 20.f;
+	m_vecPivot.x = 1020.f;
+	m_vecPivot.y = 200.f;
+	if (Check_FrameEnd())
+		m_BossState = BOSSSTATE::SWEEP;
+}
+
+void CBoss::Teleport_in_sweepL()
+{
+	m_fSpeed = 20.f;
+	m_vecPivot.x = 200.f;
+	m_vecPivot.y = 200.f;
+	if (Check_FrameEnd())
+		m_BossState = BOSSSTATE::SWEEP;
 }
 
 void CBoss::Teleport_out_sweep()
 {
+	static int Dir = 0;
+	m_fSpeed = 10.f;
+	if(Check_FrameEnd())
+	{
+		m_BossState = BOSSSTATE::TELEPORT_IN_SWEEPR;
+		Dir = 1;
+		return;
+	}
+		
+
 }
 
 void CBoss::Teleport_in_ground()
 {
+	if (m_pTarget->Get_Pivot().x <= m_fCenter && !m_bChange)
+	{
+		m_iUnitDir = -1;
+		m_vecPivot.x = 1120.f;
+		m_vecPivot.y = 580.f;
+		m_bChange = true;
+	}
+	if (m_pTarget->Get_Pivot().x > m_fCenter && !m_bChange)
+	{
+		m_iUnitDir = 1;
+		m_vecPivot.x = 260.f;
+		m_vecPivot.y = 580.f;
+		m_bChange = true;
+	}
+	if (Check_FrameEnd())
+	{
+		m_fSpeed = 0.f;
+		m_BossSkill = BOSSSKILL::ShotGranade;
+	}
 }
 
 void CBoss::Teleport_out_ground()
 {
+	
 }
 
 void CBoss::Jump()
@@ -537,8 +941,82 @@ void CBoss::Jump()
 
 void CBoss::Walljump()
 {
+
+
+	if (!m_bDown)
+	{
+		m_fSpeed = 5.f;
+		if (m_vecPivot.x >= m_fCenter)
+		{
+			m_iUnitDir = -1;
+			if (AngleToRCelling())
+			{
+				m_bDown = true;
+				m_fSpeed = 30.f;
+				m_BossSkill = BOSSSKILL::SpinShot;
+			}
+		}
+		
+		if (m_vecPivot.x < m_fCenter)
+		{
+			m_iUnitDir = 1;
+			if (AngleToLCelling())
+			{
+				m_bDown = true;
+				m_fSpeed = 30.f;
+				m_BossSkill = BOSSSKILL::SpinShot;
+			}
+		}
+			
+	}
+	
+	
+	if (m_bDown)
+	{
+		if (m_vecPivot.x >= m_fCenter && !m_bGo)
+		{
+			AngleToLLand();
+			m_bGo = true;
+		}
+
+		if (m_vecPivot.x < m_fCenter && !m_bGo)
+		{
+			AngleToRLand();
+			m_bGo = true;
+		}
+			
+	
+	}
+
+		
+	if (Check_FrameEnd())
+	{
+		m_fSpeed = 0.f;
+	
+	}
+
+	if (m_pUnitInfo->iCollide & C_LAND)
+	{
+		m_bDown = false;
+		m_bGo = false;
+		m_fJumpAngle = 0.f;
+		m_BossState = BOSSSTATE::PREJUMP;
+		return;
+	}
+
+	m_vecPivot.x += cosf(D3DXToRadian(m_fJumpAngle))*m_fUnitSpeed;
+	m_vecPivot.y -= sinf(D3DXToRadian(m_fJumpAngle))*m_fUnitSpeed;
 }
 
 void CBoss::Walljump_land()
 {
+	m_vecPivot.y += 10.f;
+
+	if (Check_FrameEnd())
+		m_fSpeed = 5.f;
+	if (m_pUnitInfo->iCollide & C_LAND)
+	{
+		m_BossState = BOSSSTATE::IDLE;
+	}
+		
 }

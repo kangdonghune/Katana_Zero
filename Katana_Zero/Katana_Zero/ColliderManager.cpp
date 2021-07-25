@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "HitEffect.h"
 #include "Boss.h"
+#include "Explosion.h"
 
 IMPLEMENT_SINGLETON(CColliderManager)
 CColliderManager::CColliderManager()
@@ -107,50 +108,19 @@ void CColliderManager::Collider_LandAndBoss(vector<MYLINE> pLandvec, CGameObject
 	const BOSSSTATE::State State = dynamic_cast<CBoss*>(pUnit)->Get_BossState();
 	const D3DXVECTOR3 Pivot = pUnit->Get_Pivot();
 	int iHeight = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, pInfo->wstrState, 0)->tImageInfo.Height >> 1);
-	int iWidth = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, L"Walljump", 0)->tImageInfo.Width >> 1);
+	int iWidth = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, pInfo->wstrState, 0)->tImageInfo.Width >> 1);
 	for (auto& tLine : pLandvec)
 	{
 		if (tLine.Start.x < Pivot.x && tLine.End.x > Pivot.x)
 		{
 			if (pLand != nullptr)
 				break;
-			if (tLine.Start.y == tLine.End.y)
+			LONG lDistance = tLine.Start.y - pUnit->Get_Pivot().y;
+			if (lDistance < 0 && lDistance >= -1 * iHeight)
 			{
-				LONG lDistance = tLine.Start.y - pUnit->Get_Hitbox().bottom;
-				if (lDistance <= 0 && lDistance >= -1 * iHeight)
-				{
-
-					pUnit->Set_PivotY(tLine.Start.y);
-					pUnit->Set_CurLine(tLine);
-					*ppLand = &tLine;
-				}
-			}
-
-			else
-			{
-				float fLineHeight = (tLine.End.y - tLine.Start.y) / (tLine.End.x - tLine.Start.x)*(Pivot.x - tLine.Start.x) + tLine.Start.y;
-				LONG lDistance = fLineHeight - pUnit->Get_Hitbox().bottom;
-				if (lDistance <= 10 && lDistance >= -iHeight)
-				{
-					if (State != PLAYERSTATE::JUMP && State != PLAYERSTATE::ATTACK)
-					{
-						pUnit->Set_PivotY(fLineHeight);
-						pUnit->Set_CurLine(tLine);
-						*ppLand = &tLine;
-						continue;
-					}
-					if (State == PLAYERSTATE::ATTACK)
-					{
-						if (Pivot.y >= fLineHeight)
-						{
-							pUnit->Set_PivotY(fLineHeight);
-							pUnit->Set_CurLine(tLine);
-							*ppLand = &tLine;
-							continue;
-						}
-					}
-
-				}
+				pUnit->Set_PivotY(tLine.Start.y);
+				pUnit->Set_CurLine(tLine);
+				*ppLand = &tLine;
 			}
 		}
 	}
@@ -166,7 +136,7 @@ void CColliderManager::Collider_LandAndBoss(vector<MYLINE> pLandvec, CGameObject
 	{
 		if (iCollide & C_LAND)
 			pUnit->Set_Info()->iCollide ^= C_LAND; //충돌 제거
-		if (pUnit->Get_UnitInfo()->iCollide & (C_LAND | C_WALLL | C_WALLR | C_CELLING | C_PASSABLE))
+		if (pUnit->Get_UnitInfo()->iCollide & (C_LAND | C_WALLL | C_WALLR | C_CELLING ))
 			return;
 
 		if (pUnit->Set_Info()->iCollide != C_NONE)
@@ -290,10 +260,6 @@ void CColliderManager::Collider_PassAble(vector<MYLINE> pLandvec, CGameObject * 
 
 }
 
-void CColliderManager::Collider_PassAbleAndBoss(vector<MYLINE> pLandvec, CGameObject * pUnit)
-{
-}
-
 void CColliderManager::Collider_PassAbleAndEnemy(vector<MYLINE> pLandvec, CGameObject * pUnit)
 {
 	MYLINE* pLand = nullptr;
@@ -305,7 +271,7 @@ void CColliderManager::Collider_PassAbleAndEnemy(vector<MYLINE> pLandvec, CGameO
 	int iWidth = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pInfo->wstrKey, pInfo->wstrState, 0)->tImageInfo.Width >> 1);
 	for (auto& tLine : pLandvec)
 	{
-		if (pUnit->Get_NextLine().type == TERRAINTYPE::LAND && pUnit->Get_NowLine().type == TERRAINTYPE::LAND &&((fabs(pUnit->Get_NextLine().Start.x - Pivot.x) < 5 || fabs(pUnit->Get_NextLine().End.x - Pivot.x))))
+		if (pUnit->Get_NextLine().type == TERRAINTYPE::LAND && pUnit->Get_NowLine().type == TERRAINTYPE::LAND &&((fabs(pUnit->Get_NextLine().Start.x - Pivot.x) < 5 || fabs(pUnit->Get_NextLine().End.x - Pivot.x))) && pUnit->Get_ObjState() != DOWN)
 			break;
 
 		if (tLine.Start.x < Pivot.x && tLine.End.x > Pivot.x)
@@ -401,6 +367,131 @@ void CColliderManager::Collider_Wall(vector<MYLINE> pWallvec, CGameObject * pUni
 			pUnit->Set_Info()->iCollide = C_NONE;
 	}
 	
+}
+
+void CColliderManager::Collider_WallBoss(vector<MYLINE> pWallvec, CGameObject * pUnit)
+{
+	int dir = 0;
+	MYLINE* pWall = nullptr;
+	MYLINE** ppWall = &pWall;
+	const UNITINFO* pInfo = pUnit->Get_UnitInfo();
+	const D3DXVECTOR3 Pivot = pUnit->Get_Pivot();
+	const RECT	tHitBox = pUnit->Get_Hitbox();
+	float fHeight = tHitBox.bottom - tHitBox.top;
+	int	iCollide = pInfo->iCollide;
+	int iWidth = pUnit->Get_Ratio() * (Texture_Maneger->Get_TexInfo_Manager(pUnit->Get_UnitInfo()->wstrKey, L"Walljump", 0)->tImageInfo.Width >> 1);
+	for (auto& tLine : pWallvec)
+	{
+		if (pWall != nullptr)
+			break;
+		if (tLine.Start.y <= tHitBox.bottom  && tLine.End.y >= tHitBox.top + fHeight * 3 / 4) //캐릭터가 벽 라인 높이에 일부라도 걸쳐 있을 때
+		{
+			LONG lDistanceL = tLine.Start.x - (Pivot.x - iWidth);
+			LONG lDistanceR = (Pivot.x + iWidth) - tLine.Start.x;
+			if (lDistanceL >= 0 && lDistanceL <= iWidth) //왼쪽벽에 닿은 경우
+			{
+				pUnit->Set_PivotX(Pivot.x + lDistanceL);
+				*ppWall = &tLine;
+				dir = C_WALLL;
+				dynamic_cast<CBoss*>(pUnit)->Set_BossState(BOSSSTATE::WALLJUMP);
+				continue;
+			}
+			if (lDistanceR >= 0 && lDistanceR <= iWidth) //오른쪽 벽
+			{
+				pUnit->Set_PivotX(Pivot.x - lDistanceR);
+				*ppWall = &tLine;
+				dir = C_WALLR;
+				dynamic_cast<CBoss*>(pUnit)->Set_BossState(BOSSSTATE::WALLJUMP);
+				continue;
+			}
+		}
+	}
+
+	if (pWall != nullptr)
+	{
+		pUnit->Set_Info()->iCollide |= C_WALL | dir;
+		if (pUnit->Get_UnitInfo()->iCollide  & C_NONE)
+			pUnit->Set_Info()->iCollide ^= C_NONE; //충돌 제거
+	}
+
+	if (pWall == nullptr)
+	{
+		if (iCollide & C_WALL)
+			pUnit->Set_Info()->iCollide ^= C_WALL;
+		if (iCollide & C_WALLL)
+			pUnit->Set_Info()->iCollide ^= C_WALLL;
+		if (iCollide & C_WALLR)
+			pUnit->Set_Info()->iCollide ^= C_WALLR;
+		if (pUnit->Get_UnitInfo()->iCollide & (C_LAND | C_CELLING | C_PASSABLE))
+			return;
+
+		if (pUnit->Set_Info()->iCollide != C_NONE)
+			pUnit->Set_Info()->iCollide = C_NONE;
+	}
+
+}
+
+void CColliderManager::Collider_BulletAndBoss(CGameObject * pObject1, CGameObject * pObject2)
+{
+	if (pObject2->Get_UnitInfo()->wstrKey != L"Player" && pObject1->Get_ObjState() == NONE) //플레이어가 아니고 총알이 반사된 상태가 아니면 충돌 x
+		return;
+	if (pObject2->Get_UnitInfo()->wstrKey == L"Player" && pObject1->Get_ObjState() == COLLIDE) //플레이어 이고 총알이 반사된 상태라면 충돌 x
+		return;
+	if (pObject2->Get_ObjState() == DOWN)
+		return;
+
+	//두 대상의 거리 벡터
+	D3DXVECTOR3 Dist = pObject1->Get_UnitInfo()->D3VecPos - pObject2->Get_UnitInfo()->D3VecPos;
+	//obj1의 라이트 투영
+	D3DXVECTOR3 R1 = { pObject1->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject1->Get_UnitInfo()->wstrKey,pObject1->Get_UnitInfo()->wstrState,0)->tImageInfo.Width >> 1)*cosf(D3DXToRadian(pObject1->Get_TargetAngle())), -1 * pObject1->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject1->Get_UnitInfo()->wstrKey,pObject1->Get_UnitInfo()->wstrState,0)->tImageInfo.Width >> 1)*sinf(D3DXToRadian(pObject1->Get_TargetAngle())), 0.f };
+	//obj1의 up 투영
+	D3DXVECTOR3 U1 = { pObject1->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject1->Get_UnitInfo()->wstrKey,pObject1->Get_UnitInfo()->wstrState,0)->tImageInfo.Height >> 1)*cosf(D3DXToRadian(pObject1->Get_TargetAngle() + 90)), -1 * pObject1->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject1->Get_UnitInfo()->wstrKey,pObject1->Get_UnitInfo()->wstrState,0)->tImageInfo.Height >> 1)*sinf(D3DXToRadian(pObject1->Get_TargetAngle() + 90)), 0.f };
+	//obj2의 right 투영
+	D3DXVECTOR3 R2 = { pObject2->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject2->Get_UnitInfo()->wstrKey,pObject2->Get_UnitInfo()->wstrState,0)->tImageInfo.Width >> 1)*cosf(D3DXToRadian(pObject2->Get_TargetAngle())),  -1 * pObject2->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject2->Get_UnitInfo()->wstrKey,pObject2->Get_UnitInfo()->wstrState,0)->tImageInfo.Width >> 1)* sinf(D3DXToRadian(pObject2->Get_TargetAngle())), 0.f };
+	//obj2의 up투영
+	D3DXVECTOR3 U2 = { pObject2->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject2->Get_UnitInfo()->wstrKey,pObject2->Get_UnitInfo()->wstrState,0)->tImageInfo.Height >> 1)*cosf(D3DXToRadian(pObject2->Get_TargetAngle() + 90)), -1 * pObject2->Get_Ratio()*(Texture_Maneger->Get_TexInfo_Manager(pObject2->Get_UnitInfo()->wstrKey,pObject2->Get_UnitInfo()->wstrState,0)->tImageInfo.Height >> 1)* sinf(D3DXToRadian(pObject2->Get_TargetAngle() + 90)), 0.f };
+
+	D3DXVECTOR3 v[4] = { R1,R2,U1,U2 };
+	for (int i = 0; i < 4; i++)
+	{
+		//투영할 방향벡터
+		float sum = 0.f;
+		D3DXVECTOR3 Dir{};
+		D3DXVec3Normalize(&Dir, &v[i]);//i번째 선분을 정규화, 크기가 1인 방향벡터로
+		for (int j = 0; j < 4; j++)
+		{
+			sum += fabs(D3DXVec3Dot(&Dir, &v[j]));
+		}
+		if (fabs(D3DXVec3Dot(&Dir, &Dist)) > sum)
+			return;
+	}
+	pObject1->Set_ObjState(DEAD);
+	switch (pObject2->Get_UnitInfo()->type)
+	{
+	case UNITTYPE::PLAYER:
+		/*	pObject2->Set_State(PLAYERSTATE::HURTFLY_BEGIN);
+		pObject2->Set_ObjState(DOWN);
+		pObject2->Set_HitAngle(pObject1->Get_TargetAngle());
+		pObject2->Set_HitDir(pObject1->Get_UnitDir());
+		pObject2->Set_HitSpeed(pObject1->Get_UnitSpeed()/4*pObject1->Get_UnitDir());
+		pObject2->Set_UnitDir(-pObject1->Get_UnitDir());*/
+		break;
+	case UNITTYPE::GANGSTER:
+		pObject2->Set_State(GANGSTERSTATE::HURTFLY);
+		pObject2->Set_ObjState(DOWN);
+		pObject2->Set_HitAngle(pObject1->Get_TargetAngle());
+		pObject2->Set_HitDir(pObject1->Get_UnitDir());
+		pObject2->Set_HitSpeed(pObject1->Get_UnitSpeed() / 4 * pObject1->Get_UnitDir());
+		pObject2->Set_UnitDir(-pObject1->Get_UnitDir());
+		GameObjectManager->Insert_GameObjectManager(CHitEffect::Create(pObject2), GAMEOBJECT::EFFECT);
+		break;
+	default:
+		break;
+	}
+}
+
+void CColliderManager::Collider_AttckAndBoss(CGameObject * pObject1, CGameObject * pObject2)
+{
 }
 
 void CColliderManager::Collider_Celling(vector<MYLINE> pCellingVec, CGameObject * pUnit)
@@ -776,6 +867,16 @@ void CColliderManager::Collider_BulletAndUnit(CGameObject * pObject1, CGameObjec
 		pObject2->Set_UnitDir(-pObject1->Get_UnitDir());
 		GameObjectManager->Insert_GameObjectManager(CHitEffect::Create(pObject2), GAMEOBJECT::EFFECT);
 		break;
+
+	case UNITTYPE::BOSS:
+		dynamic_cast<CBoss*>(pObject2)->Set_BossState(BOSSSTATE::HURT);
+		pObject2->Set_ObjState(DOWN);
+		pObject2->Set_HitAngle(pObject1->Get_TargetAngle());
+		pObject2->Set_HitDir(pObject1->Get_UnitDir());
+		pObject2->Set_HitSpeed(pObject1->Get_UnitSpeed() / 4 * pObject1->Get_UnitDir());
+		pObject2->Set_UnitDir(-pObject1->Get_UnitDir());
+		GameObjectManager->Insert_GameObjectManager(CHitEffect::Create(pObject2), GAMEOBJECT::EFFECT);
+		break;
 	default:
 		break;
 	}
@@ -817,6 +918,9 @@ void CColliderManager::Collider_Projectile(MYLINE tLine, CGameObject * pProjecti
 							pProjectile->Set_ObjState(COLLIDE);
 							return;
 						}
+						if (pProjectile->Get_ItemInfo()->type == ITEMTYPE::EXPLOSIVEVIAL)
+							GameObjectManager->Insert_GameObjectManager(CExplosion::Create(pProjectile->Get_ItemInfo()->D3VecPos.x, pProjectile->Get_ItemInfo()->D3VecPos.y), GAMEOBJECT::EFFECT);
+
 						pProjectile->Set_ObjState(DEAD);
 						return;
 					}
@@ -850,7 +954,12 @@ void CColliderManager::Collider_Projectile(MYLINE tLine, CGameObject * pProjecti
 						}
 					}
 					if (pProjectile->Get_ObjState() == THROW)
+					{
+						if (pProjectile->Get_ItemInfo()->type == ITEMTYPE::EXPLOSIVEVIAL)
+							GameObjectManager->Insert_GameObjectManager(CExplosion::Create(pProjectile->Get_ItemInfo()->D3VecPos.x, pProjectile->Get_ItemInfo()->D3VecPos.y), GAMEOBJECT::EFFECT);
 						pProjectile->Set_ObjState(DEAD);
+					}
+					
 					return;
 				}
 			}
@@ -881,7 +990,11 @@ void CColliderManager::Collider_Projectile(MYLINE tLine, CGameObject * pProjecti
 					}
 				}
 				if (pProjectile->Get_ObjState() == THROW)
+				{
+					if (pProjectile->Get_ItemInfo()->type == ITEMTYPE::EXPLOSIVEVIAL)
+						GameObjectManager->Insert_GameObjectManager(CExplosion::Create(pProjectile->Get_ItemInfo()->D3VecPos.x, pProjectile->Get_ItemInfo()->D3VecPos.y), GAMEOBJECT::EFFECT);
 					pProjectile->Set_ObjState(DEAD);
+				}
 				return;
 			}
 		}
@@ -907,7 +1020,11 @@ void CColliderManager::Collider_Projectile(MYLINE tLine, CGameObject * pProjecti
 					}
 				}
 				if (pProjectile->Get_ObjState() == THROW)
+				{
+					if (pProjectile->Get_ItemInfo()->type == ITEMTYPE::EXPLOSIVEVIAL)
+						GameObjectManager->Insert_GameObjectManager(CExplosion::Create(pProjectile->Get_ItemInfo()->D3VecPos.x, pProjectile->Get_ItemInfo()->D3VecPos.y), GAMEOBJECT::EFFECT);
 					pProjectile->Set_ObjState(DEAD);
+				}
 				return;
 			}
 		}
@@ -962,6 +1079,8 @@ void CColliderManager::Collider_ProjectileAndUnit(CGameObject * pObject1, CGameO
 		if (fabs(D3DXVec3Dot(&Dir, &Dist)) > sum)
 			return;
 	}
+	if(pObject1->Get_ItemInfo()->type == ITEMTYPE::EXPLOSIVEVIAL &&pObject2->Get_UnitInfo()->wstrKey != L"Player"&&pObject1->Get_ObjState() == THROW)
+		GameObjectManager->Insert_GameObjectManager(CExplosion::Create(pObject1->Get_ItemInfo()->D3VecPos.x, pObject1->Get_ItemInfo()->D3VecPos.y), GAMEOBJECT::EFFECT);
 
 	switch (pObject2->Get_UnitInfo()->type)
 	{
@@ -1038,6 +1157,15 @@ void CColliderManager::ColliderAttckAndUnit(CGameObject * pObject1, CGameObject 
 	{
 	case UNITTYPE::GANGSTER:
 		pObject2->Set_State(GANGSTERSTATE::HURTFLY);
+		pObject2->Set_ObjState(DOWN);
+		pObject2->Set_HitAngle(pObject1->Get_TargetAngle());
+		pObject2->Set_HitDir(pObject1->Get_UnitDir());
+		pObject2->Set_HitSpeed(pObject1->Get_UnitSpeed() / 4 * pObject1->Get_UnitDir());
+		pObject2->Set_UnitDir(-pObject1->Get_UnitDir());
+		GameObjectManager->Insert_GameObjectManager(CHitEffect::Create(pObject2), GAMEOBJECT::EFFECT);
+		break;
+	case UNITTYPE::BOSS:
+		dynamic_cast<CBoss*>(pObject2)->Set_BossState(BOSSSTATE::HURT);
 		pObject2->Set_ObjState(DOWN);
 		pObject2->Set_HitAngle(pObject1->Get_TargetAngle());
 		pObject2->Set_HitDir(pObject1->Get_UnitDir());

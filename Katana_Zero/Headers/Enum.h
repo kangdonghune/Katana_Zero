@@ -4,6 +4,7 @@ namespace GAMEOBJECT
 {
 	enum TYPE
 	{
+	
 		PLAYER,
 		PLAYERATTACK,
 		GANGSTER,
@@ -15,6 +16,7 @@ namespace GAMEOBJECT
 		SMOKE,
 		EXPLOSIVE,
 		EFFECT,
+		UI,
 		END
 	};
 }
@@ -106,13 +108,26 @@ namespace BOSSSTATE
 		TAKEOUT,
 		TELEPORT_IN,
 		TELEPORT_OUT,
-		TELEPORT_IN_SWEEP,
+		TELEPORT_IN_SWEEPL,
+		TELEPORT_IN_SWEEPR,
 		TELEPORT_OUT_SWEEP,
 		TELEPORT_IN_GROUND,
 		TELEPORT_OUT_GROUND,
 		Jump,
 		WALLJUMP,
 		WALLJUMP_LAND,
+		END
+	};
+}
+
+namespace BOSSSKILL
+{
+	enum Skill
+	{
+		SettingLine,
+		ShotLaser,
+		ShotGranade,
+		SpinShot,
 		END
 	};
 }

@@ -880,6 +880,13 @@ void CPlayer::Throw_Item()
 
 }
 
+ITEMTYPE::TYPE CPlayer::Get_ItemType()
+{
+	if (m_pItem == nullptr)
+		return ITEMTYPE::END;
+	return m_pItem->type;
+}
+
 void CPlayer::Set_Item(CGameObject * pItem)
 {
 	m_pItem = new ITEMINFO;
@@ -961,10 +968,10 @@ void CPlayer::Render_GameObject()
 
 	FrameManager->Render_Frame_Manager_FrameNum((size_t)m_tFrame.fFrameStart);
 	FrameManager->Render_Frame_Manager_FrameName(m_pUnitInfo->wstrState);
-	Render_HitBox();
+	/*Render_HitBox();
 	Render_Pivot();
 	Render_MousePos();
-	Render_ObbLine();
+	Render_ObbLine();*/
 }
 
 void CPlayer::Release_GameObject()

@@ -12,6 +12,8 @@
 #include "Stage3.h"
 #include "Stage4.h"
 #include "Stage5.h"
+#include "GameObject.h"
+#include "UI.h"
 
 IMPLEMENT_SINGLETON(CSceneManager)
 
@@ -118,7 +120,6 @@ HRESULT CSceneManager::Ready_SceneManager()
 	if (FAILED(Texture_Maneger->Init_Texture_Manager()))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -142,12 +143,20 @@ void CSceneManager::Update_SceneManager()
 	ColliderManager->Collider_Celling(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
 	ColliderManager->Collider_PassAbleAndEnemy(MapObjectManager->Get_TerrainVector(TERRAINTYPE::PASSABLE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
 
+	//보스 라인충돌
+	if (!GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BOSS).empty())
+	{
+		ColliderManager->Collider_LandAndBoss(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BOSS).front());
+		ColliderManager->Collider_WallBoss(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BOSS).front());
+	}
+	
 	//탄환과 공격이펙트 충돌
 	ColliderManager->Collider_Obb(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
 	
 	//탄환과 유닛 충돌
 	ColliderManager->Collider_BulletAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
 	ColliderManager->Collider_BulletAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER));
+	ColliderManager->Collider_BulletAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BOSS));
 
 	//탄환과 벽충돌
 	ColliderManager->Collider_Bullet(MapObjectManager->Get_TerrainVector(TERRAINTYPE::LAND), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BULLET));
@@ -162,6 +171,7 @@ void CSceneManager::Update_SceneManager()
 
 	//공격이펙트와 적 충돌
 	ColliderManager->ColliderAttckAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER));
+	ColliderManager->ColliderAttckAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYERATTACK), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BOSS));
 
 	//투사체와과 유닛충돌
 	ColliderManager->Collider_ProjectileAndUnit(GameObjectManager->Get_GameObjectlist(GAMEOBJECT::BUTCHERKNIFE), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER));
@@ -190,6 +200,7 @@ void CSceneManager::Update_SceneManager()
 void CSceneManager::Render_SceneManager()
 {
 	m_pScene->Render_Scene();
+
 }
 
 void CSceneManager::LateUpdate_ScnenManager()

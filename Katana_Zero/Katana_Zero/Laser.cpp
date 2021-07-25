@@ -5,6 +5,7 @@
 #include "Texture_Manager.h"
 #include "Gangster.h"
 #include "ScrollManager.h"
+#include "Boss.h"
 
 CLaser::CLaser()
 {
@@ -44,7 +45,6 @@ HRESULT CLaser::Ready_GameObject()
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
 	m_fSpeed = 0.f;
 	m_fUnitSpeed = 0.f;
-
 	m_iUnitDir = m_pShooter->Get_UnitDir();
 
 	return S_OK;
@@ -55,7 +55,7 @@ void CLaser::Update_GameObject()
 	m_fRatio = m_fWidthRatio;
 	m_pUnitInfo->D3VecPos.x += cosf(D3DXToRadian(m_fTargetAngle))*m_fUnitSpeed;
 	m_pUnitInfo->D3VecPos.y -= sinf(D3DXToRadian(m_fTargetAngle))*m_fUnitSpeed;
-	Update_HitBoxOBB();
+	Update_HitBoxLaser();
 	//방향만 이동.
 }
 
@@ -82,16 +82,21 @@ void CLaser::Render_GameObject()
 
 	float fCenterX = pTexInfo->tImageInfo.Width >> 1;
 	float fCenterY = pTexInfo->tImageInfo.Height >> 1;
-	D3DXMatrixScaling(&matScale, m_fWidthRatio, m_fHeightRatio, 0.f);
+	D3DXMatrixScaling(&matScale, m_iUnitDir*m_fWidthRatio, m_fHeightRatio, 0.f);
 	D3DXMatrixRotationZ(&matRolateZ, D3DXToRadian(m_fRotateAngle));
-	D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY(), 0.f);
-	matWorld = matScale * matRolateZ *matTrans;
+	D3DXMatrixTranslation(&matTrans, m_iUnitDir * 30, 0, 0.f);
+	D3DXMatrixTranslation(&matParent, m_pShooter->Get_UnitInfo()->D3VecPos.x, m_pShooter->Get_UnitInfo()->D3VecPos.y, 0.f);
+	matWorld = matScale*matTrans*matRolateZ*matParent;
+	if (dynamic_cast<CBoss*>(m_pShooter)->Get_BossState() == BOSSSTATE::TAKEOUT)
+	{
+		D3DXMatrixTranslation(&matTrans, m_pUnitInfo->D3VecPos.x, m_pUnitInfo->D3VecPos.y, 0.f);
+		matWorld = matScale*matTrans;
+	}
 
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
-	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	Render_HitBoxObb();
-	Render_ObbLineD3D();
+	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(0.f,fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+//	Render_HitBoxObb();
+//	Render_ObbLineD3D();
 }
 
 void CLaser::Release_GameObject()

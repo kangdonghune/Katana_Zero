@@ -19,6 +19,7 @@ public:
 	void		Set_ObjState(int State) { m_iObjState = State; }
 	void		Set_Target(CGameObject* pTarget) { m_pTarget = pTarget; }
 	void		Set_TargetAngle(float Angle) { m_fTargetAngle += Angle; }
+	void		Set_TargetAngle2(float Angle) { m_fTargetAngle = Angle; }
 	void		Set_ItemPosY(float fPoint) { m_pItemInfo->D3VecPos.y = fPoint; }
 	void		Set_RotateAngle(float fAngle) { m_fRotateAngle = fAngle; }
 	void		Set_HitSpeed(float fSpeed) { m_fHitSpeed = fSpeed; }
@@ -34,6 +35,7 @@ public:
 
 	void Update_HitBox();
 	void Update_HitBoxOBB();
+	void Update_HitBoxLaser();
 	void Update_ProjectileHitBoxOBB();
 	void FrameMove(float fSpeed);
 	void FrameMoveIndependence(float fSpeed);
@@ -122,5 +124,6 @@ protected:
 	GANGSTERSTATE::State	m_GangState;
 	float					m_fWidthRatio;
 	float					m_fHeightRatio;
+	CGameObject*	m_pShooter;
 };
 

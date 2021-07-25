@@ -129,6 +129,12 @@
     <Filter Include="소스 파일\01.GameObject\02.Effect\02.Explosion">
       <UniqueIdentifier>{e4c89579-84ad-4435-857b-38195c405f12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.GameObject\05.UI">
+      <UniqueIdentifier>{580a8867-3ff4-4ec9-a1ab-1082ee0d64e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\097.sound">
+      <UniqueIdentifier>{8c225509-b1bf-4efa-812e-6dfb2c7b5c82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -251,6 +257,12 @@
     <ClInclude Include="Explosion.h">
       <Filter>소스 파일\01.GameObject\02.Effect\02.Explosion</Filter>
     </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>소스 파일\01.GameObject\05.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>소스 파일\097.sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -366,6 +378,12 @@
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
       <Filter>소스 파일\01.GameObject\02.Effect\02.Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>소스 파일\01.GameObject\05.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>소스 파일\097.sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

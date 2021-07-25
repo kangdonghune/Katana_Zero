@@ -27,7 +27,6 @@ public:
 
 private:
 	float			m_fProjectileAngle;
-	CGameObject*	m_pShooter;
 	float			x;
 };
 
