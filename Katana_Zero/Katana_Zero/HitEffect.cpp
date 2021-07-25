@@ -25,6 +25,18 @@ CGameObject * CHitEffect::Create(CGameObject * pTarget)
 		Safe_Delete(pEffect);
 		return pEffect;
 	}
+	if(pTarget->Get_ItemInfo() == nullptr)
+		CSoundMgr::Get_Instance()->PlaySound(L"death_sword.wav", CSoundMgr::EFFECT);
+	else
+	{
+		if (pTarget->Get_ItemInfo()->type == ITEMTYPE::BUTCHERKNIFE)
+		{
+			CSoundMgr::Get_Instance()->PlaySound(L"death_knife.wav", CSoundMgr::EFFECT);
+		}
+	}
+	
+
+
 	return pEffect;
 }
 
@@ -39,7 +51,7 @@ HRESULT CHitEffect::Ready_GameObject()
 	m_tFrame.fFrameStart = 0.f;
 	m_tFrame.fFrameEnd = Texture_Maneger->Get_TexInfo_Frame(m_pUnitInfo->wstrKey, m_pUnitInfo->wstrState);
 	m_fSpeed = 20.f;
-	m_fRatio = 40.f;
+	m_fRatio = 30.f;
 	m_fRotateAngle = 0.f;
 	m_fTargetAngle = m_pTarget->Get_TargetAngle();
 	m_iUnitDir = m_pTarget->Get_UnitDir();
@@ -96,7 +108,7 @@ void CHitEffect::Render_GameObject()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 	//Render_HitBoxObb();
-	Render_ObbLineD3D();
+	//Render_ObbLineD3D();
 }
 
 void CHitEffect::Release_GameObject()

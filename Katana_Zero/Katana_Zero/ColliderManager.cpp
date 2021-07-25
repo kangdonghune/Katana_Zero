@@ -42,8 +42,8 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 				LONG lDistance = tLine.Start.y - pUnit->Get_Hitbox().bottom;
 				if (lDistance <= 0 && lDistance >= -1 * iHeight)
 				{
-				
 					pUnit->Set_PivotY(tLine.Start.y);
+					pUnit->Set_OldLine(pUnit->Get_CurLine());
 					pUnit->Set_CurLine(tLine);
 					*ppLand = &tLine;
 				}
@@ -58,6 +58,7 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 					if (State != PLAYERSTATE::JUMP && State != PLAYERSTATE::ATTACK)
 					{
 						pUnit->Set_PivotY(fLineHeight);
+						pUnit->Set_OldLine(pUnit->Get_CurLine());
 						pUnit->Set_CurLine(tLine);
 						*ppLand = &tLine;
 						continue;
@@ -67,6 +68,7 @@ void CColliderManager::Collider_Land(vector<MYLINE> pLandvec, CGameObject * pUni
 						if (Pivot.y >= fLineHeight)
 						{
 							pUnit->Set_PivotY(fLineHeight);
+							pUnit->Set_OldLine(pUnit->Get_CurLine());
 							pUnit->Set_CurLine(tLine);
 							*ppLand = &tLine;
 							continue;
@@ -234,6 +236,7 @@ void CColliderManager::Collider_PassAble(vector<MYLINE> pLandvec, CGameObject * 
 			if (lDistance <= 10 && lDistance >= -10)
 			{
 				pUnit->Set_PivotY(tLine.Start.y);
+				pUnit->Set_OldLine(pUnit->Get_CurLine());
 				pUnit->Set_CurLine(tLine);
 				*ppLand = &tLine;
 			}
@@ -394,6 +397,7 @@ void CColliderManager::Collider_WallBoss(vector<MYLINE> pWallvec, CGameObject * 
 				*ppWall = &tLine;
 				dir = C_WALLL;
 				dynamic_cast<CBoss*>(pUnit)->Set_BossState(BOSSSTATE::WALLJUMP);
+				CSoundMgr::Get_Instance()->PlaySound(L"sound_boss_huntress_wallslam_01.wav", CSoundMgr::EFFECT);
 				continue;
 			}
 			if (lDistanceR >= 0 && lDistanceR <= iWidth) //오른쪽 벽
@@ -402,6 +406,8 @@ void CColliderManager::Collider_WallBoss(vector<MYLINE> pWallvec, CGameObject * 
 				*ppWall = &tLine;
 				dir = C_WALLR;
 				dynamic_cast<CBoss*>(pUnit)->Set_BossState(BOSSSTATE::WALLJUMP);
+				CSoundMgr::Get_Instance()->PlaySound(L"sound_boss_huntress_wallslam_01.wav", CSoundMgr::EFFECT);
+
 				continue;
 			}
 		}
@@ -656,8 +662,10 @@ void CColliderManager::Collider_Obb(CGameObject* pObject1, CGameObject* pObject2
 		if (fabs(D3DXVec3Dot(&Dir, &Dist)) > sum)
 			return;
 	}
+
 	pObject2->Set_ObjState(COLLIDE);//충돌 상태로 변환
 	GameObjectManager->Insert_GameObjectManager(CEffect::Create(pObject2,L"Bulletreflect"), GAMEOBJECT::EFFECT);
+	CSoundMgr::Get_Instance()->PlaySound(L"slash_bullet.wav", CSoundMgr::EFFECT);
 	pObject2->Set_TargetAngle(180.f);//날아가던 방향을 반대로
 }
 
@@ -740,6 +748,7 @@ void CColliderManager::Collider_Bullet(MYLINE tLine, CGameObject * pProjectile)
 				if (0 >= Center* Dot)
 				{
 					pProjectile->Set_ObjState(DEAD);
+					CSoundMgr::Get_Instance()->PlaySound(L"death_bullet.wav", CSoundMgr::EFFECT);
 					return;
 				}
 			}
@@ -757,6 +766,7 @@ void CColliderManager::Collider_Bullet(MYLINE tLine, CGameObject * pProjectile)
 				if (0 >= Center* Dot)
 				{
 					pProjectile->Set_ObjState(DEAD);
+					CSoundMgr::Get_Instance()->PlaySound(L"death_bullet.wav", CSoundMgr::EFFECT);
 					return;
 				}
 			}
@@ -773,6 +783,7 @@ void CColliderManager::Collider_Bullet(MYLINE tLine, CGameObject * pProjectile)
 				if (0 >= Center* Dot)
 				{
 					pProjectile->Set_ObjState(DEAD);
+					CSoundMgr::Get_Instance()->PlaySound(L"death_bullet.wav", CSoundMgr::EFFECT);
 					return;
 				}
 			}
@@ -789,6 +800,7 @@ void CColliderManager::Collider_Bullet(MYLINE tLine, CGameObject * pProjectile)
 				if (0 >= Center* Dot)
 				{
 					pProjectile->Set_ObjState(DEAD);
+					CSoundMgr::Get_Instance()->PlaySound(L"death_bullet.wav", CSoundMgr::EFFECT);
 					return;
 				}
 			}
@@ -1091,6 +1103,7 @@ void CColliderManager::Collider_ProjectileAndUnit(CGameObject * pObject1, CGameO
 		{
 			dynamic_cast<CPlayer*>(pObject2)->Set_Item(pObject1);
 			pObject1->Set_ObjState(DEAD);
+			CSoundMgr::Get_Instance()->PlaySound(L"pickup.wav", CSoundMgr::EFFECT);
 		}
 		break;
 	case UNITTYPE::GANGSTER:
@@ -1101,7 +1114,8 @@ void CColliderManager::Collider_ProjectileAndUnit(CGameObject * pObject1, CGameO
 		pObject2->Set_HitDir(pObject1->Get_UnitDir());
 		pObject2->Set_HitSpeed(pObject1->Get_UnitSpeed()/4*pObject1->Get_UnitDir());
 		pObject2->Set_UnitDir(-pObject1->Get_UnitDir());
-		GameObjectManager->Insert_GameObjectManager(CHitEffect::Create(pObject2), GAMEOBJECT::EFFECT);
+		if (pObject1->Get_ItemInfo()->type != ITEMTYPE::EXPLOSIVEVIAL)
+			GameObjectManager->Insert_GameObjectManager(CHitEffect::Create(pObject2), GAMEOBJECT::EFFECT);
 		break;
 	default:
 		break;
@@ -1158,20 +1172,14 @@ void CColliderManager::ColliderAttckAndUnit(CGameObject * pObject1, CGameObject 
 	case UNITTYPE::GANGSTER:
 		pObject2->Set_State(GANGSTERSTATE::HURTFLY);
 		pObject2->Set_ObjState(DOWN);
-		pObject2->Set_HitAngle(pObject1->Get_TargetAngle());
-		pObject2->Set_HitDir(pObject1->Get_UnitDir());
-		pObject2->Set_HitSpeed(pObject1->Get_UnitSpeed() / 4 * pObject1->Get_UnitDir());
-		pObject2->Set_UnitDir(-pObject1->Get_UnitDir());
 		GameObjectManager->Insert_GameObjectManager(CHitEffect::Create(pObject2), GAMEOBJECT::EFFECT);
 		break;
 	case UNITTYPE::BOSS:
+		CSoundMgr::Get_Instance()->PlaySoundOnce(L"sound_voiceboss_huntress_hurt_3.wav", CSoundMgr::MONSTER);
 		dynamic_cast<CBoss*>(pObject2)->Set_BossState(BOSSSTATE::HURT);
 		pObject2->Set_ObjState(DOWN);
-		pObject2->Set_HitAngle(pObject1->Get_TargetAngle());
-		pObject2->Set_HitDir(pObject1->Get_UnitDir());
-		pObject2->Set_HitSpeed(pObject1->Get_UnitSpeed() / 4 * pObject1->Get_UnitDir());
-		pObject2->Set_UnitDir(-pObject1->Get_UnitDir());
 		GameObjectManager->Insert_GameObjectManager(CHitEffect::Create(pObject2), GAMEOBJECT::EFFECT);
+		
 		break;
 	default:
 		break;

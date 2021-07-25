@@ -30,6 +30,7 @@ private:
 	ID		m_eNextScene;
 	CScene* m_pOldScene;
 	//CGameObject* m_pUI;
+	bool	m_bstopFind;
 
 };
 

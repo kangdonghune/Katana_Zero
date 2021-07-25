@@ -72,5 +72,6 @@ void CMain::Release_Main()
 	TimeManager->Destroy_Instance();
 	ColliderManager->Destroy_Instance();
 	Device->Destroy_Instance();
+	CSoundMgr::Get_Instance()->Release();
 	
 }

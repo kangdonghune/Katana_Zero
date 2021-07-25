@@ -22,6 +22,7 @@ CPlayer::CPlayer()
 	, m_fFallAngle(0.f)
 	, m_szPivot(L"")
 	, m_pItem(nullptr)
+	, bSlowisStart(false)
 {
 }
 
@@ -83,6 +84,7 @@ void CPlayer::Idle()
 	if (GetAsyncKeyState('W') & 0x8000)
 	{
 		m_State = PLAYERSTATE::JUMP;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_jump.wav", CSoundMgr::EFFECT);
 		return;
 	}
 
@@ -132,6 +134,7 @@ void CPlayer::Idle_to_run()
 	if (GetAsyncKeyState('W') & 0X8000)
 	{
 		m_State = PLAYERSTATE::JUMP;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_jump.wav", CSoundMgr::EFFECT);
 		return;
 	}
 
@@ -172,6 +175,7 @@ void CPlayer::Run()
 	if (GetAsyncKeyState('W') & 0X8000)
 	{
 		m_State = PLAYERSTATE::JUMP;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_jump.wav", CSoundMgr::EFFECT);
 		return;
 	}
 
@@ -223,6 +227,7 @@ void CPlayer::Run_to_idle()
 	if (GetAsyncKeyState('W') & 0X8000)
 	{
 		m_State = PLAYERSTATE::JUMP;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_jump.wav", CSoundMgr::EFFECT);
 		return;
 	}
 	if (GetAsyncKeyState('S') & 0X8001)
@@ -312,6 +317,7 @@ void CPlayer::Precrouch()
 	if (GetAsyncKeyState('W') & 0X8000)
 	{
 		m_State = PLAYERSTATE::JUMP;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_jump.wav", CSoundMgr::EFFECT);
 		return;
 	}
 
@@ -352,6 +358,7 @@ void CPlayer::Crouch()
 	if (GetAsyncKeyState('W') & 0X8000)
 	{
 		m_State = PLAYERSTATE::JUMP;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_jump.wav", CSoundMgr::EFFECT);
 		return;
 	}
 
@@ -398,6 +405,7 @@ void CPlayer::Postcrouch()
 	if (GetAsyncKeyState('W') & 0X8000 )
 	{
 		m_State = PLAYERSTATE::JUMP;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_jump.wav", CSoundMgr::EFFECT);
 		return;
 	}
 
@@ -459,6 +467,7 @@ void CPlayer::Fall()
 		if (m_pUnitInfo->iCollide & C_WALLR && GetAsyncKeyState('D') & 0X8000)
 		{
 			m_State = PLAYERSTATE::WALLSLIDE;
+	
 			return;
 		}
 
@@ -487,6 +496,8 @@ void CPlayer::Fall()
 		m_State = PLAYERSTATE::IDLE;
 		m_fJumpAngle = 0.f;
 		m_fFallAngle = 0.f;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_land.wav", CSoundMgr::EFFECT);
+		return;
 
 	}
 		
@@ -876,6 +887,7 @@ void CPlayer::Throw_Item()
 		}
 		m_fRotateAngle = oldRotate;
 		m_iUnitDir = OldDir;
+		CSoundMgr::Get_Instance()->PlaySound(L"player_throw.wav", CSoundMgr::EFFECT);
 	}
 
 }
@@ -962,16 +974,30 @@ void CPlayer::Render_GameObject()
 	if (GetAsyncKeyState(VK_CONTROL) & 0x8001)
 	{
 		FrameManager->Set_FrameSpeed(20.f);
+		if (!bSlowisStart)
+		{
+			CSoundMgr::Get_Instance()->PlaySound(L"Slowmo_Enter.wav", CSoundMgr::EFFECT);
+			bSlowisStart = true;
+		}
 	}
 	else
+	{
 		FrameManager->Set_FrameSpeed(60.f);
+		if(bSlowisStart)
+		{
+			CSoundMgr::Get_Instance()->PlaySound(L"Slowmo_Exit.wav", CSoundMgr::EFFECT);
+			bSlowisStart = false;
+		}
+	}
+
+
 
 	FrameManager->Render_Frame_Manager_FrameNum((size_t)m_tFrame.fFrameStart);
 	FrameManager->Render_Frame_Manager_FrameName(m_pUnitInfo->wstrState);
 	/*Render_HitBox();
 	Render_Pivot();
-	Render_MousePos();
 	Render_ObbLine();*/
+	Render_MousePos();
 }
 
 void CPlayer::Release_GameObject()
@@ -1017,6 +1043,7 @@ void CPlayer::Wallslide()
 		m_State = PLAYERSTATE::FLIP;
 		m_fJumpAngle = 0.f;
 		m_fFallAngle += 0.f;
+		CSoundMgr::Get_Instance()->PlaySound(L"wallkick_2.wav", CSoundMgr::EFFECT);
 		return;
 	}
 

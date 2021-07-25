@@ -38,9 +38,9 @@ void CSoundMgr::Release()
 
 void CSoundMgr::PlaySound(TCHAR * pSoundKey, CHANNELID eID)
 {
-	map<TCHAR*, FMOD_SOUND*>::iterator iter; 
+	map<TCHAR*, FMOD_SOUND*>::iterator iter;
 
-	iter = find_if(m_mapSound.begin(), m_mapSound.end(), [&](auto& iter) 
+	iter = find_if(m_mapSound.begin(), m_mapSound.end(), [&](auto& iter)
 	{
 		return !lstrcmp(pSoundKey, iter.first);
 	});
@@ -48,7 +48,26 @@ void CSoundMgr::PlaySound(TCHAR * pSoundKey, CHANNELID eID)
 	if (iter == m_mapSound.end())
 		return;
 
-	FMOD_BOOL bPlay = FALSE; 
+	FMOD_BOOL bPlay = FALSE;
+
+	FMOD_System_PlaySound(m_pSystem, FMOD_CHANNEL_FREE, iter->second, FALSE, &m_pChannelArr[eID]);
+
+	FMOD_System_Update(m_pSystem);
+}
+
+void CSoundMgr::PlaySoundOnce(TCHAR * pSoundKey, CHANNELID eID)
+{
+	map<TCHAR*, FMOD_SOUND*>::iterator iter;
+
+	iter = find_if(m_mapSound.begin(), m_mapSound.end(), [&](auto& iter)
+	{
+		return !lstrcmp(pSoundKey, iter.first);
+	});
+
+	if (iter == m_mapSound.end())
+		return;
+
+	FMOD_BOOL bPlay = FALSE;
 	if (FMOD_Channel_IsPlaying(m_pChannelArr[eID], &bPlay))
 	{
 		FMOD_System_PlaySound(m_pSystem, FMOD_CHANNEL_FREE, iter->second, FALSE, &m_pChannelArr[eID]);

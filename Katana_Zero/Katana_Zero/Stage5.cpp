@@ -38,6 +38,8 @@ HRESULT CStage5::Ready_Scene()
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 5);
 	m_fMapWidth = float(pTexInfo->tImageInfo.Width);
 	m_fMapHeight = float(pTexInfo->tImageInfo.Height);
+	CSoundMgr::Get_Instance()->StopAll();
+	CSoundMgr::Get_Instance()->PlayBGM(L"song_bossbattle.ogg");
 	return S_OK;
 }
 

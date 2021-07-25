@@ -34,6 +34,8 @@ HRESULT CStage2::Ready_Scene()
 	//유닛 정보 불러오기.
 	if (FAILED(SaveLoadManager->LoadUnit(L"../Data/Stage2/Unit/Unit.dat")))
 		return E_FAIL;
+	if (FAILED(SaveLoadManager->LoadItem(L"../Data/Stage2/Projectile/Projectile.dat")))
+		return E_FAIL;
 
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 1);
 	m_fMapWidth = float(pTexInfo->tImageInfo.Width);
@@ -68,9 +70,9 @@ void CStage2::Render_Scene()
 		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, &rc, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
 	}
-	MapObjectManager->Render_MapObjectManager();
+ //	MapObjectManager->Render_MapObjectManager();
 	GameObjectManager->Render_GameObjectManager();
-	FrameManager->Render_Frame_Manager();
+	//FrameManager->Render_Frame_Manager();
 	Device->Render_End();
 }
 

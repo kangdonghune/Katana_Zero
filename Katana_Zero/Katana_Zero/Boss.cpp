@@ -24,7 +24,7 @@ CBoss::CBoss()
 	, m_fLaserAngle(0.f)
 	, m_bGo(false)
 	, m_bDown(false)
-	, m_iLife(1)
+	, m_iLife(3	)
 {
 }
 
@@ -353,7 +353,10 @@ void CBoss::Shoot_Laser()
 		if (fRatio <= 20 && !bEnd)
 			fRatio += 2.f;
 		if (fRatio > 20)
+		{
 			bEnd = true;
+		}
+	
 		if (bEnd)
 			fRatio -= 2.f;
 		m_pLaser->Set_WidthRatio(31.f);
@@ -380,6 +383,7 @@ void CBoss::Shoot_Granade()
 		m_pGranade = CGranade::Create(this);
 		GameObjectManager->Insert_GameObjectManager(m_pGranade, GAMEOBJECT::GRANADE);
 	}
+	CSoundMgr::Get_Instance()->PlaySoundOnce(L"sound_boss_huntressbomb_shot_01.wav", CSoundMgr::EFFECT);
 	static float BoobCool = 1.f;
 	static float BoobCount = 0.f;
 	static float BoobMoveCount = 0.f;
@@ -657,6 +661,7 @@ void CBoss::Prejump()
 	}
 	if (Check_FrameEnd())
 	{
+		CSoundMgr::Get_Instance()->PlaySound(L"sound_boss_huntress_jump_01.wav", CSoundMgr::EFFECT);
 		m_BossState = BOSSSTATE::Jump;
 		iJumpCount += 1;
 	}
@@ -706,7 +711,10 @@ void CBoss::Sweep()
 		if (!bLaser)
 			m_fLaserAngle += 3.f;
 		if (fRatio <= 20 && !bEnd)
+		{
 			fRatio += 2.f;
+		}
+		
 		if (fRatio > 20)
 			bEnd = true;
 		m_pLaser->Set_WidthRatio(31.f);
@@ -728,6 +736,7 @@ void CBoss::Sweep()
 				ShotLine[0] = {};
 				ShotLine[1] = {};
 				m_BossState = BOSSSTATE::TELEPORT_OUT;
+
 				return;
 			}
 
@@ -771,6 +780,7 @@ void CBoss::Sweep()
 				ShotLine[0] = {};
 				ShotLine[1] = {};
 				m_BossState = BOSSSTATE::TELEPORT_IN_SWEEPL;
+				CSoundMgr::Get_Instance()->PlaySound(L"sound_boss_huntresslaser_swipe_01.wav", CSoundMgr::EFFECT);
 				return;
 			}
 
@@ -788,6 +798,7 @@ void CBoss::Takeout()
 
 	if (Check_FrameEnd())
 	{
+		CSoundMgr::Get_Instance()->PlaySoundOnce(L"sound_boss_huntresslaser_lockon_01.wav", CSoundMgr::EFFECT);
 		m_fSpeed = 0.f;
 		Shoot_Laser();
 		return;
@@ -815,6 +826,7 @@ void CBoss::Teleport_in()
 		}
 		static float fRatio = 0;
 		static bool	 bEnd = false;
+		CSoundMgr::Get_Instance()->PlaySound(L"sound_boss_huntresslaser_lockon_01.wav", CSoundMgr::EFFECT);
 
 		m_iUnitDir = 1;
 		if (fRatio <= 20 && !bEnd)
@@ -893,6 +905,7 @@ void CBoss::Teleport_out_sweep()
 	{
 		m_BossState = BOSSSTATE::TELEPORT_IN_SWEEPR;
 		Dir = 1;
+		CSoundMgr::Get_Instance()->PlaySound(L"sound_boss_huntresslaser_swipe_01.wav", CSoundMgr::EFFECT);
 		return;
 	}
 		

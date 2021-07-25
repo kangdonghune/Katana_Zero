@@ -39,7 +39,6 @@ CGameObject::CGameObject()
 	, m_NowLine({})
 {
 	m_tCurLand.type = TERRAINTYPE::END;
-	m_tOldLand.ID = -1;
 	m_NextLine.type = TERRAINTYPE::END;
 	m_NowLine.type = TERRAINTYPE::END;
 }
@@ -347,10 +346,9 @@ void CGameObject::Update_CurLand()
 
 }
 
-bool CGameObject::Find_Root(const MYLINE StartLine, const MYLINE TargetLine, const MYLINE OldTargetLine)
+bool CGameObject::Find_Root(const MYLINE StartLine, const MYLINE TargetLine)
 {
-	if (TargetLine.ID == OldTargetLine.ID) //타겟의 현재 닿고 있는 라인이 바뀌지 않았다면 참을 반환하라.
-		return true;
+
 	m_lstRoot.clear();
 	m_vecID.clear();
 	if (TargetLine.ID == StartLine.ID)

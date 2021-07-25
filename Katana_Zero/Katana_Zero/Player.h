@@ -75,5 +75,6 @@ private:
 	TCHAR		m_szPivot[255];
 	TCHAR		m_szMousePos[255];
 	ITEMINFO*	m_pItem;
+	bool		bSlowisStart;
 };
 

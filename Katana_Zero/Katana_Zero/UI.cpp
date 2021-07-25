@@ -69,7 +69,19 @@ void CUI::Update_GameObject()
 			break;
 		}
 	}
-	
+	if (GetAsyncKeyState(VK_CONTROL) & 0x8001)
+	{
+		if (m_fSlowTimer > 0.f)
+			m_fSlowTimer -= TimeManager->Get_DeltaTime() *(FrameManager->Get_FPS() / 60);
+	}
+
+	else
+	{
+		if (m_fSlowTimer < 9.0f)
+			m_fSlowTimer += TimeManager->Get_DeltaTime() *(FrameManager->Get_FPS() / 60);
+	}
+	if (m_fSlowTimer < 0.0f)
+		m_fSlowTimer = 0.f;
 }
 
 void CUI::LateUpdate_GameObject()
@@ -113,7 +125,7 @@ void CUI::Render_GameObject()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo1->pTexture, nullptr, &D3DXVECTOR3(fCenterX1, fCenterY1, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 	D3DXMATRIX matScale2, matTrans2, matWorld2;
-	const TEXINFO* pTexInfo2 = Texture_Maneger->Get_TexInfo_Manager(L"UI", L"Battery", 9);
+	const TEXINFO* pTexInfo2 = Texture_Maneger->Get_TexInfo_Manager(L"UI", L"Battery", (size_t)m_fSlowTimer);
 	if (nullptr == pTexInfo2)
 	{
 		ERR_MSG(L"UI에서 텍스쳐 찾기 실패");

@@ -29,6 +29,7 @@ public:
 	void Release(); 
 public:
 	void PlaySound(TCHAR* pSoundKey, CHANNELID eID);
+	void PlaySoundOnce(TCHAR* pSoundKey, CHANNELID eID);
 	void PlayBGM(TCHAR* pSoundKey);
 	void StopSound(CHANNELID eID);
 	void StopAll();

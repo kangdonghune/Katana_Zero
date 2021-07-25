@@ -25,6 +25,7 @@ CGameObject * CExplosion::Create(CGameObject * pTarget)
 		Safe_Delete(pEffect);
 		return pEffect;
 	}
+	CSoundMgr::Get_Instance()->PlaySound(L"sound_boss_huntress_explosion_01.wav", CSoundMgr::EFFECT);
 	return pEffect;
 }
 
@@ -111,8 +112,8 @@ void CExplosion::Render_GameObject()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	Render_HitBoxObb();
-	Render_ObbLineD3D();
+	//Render_HitBoxObb();
+	//Render_ObbLineD3D();
 }
 
 void CExplosion::Release_GameObject()

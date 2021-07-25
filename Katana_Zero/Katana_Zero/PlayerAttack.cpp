@@ -23,6 +23,7 @@ CGameObject * CPlayerAttack::Create(CGameObject* pTarget)
 		Safe_Delete(pPlayerAttack);
 		return pPlayerAttack;
 	}
+	CSoundMgr::Get_Instance()->PlaySound(L"slash_3.wav", CSoundMgr::PLAYER);
 	return pPlayerAttack;;
 }
 
@@ -95,8 +96,8 @@ void CPlayerAttack::Render_GameObject()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	Render_HitBoxObb();
-	Render_ObbLineD3D();
+	//Render_HitBoxObb();
+	//Render_ObbLineD3D();
 }
 
 void CPlayerAttack::Release_GameObject()

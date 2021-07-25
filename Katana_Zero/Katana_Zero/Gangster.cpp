@@ -99,24 +99,19 @@ void CGangster::Enterstair()
 
 void CGangster::Fall()
 {
+	m_vecPivot.y += 5.f;
 }
 
 void CGangster::Hurtfly()
 {
-	if (m_fHitSpeed <= 0)
-		m_fHitSpeed /= 3.f;
-	m_vecPivot.x += cosf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed*2;
-	m_vecPivot.y -= sinf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed * 2;
+
 	if(Check_FrameEnd())
 		m_GangState = GANGSTERSTATE::HURTGROUND;
 }
 
 void CGangster::Hurtground()
 {
-	if (m_fHitSpeed <= 0)
-		m_fHitSpeed /= 3.f;
-	m_vecPivot.x += cosf(D3DXToRadian(m_fHitAngle))*m_fHitSpeed * 2;
-	m_vecPivot.y +=3.f;
+
 	if (Check_FrameEnd())
 		m_fSpeed = 0;
 }
@@ -291,6 +286,7 @@ void CGangster::Update_UnitState()
 	case GANGSTERSTATE::FALL:
 		m_pUnitInfo->wstrState = L"Fall";
 		Update_Frame();
+		Fall();
 		break;
 	case GANGSTERSTATE::HURTFLY:
 		m_pUnitInfo->wstrState = L"Hurtfly";
@@ -385,10 +381,7 @@ void CGangster::Update_GameObject()
 	Update_HitBox();
 	Update_UnitState();
 	FrameMove(m_fSpeed); //현재 프레임 증가 또는 초기화
-	if (Find_Root(m_tCurLand, m_pTarget->Get_CurLine(), m_pTarget->Get_OldLine()))//탐색이 됐다면.
-	{
-		m_pTarget->Set_OldLine(m_pTarget->Get_CurLine());
-	}
+	
 	if (m_GangState == GANGSTERSTATE::AIM)
 		Update_TargetRotate();
 
@@ -470,9 +463,9 @@ void CGangster::Render_GameObject()
 		}
 	}
 
-	Render_Raytraise();
-	Render_HitBox();
-	Render_ObbLine();
+	//Render_Raytraise();
+	//Render_HitBox();
+	//Render_ObbLine();
 }
 
 void CGangster::Release_GameObject()

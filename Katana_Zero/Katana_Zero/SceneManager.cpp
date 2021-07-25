@@ -18,6 +18,7 @@
 IMPLEMENT_SINGLETON(CSceneManager)
 
 CSceneManager::CSceneManager()
+	:m_bstopFind(false)
 {
 }
 
@@ -195,6 +196,22 @@ void CSceneManager::Update_SceneManager()
 	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::WALL), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::EXPLOSIVE));
 	ColliderManager->Collider_Projectile(MapObjectManager->Get_TerrainVector(TERRAINTYPE::CELLING), GameObjectManager->Get_GameObjectlist(GAMEOBJECT::EXPLOSIVE));
 
+
+	if (GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front()->Get_CurLine().ID == GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front()->Get_OldLine().ID)
+		m_bstopFind = false;
+	if (GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front()->Get_CurLine().ID != GameObjectManager->Get_GameObjectlist(GAMEOBJECT::PLAYER).front()->Get_OldLine().ID)
+		m_bstopFind = true;
+	for (auto& pGang : GameObjectManager->Get_GameObjectlist(GAMEOBJECT::GANGSTER))
+	{
+		if(m_bstopFind)//Å½»öÀÌ µÆ´Ù¸é.
+		{
+			if (pGang->Get_TargetDist() > 800.f)
+				continue;
+			if(pGang->Get_ObjState() != DOWN)
+				pGang->Find_Root(pGang->Get_CurLine(), pGang->Get_Target()->Get_CurLine());
+		}
+	}
+	
 }
 
 void CSceneManager::Render_SceneManager()
