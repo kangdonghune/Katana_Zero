@@ -8,7 +8,7 @@
 #include "SaveLoadManager.h"
 #include "Explosion.h"
 #include "SceneManager.h"
-
+#include "UI.h"
 
 CStage4::CStage4()
 	:MapNum(3)
@@ -42,6 +42,7 @@ HRESULT CStage4::Ready_Scene()
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 3);
 	m_fMapWidth = float(pTexInfo->tImageInfo.Width);
 	m_fMapHeight = float(pTexInfo->tImageInfo.Height);
+	GameObjectManager->Insert_GameObjectManager(CUI::Create(), GAMEOBJECT::UI);
 	return S_OK;
 }
 

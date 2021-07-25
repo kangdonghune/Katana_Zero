@@ -6,6 +6,7 @@
 #include "MapObjectManager.h"
 #include "FrameManager.h"
 #include "SaveLoadManager.h"
+#include "UI.h"
 
 CStage1::CStage1()
 {
@@ -39,6 +40,8 @@ HRESULT CStage1::Ready_Scene()
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 0);
 	m_fMapWidth = float(pTexInfo->tImageInfo.Width);
 	m_fMapHeight = float(pTexInfo->tImageInfo.Height);
+	GameObjectManager->Insert_GameObjectManager(CUI::Create(), GAMEOBJECT::UI);
+	CSoundMgr::Get_Instance()->StopAll();
 	CSoundMgr::Get_Instance()->PlayBGM(L"song_youwillneverknow.ogg");
 	return S_OK;
 }

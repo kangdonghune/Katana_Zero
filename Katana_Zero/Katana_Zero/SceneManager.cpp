@@ -14,6 +14,7 @@
 #include "Stage5.h"
 #include "GameObject.h"
 #include "UI.h"
+#include "MainScene.h"
 
 IMPLEMENT_SINGLETON(CSceneManager)
 
@@ -40,8 +41,7 @@ void CSceneManager::Change_SceneManager(ID eNextScene)
 		case CSceneManager::SCENE_LODING:
 			break;
 		case CSceneManager::SCENE_MENU:
-			break;
-		case CSceneManager::SCENE_EDIT:
+			m_pScene = CMainScene::Create();
 			break;
 		case CSceneManager::SCENE_STAGE1:
 			m_pScene = CStage1::Create();
@@ -79,8 +79,7 @@ void CSceneManager::Change_SceneManager(int SceneID)
 		case CSceneManager::SCENE_LODING:
 			break;
 		case CSceneManager::SCENE_MENU:
-			break;
-		case CSceneManager::SCENE_EDIT:
+			m_pScene = CMainScene::Create();
 			break;
 		case CSceneManager::SCENE_STAGE1:
 			m_pScene = CStage1::Create();
@@ -121,11 +120,18 @@ HRESULT CSceneManager::Ready_SceneManager()
 	if (FAILED(Texture_Maneger->Init_Texture_Manager()))
 		return E_FAIL;
 
+
+
 	return S_OK;
 }
 
 void CSceneManager::Update_SceneManager()
 {
+	if (m_eCurScene == SCENE_MENU)
+	{
+		m_pScene->Update_Scene();
+		return;
+	}
 
 	TimeManager->Update_TimeManager();
 	GameObjectManager->Update_GameObjectManager();

@@ -184,6 +184,21 @@ HRESULT CTexture_Manager::Init_Texture_Manager()
 	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/UI/Timer/TimerFrame.png", L"UI", L"TimerFrame", 1)))
 		return E_FAIL;
 
+	//MainScene
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Main/TitleBG.png", L"Main", L"TitleBG", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Main/TitleFence.png", L"Main", L"TitleFence", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Main/Katana.png", L"Main", L"Katana", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Main/ZER.png", L"Main", L"ZER", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Main/O.png", L"Main", L"O", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Main/Grass.png", L"Main", L"Grass", 1)))
+		return E_FAIL;
+	if (FAILED(Texture_Maneger->Insert_Texture_Manager(L"../Resource/Texture/Main/Plants/%d.png", L"Main", L"Plants", 12)))
+		return E_FAIL;
 	return S_OK;
 }
 //L"../Texture/Stage/Player/Attack/AKIHA_AKI01_00%d.png",L"Player", L"Attack", 6

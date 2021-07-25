@@ -6,6 +6,7 @@
 #include "MapObjectManager.h"
 #include "FrameManager.h"
 #include "SaveLoadManager.h"
+#include "UI.h"
 
 CStage2::CStage2()
 {
@@ -40,6 +41,7 @@ HRESULT CStage2::Ready_Scene()
 	const TEXINFO* pTexInfo = Texture_Maneger->Get_TexInfo_Manager(L"Map", L"Stage", 1);
 	m_fMapWidth = float(pTexInfo->tImageInfo.Width);
 	m_fMapHeight = float(pTexInfo->tImageInfo.Height);
+	GameObjectManager->Insert_GameObjectManager(CUI::Create(), GAMEOBJECT::UI);
 	return S_OK;
 }
 
