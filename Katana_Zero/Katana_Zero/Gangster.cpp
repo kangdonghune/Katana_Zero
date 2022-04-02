@@ -441,6 +441,8 @@ void CGangster::Render_GameObject()
 		}
 	}
 
+	CEnemy::Render_GameObject();
+
 }
 
 void CGangster::Release_GameObject()

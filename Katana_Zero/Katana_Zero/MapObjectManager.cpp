@@ -79,7 +79,7 @@ void CMapObjectManager::LateUpdate_MapObjectManager()
 
 void CMapObjectManager::Render_MapObjectManager()
 {
-	if (!GetAsyncKeyState(VK_TAB))
+	if (!GetAsyncKeyState(VK_SPACE))
 		return;
 	Device->m_pSprite->End();
 	Device->m_pLine->SetWidth(5.f);

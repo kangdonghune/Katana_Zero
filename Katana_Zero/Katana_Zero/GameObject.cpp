@@ -208,7 +208,7 @@ void CGameObject::Render_HitBox()
 	if (m_pUnitInfo == nullptr)
 		return;
 
-	if (GetAsyncKeyState(VK_TAB) & 0X8001)
+	if (GetAsyncKeyState(VK_SPACE) & 0X8001)
 	{
 	
 		int r = 0;
@@ -292,7 +292,7 @@ void CGameObject::Render_HitBoxObb()
 	if (m_pUnitInfo == nullptr)
 		return;
 
-	if (GetAsyncKeyState(VK_TAB) & 0X8001)
+	if (GetAsyncKeyState(VK_SPACE) & 0X8001)
 	{
 		Device->m_pSprite->End();
 		Device->m_pLine->SetWidth(1.f);
@@ -305,7 +305,7 @@ void CGameObject::Render_HitBoxObb()
 
 void CGameObject::Render_ObbLine()
 {
-	if (GetAsyncKeyState(VK_TAB) & 8001)
+	if (GetAsyncKeyState(VK_SPACE) & 8001)
 	{
 		Device->m_pSprite->End();
 		Device->m_pLine->SetWidth(1.f);
@@ -322,7 +322,7 @@ void CGameObject::Render_ObbLineD3D()
 	if (m_pUnitInfo == nullptr)
 		return;
 
-	if (GetAsyncKeyState(VK_TAB) & 0X8001)
+	if (GetAsyncKeyState(VK_SPACE) & 0X8001)
 	{
 		Device->m_pSprite->End();
 		Device->m_pLine->SetWidth(1.f);

@@ -53,7 +53,7 @@ void CFrameManager::Render_Frame_Manager()
 	D3DXMatrixTranslation(&matTrans, 100.f, 100.f, 0.f);
 
 	Device->Get_Sprite()->SetTransform(&matTrans);
-	if (GetAsyncKeyState(VK_TAB) & 0X8001)
+	if (GetAsyncKeyState(VK_SPACE) & 0X8001)
 		Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szFPS, lstrlen(m_szFPS), nullptr, 0, D3DCOLOR_ARGB(255, 255,255, 255));
 }
 
@@ -65,7 +65,7 @@ void CFrameManager::Render_Frame_Manager_FrameNum(size_t fFrameStart)
 	D3DXMatrixTranslation(&matTrans, 100.f, 130.f, 0.f);
 
 	Device->Get_Sprite()->SetTransform(&matTrans);
-	if (GetAsyncKeyState(VK_TAB) & 0X8001)
+	if (GetAsyncKeyState(VK_SPACE) & 0X8001)
 		Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szFrame, lstrlen(m_szFrame), nullptr, 0, D3DCOLOR_ARGB(255, 255, 255, 255));
 }
 
@@ -77,7 +77,7 @@ void CFrameManager::Render_Frame_Manager_FrameName(wstring wstrStateKey)
 	D3DXMatrixTranslation(&matTrans, 100.f, 150.f, 0.f);
 
 	Device->Get_Sprite()->SetTransform(&matTrans);
-	if (GetAsyncKeyState(VK_TAB) & 0X8001)
+	if (GetAsyncKeyState(VK_SPACE) & 0X8001)
 		Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szFrameName, lstrlen(m_szFrameName), nullptr, 0, D3DCOLOR_ARGB(255, 255, 255, 255));
 }
 

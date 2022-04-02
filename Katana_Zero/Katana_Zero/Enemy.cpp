@@ -17,7 +17,7 @@ CEnemy::~CEnemy()
 
 void CEnemy::Render_Raytraise()
 {
-	if (GetAsyncKeyState(VK_TAB))
+	if (GetAsyncKeyState(VK_SPACE))
 	{
 		D3DXVECTOR2	vLine2[2]{ { m_pTarget->Get_UnitInfo()->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pTarget->Get_UnitInfo()->D3VecPos.y - CScrollManager::Get_ScroolY() },{ m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY() } };
 		Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, r, g, b));

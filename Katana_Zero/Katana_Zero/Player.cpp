@@ -788,7 +788,7 @@ void CPlayer::Update_UnitState()
 
 void CPlayer::Render_Pivot()
 {
-	if (GetAsyncKeyState(VK_TAB))
+	if (GetAsyncKeyState(VK_SPACE))
 	{
 		swprintf_s(m_szPivot, L"Pivot x: %f y: %f", m_vecPivot.x, m_vecPivot.y);
 
@@ -803,7 +803,7 @@ void CPlayer::Render_Pivot()
 
 void CPlayer::Render_MousePos()
 {
-	if (GetAsyncKeyState(VK_TAB))
+	if (GetAsyncKeyState(VK_SPACE))
 	{
 	swprintf_s(m_szMousePos, L"Mouse x: %f y: %f", m_vecMousePos.x, m_vecMousePos.y );
 

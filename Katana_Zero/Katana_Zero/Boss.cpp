@@ -115,7 +115,7 @@ void CBoss::Render_GameObject()
 		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
 	}
-
+	CEnemy::Render_GameObject();
 	Render_shotLine();
 }
 
