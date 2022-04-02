@@ -79,6 +79,8 @@ void CMapObjectManager::LateUpdate_MapObjectManager()
 
 void CMapObjectManager::Render_MapObjectManager()
 {
+	if (!GetAsyncKeyState(VK_TAB))
+		return;
 	Device->m_pSprite->End();
 	Device->m_pLine->SetWidth(5.f);
 	for (auto& tLine : m_vecTerrain[TERRAINTYPE::WALL])

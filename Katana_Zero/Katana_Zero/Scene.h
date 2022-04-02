@@ -10,10 +10,10 @@ public:
 	float	Get_MapHeight() { return m_fMapHeight; }
 
 public:
-	virtual HRESULT Ready_Scene()PURE;
-	virtual void Update_Scene() PURE;
-	virtual void Render_Scene()PURE;
-	virtual void Release_Scene() PURE;
+	virtual HRESULT Ready_Scene();
+	virtual void Update_Scene();
+	virtual void Render_Scene();
+	virtual void Release_Scene();
 
 protected:
 	float m_fMapWidth;

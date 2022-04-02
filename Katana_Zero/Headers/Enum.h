@@ -4,7 +4,6 @@ namespace GAMEOBJECT
 {
 	enum TYPE
 	{
-	
 		PLAYER,
 		PLAYERATTACK,
 		GANGSTER,

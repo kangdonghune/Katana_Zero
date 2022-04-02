@@ -41,6 +41,7 @@ HRESULT CSmoke::Ready_GameObject()
 {
 	if (m_pTarget != nullptr)
 	{
+		m_pUnitInfo = new UNITINFO{};
 		m_pItemInfo->wstrKey = L"Projectile";
 		m_pItemInfo->wstrState = L"Smoke";
 		m_pItemInfo->type = ITEMTYPE::SMOKE;

@@ -61,6 +61,11 @@ void CGameObjectManager::Render_GameObjectManager()
 		for(auto& pUnit : pVector)
 		{
 			pUnit->Render_GameObject();
+			pUnit->Render_HitBox();
+			pUnit->Render_HitBox();
+			pUnit->Render_ObbLine();
+			pUnit->Render_HitBoxObb();
+			pUnit->Render_ObbLineD3D();
 		}
 	}
 }

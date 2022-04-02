@@ -31,9 +31,7 @@ private:
 	void	Update_TargetRotate();
 	void	Update_D3DPos();
 	void	Update_UnitState();
-	void	Render_Raytraise();
 
-	bool	Ray_Traising();
 public:
 	// CGameObject을(를) 통해 상속됨
 	virtual HRESULT Ready_GameObject() override;

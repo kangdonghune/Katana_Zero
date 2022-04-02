@@ -788,17 +788,23 @@ void CPlayer::Update_UnitState()
 
 void CPlayer::Render_Pivot()
 {
-	swprintf_s(m_szPivot, L"Pivot x: %f y: %f", m_vecPivot.x, m_vecPivot.y);
+	if (GetAsyncKeyState(VK_TAB))
+	{
+		swprintf_s(m_szPivot, L"Pivot x: %f y: %f", m_vecPivot.x, m_vecPivot.y);
 
-	D3DXMATRIX matTrans;
-	D3DXMatrixTranslation(&matTrans, 100.f, 170.f, 0.f);
+		D3DXMATRIX matTrans;
+		D3DXMatrixTranslation(&matTrans, 100.f, 170.f, 0.f);
 
-	Device->Get_Sprite()->SetTransform(&matTrans);
-	Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szPivot, lstrlen(m_szPivot), nullptr, 0, D3DCOLOR_ARGB(255, 255, 255, 255));
+		Device->Get_Sprite()->SetTransform(&matTrans);
+		Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szPivot, lstrlen(m_szPivot), nullptr, 0, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	}
 }
 
 void CPlayer::Render_MousePos()
 {
+	if (GetAsyncKeyState(VK_TAB))
+	{
 	swprintf_s(m_szMousePos, L"Mouse x: %f y: %f", m_vecMousePos.x, m_vecMousePos.y );
 
 	D3DXMATRIX matTrans;
@@ -806,6 +812,7 @@ void CPlayer::Render_MousePos()
 
 	Device->Get_Sprite()->SetTransform(&matTrans);
 	Device->Get_Font()->DrawTextW(Device->Get_Sprite(), m_szMousePos, lstrlen(m_szMousePos), nullptr, 0, D3DCOLOR_ARGB(255, 255, 255, 255));
+	}
 }
 
 void CPlayer::Update_D3DPos()
@@ -994,9 +1001,7 @@ void CPlayer::Render_GameObject()
 
 	FrameManager->Render_Frame_Manager_FrameNum((size_t)m_tFrame.fFrameStart);
 	FrameManager->Render_Frame_Manager_FrameName(m_pUnitInfo->wstrState);
-	/*Render_HitBox();
 	Render_Pivot();
-	Render_ObbLine();*/
 	Render_MousePos();
 }
 

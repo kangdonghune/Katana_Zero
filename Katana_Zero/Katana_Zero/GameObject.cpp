@@ -205,109 +205,133 @@ void CGameObject::FrameMoveIndependence(float fSpeed)
 
 void CGameObject::Render_HitBox()
 {
-	int r = 0;
-	int g = 0;
-	int b = 0;
-	switch (m_pUnitInfo->iCollide)
+	if (m_pUnitInfo == nullptr)
+		return;
+
+	if (GetAsyncKeyState(VK_TAB) & 0X8001)
 	{
-	case C_NONE:
-		r = 255;
-		g = 255;
-		b = 255;
-		break;
-	case C_LAND:
-		r = 0;
-		g = 255;
-		b = 0;
-		break;
-	case C_WALL | C_CELLING:
-		r = 255;
-		g = 0;
-		b = 100;
-		break;
-	case C_WALL|C_WALLL:
-		r = 255;
-		g = 0;
-		b = 0;
-		break;
-	case C_WALL | C_WALLR:
-		r = 255;
-		g = 0;
-		b = 0;
-		break;
-	case C_CELLING:
-		r = 0;
-		g = 0;
-		b = 255;
-		break;
+	
+		int r = 0;
+			int g = 0;
+			int b = 0;
+			switch (m_pUnitInfo->iCollide)
+			{
+			case C_NONE:
+				r = 255;
+					g = 255;
+					b = 255;
+					break;
+			case C_LAND:
+				r = 0;
+				g = 255;
+				b = 0;
+				break;
+			case C_WALL | C_CELLING:
+				r = 255;
+				g = 0;
+				b = 100;
+				break;
+			case C_WALL | C_WALLL:
+				r = 255;
+				g = 0;
+				b = 0;
+				break;
+			case C_WALL | C_WALLR:
+				r = 255;
+				g = 0;
+				b = 0;
+				break;
+			case C_CELLING:
+				r = 0;
+				g = 0;
+				b = 255;
+				break;
 
-	case C_PASSABLE:
-		r = 170;
-		g = 50;
-		b = 255;
-		break;
+			case C_PASSABLE:
+				r = 170;
+				g = 50;
+				b = 255;
+				break;
 
-	case C_LAND| C_WALL | C_WALLL:
-		r = 255;
-		g = 255;
-		b = 0;
-		break;
-	case C_LAND | C_WALL | C_WALLR:
-		r = 255;
-		g = 255;
-		b = 0;
-		break;
-	case C_WALL | C_WALLL | C_CELLING:
-		r = 255;
-		g = 0;
-		b = 255;
-		break;
-	case C_WALL | C_WALLR| C_CELLING:
-		r = 255;
-		g = 0;
-		b = 255;
-		break;
-	default:
-		break;
+			case C_LAND | C_WALL | C_WALLL:
+				r = 255;
+				g = 255;
+				b = 0;
+				break;
+			case C_LAND | C_WALL | C_WALLR:
+				r = 255;
+				g = 255;
+				b = 0;
+				break;
+			case C_WALL | C_WALLL | C_CELLING:
+				r = 255;
+				g = 0;
+				b = 255;
+				break;
+			case C_WALL | C_WALLR | C_CELLING:
+				r = 255;
+				g = 0;
+				b = 255;
+				break;
+			default:
+				break;
+			}
+		Device->m_pSprite->End();
+		Device->m_pLine->SetWidth(1.f);
+		D3DXVECTOR2	vLine[5]{ { (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.right - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.right - CScrollManager::Get_ScroolX(), (float)m_tHitBox.bottom - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.bottom - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } };
+		Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, r, g, b));
+		D3DXVECTOR2	vLine2[2]{ {(float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)m_vecPivot.y - CScrollManager::Get_ScroolY() },{ (float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)m_vecPivot.y - 80.f - CScrollManager::Get_ScroolY() } };
+		Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 0));
+		Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 	}
-	Device->m_pSprite->End();
-	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine[5]{ { (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.right - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.right - CScrollManager::Get_ScroolX(), (float)m_tHitBox.bottom - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.bottom - CScrollManager::Get_ScroolY() } ,{ (float)m_tHitBox.left - CScrollManager::Get_ScroolX(), (float)m_tHitBox.top - CScrollManager::Get_ScroolY() } };
-	Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, r, g ,b));
-	D3DXVECTOR2	vLine2[2]{ {(float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)m_vecPivot.y - CScrollManager::Get_ScroolY() },{ (float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)m_vecPivot.y - 80.f - CScrollManager::Get_ScroolY() } };
-	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 0));
-	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	
 }
 
 void CGameObject::Render_HitBoxObb()
 {
-	Device->m_pSprite->End();
-	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine[5]{ {m_tHitBoxObb[0].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[0].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[1].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[1].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[2].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[2].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[3].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[3].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[0].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[0].y - CScrollManager::Get_ScroolY() } };
-	Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, 175, 255, 175));
-	
-	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	if (m_pUnitInfo == nullptr)
+		return;
+
+	if (GetAsyncKeyState(VK_TAB) & 0X8001)
+	{
+		Device->m_pSprite->End();
+		Device->m_pLine->SetWidth(1.f);
+		D3DXVECTOR2	vLine[5]{ {m_tHitBoxObb[0].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[0].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[1].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[1].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[2].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[2].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[3].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[3].y - CScrollManager::Get_ScroolY() },{ m_tHitBoxObb[0].x - CScrollManager::Get_ScroolX(),m_tHitBoxObb[0].y - CScrollManager::Get_ScroolY() } };
+		Device->m_pLine->Draw(vLine, 5, D3DCOLOR_ARGB(255, 175, 255, 175));
+
+		Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	}
 }
 
 void CGameObject::Render_ObbLine()
 {
-	Device->m_pSprite->End();
-	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine2[2]{ { (float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)(m_vecPivot.y -m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height>>1)) - CScrollManager::Get_ScroolY() }
-	,{ (float)(m_vecPivot.x - CScrollManager::Get_ScroolX() + m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Width >> 1)) , (float)(m_vecPivot.y - m_fRatio*(Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1)) - CScrollManager::Get_ScroolY() } };
-	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 255));;
-	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	if (GetAsyncKeyState(VK_TAB) & 8001)
+	{
+		Device->m_pSprite->End();
+		Device->m_pLine->SetWidth(1.f);
+		D3DXVECTOR2	vLine2[2]{ { (float)m_vecPivot.x - CScrollManager::Get_ScroolX(), (float)(m_vecPivot.y - m_fRatio * (Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1)) - CScrollManager::Get_ScroolY() }
+		,{ (float)(m_vecPivot.x - CScrollManager::Get_ScroolX() + m_fRatio * (Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Width >> 1)) , (float)(m_vecPivot.y - m_fRatio * (Texture_Maneger->Get_TexInfo_Manager(m_pUnitInfo->wstrKey,m_pUnitInfo->wstrState,0)->tImageInfo.Height >> 1)) - CScrollManager::Get_ScroolY() } };
+		Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 255));;
+		Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	}
+	
 }
 
 void CGameObject::Render_ObbLineD3D()
 {
-	Device->m_pSprite->End();
-	Device->m_pLine->SetWidth(1.f);
-	D3DXVECTOR2	vLine[2]{ {m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY() },{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle ))*50 - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle ))*50 - CScrollManager::Get_ScroolY() } };
-	Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
-	D3DXVECTOR2	vLine2[2]{ { m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY() },{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle + 90)) * 50 - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle + 90)) * 50 - CScrollManager::Get_ScroolY() } };
-	Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
-	Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	if (m_pUnitInfo == nullptr)
+		return;
+
+	if (GetAsyncKeyState(VK_TAB) & 0X8001)
+	{
+		Device->m_pSprite->End();
+		Device->m_pLine->SetWidth(1.f);
+		D3DXVECTOR2	vLine[2]{ {m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY() },{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle)) * 50 - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle)) * 50 - CScrollManager::Get_ScroolY() } };
+		Device->m_pLine->Draw(vLine, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
+		D3DXVECTOR2	vLine2[2]{ { m_pUnitInfo->D3VecPos.x - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - CScrollManager::Get_ScroolY() },{ m_pUnitInfo->D3VecPos.x + cosf(D3DXToRadian(m_fTargetAngle + 90)) * 50 - CScrollManager::Get_ScroolX(), m_pUnitInfo->D3VecPos.y - sinf(D3DXToRadian(m_fTargetAngle + 90)) * 50 - CScrollManager::Get_ScroolY() } };
+		Device->m_pLine->Draw(vLine2, 2, D3DCOLOR_ARGB(255, 255, 0, 255));
+		Device->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	}
 }
 
 void CGameObject::Update_Frame()

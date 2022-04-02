@@ -223,7 +223,6 @@ void CSceneManager::Update_SceneManager()
 void CSceneManager::Render_SceneManager()
 {
 	m_pScene->Render_Scene();
-
 }
 
 void CSceneManager::LateUpdate_ScnenManager()

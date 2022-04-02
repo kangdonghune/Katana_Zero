@@ -71,9 +71,7 @@ void CStage3::Render_Scene()
 		CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 		CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, &rc, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 150, 150, 150));
 	}
-	//MapObjectManager->Render_MapObjectManager();
-	GameObjectManager->Render_GameObjectManager();
-	//FrameManager->Render_Frame_Manager();
+	CScene::Render_Scene();
 	Device->Render_End();
 }
 

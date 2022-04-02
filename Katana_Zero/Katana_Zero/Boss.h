@@ -1,7 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "Enemy.h"
+class CGameObject;
 class CBoss :
-	public CGameObject
+	public CEnemy
 {
 private:
 	CBoss();
@@ -41,8 +42,6 @@ private:
 	void	Update_TargetRotate();
 	void	Update_D3DPos();
 	void	Update_UnitState();
-	void	Render_Raytraise();
-	bool	Ray_Traising();
 	void	Render_shotLine();
 	void	Shoot_Laser();
 	void	Shoot_Granade();

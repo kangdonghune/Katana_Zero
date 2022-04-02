@@ -12,7 +12,9 @@ public:
 	void	Set_Target(CGameObject* pTarget) { m_pTarget = pTarget; }
 
 
-
+protected:
+	void	Render_Raytraise();
+	bool	Ray_Traising();
 public:
 	// CGameObject을(를) 통해 상속됨
 	virtual HRESULT Ready_GameObject() override;
